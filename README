@@ -40,12 +40,12 @@ splits the sequence every k letters before shuffling these around.
 
 See:
 
-    AAACAGAT
+    AAACAGATT
 
 After splitting (k = 2):
 
-    AA AC AG AT
-    1  2  3  4
+    AA AC AG AT T
+    1  2  3  4  r
 
 The k-let indices are shuffled, and the shuffled sequence reassembled from
 the split k-lets by their new index position. Any remainder letters which do
