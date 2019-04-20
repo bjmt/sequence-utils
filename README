@@ -42,7 +42,7 @@ See:
 
     AAACAGAT
 
-After splitting:
+After splitting (k = 2):
 
     AA AC AG AT
     1  2  3  4
