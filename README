@@ -26,10 +26,10 @@ This utility counts the total number of k-lets in the input sequence.
 
     bin/./countlets -k 1 -i example/sequence.txt
 
-        A 17384
-        C 8081
-        G 7583
-        T 16952
+        A  17384
+        C   8081
+        G   7583
+        T  16952
 
 
 shuffler
