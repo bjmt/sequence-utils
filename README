@@ -12,7 +12,7 @@ Enter the directory and run:
 
     make
 
-This creates the following binaries:
+The following binaries are created:
 
     bin/countlets
     bin/shuffler
