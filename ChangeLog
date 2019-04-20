@@ -1,4 +1,4 @@
-2019-04-21  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+2019-04-20  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * For markov shuffling method verbose mode: instead of showing k-let counts,
 shows before and after counts of individual letters
@@ -6,6 +6,6 @@ shows before and after counts of individual letters
 * Changed exit behaviour for requesting usage
 * Count numbers are printed right aligned
 
-2019-04-20  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+2019-04-19  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * Initial release
