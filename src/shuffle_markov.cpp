@@ -103,7 +103,7 @@ vector<int> count_klets(vector<char> letters, vector<string> klets, int k,
 
 string markov_loop(vector<string> klets, vector<string> kletsm1,
     vector<int> let_counts, vector<char> lets_uniq, default_random_engine gen,
-    int seqlen, int k) {
+    int seqlen, int k, bool verbose) {
 
   int rand_i, x, y;
   int alphlen = lets_uniq.size();
@@ -145,6 +145,15 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
     }
 
+  }
+
+  if (verbose) {
+    vector<string> k1lets = make_klets(lets_uniq, 1);
+    vector<int> k1_counts = count_klets(out_split, k1lets, 1, alphlen);
+    cerr << "  After shuffling:" << endl;
+    for (int i = 0; i < alphlen; ++i) {
+      cerr << "    " << k1lets[i] << " " << k1_counts[i] << "\n";
+    }
   }
 
   /* return */
@@ -190,15 +199,18 @@ string shuffle_markov(vector<char> letters, default_random_engine gen, int k,
   let_counts = count_klets(letters, klets, k, alphlen);
 
   if (verbose) {
-    cerr << "  K-let counts:" << endl;
-    for (int i = 0; i < nlets; ++i) {
-      cerr << "    " << klets[i] << " " << let_counts[i] << "\n";
+    vector<string> k1lets = make_klets(lets_uniq, 1);
+    vector<int> k1_counts = count_klets(letters, k1lets, 1, alphlen);
+    cerr << "Letter counts:" << endl;
+    cerr << "  Before shuffling:" << endl;
+    for (int i = 0; i < alphlen; ++i) {
+      cerr << "    " << k1lets[i] << " " << k1_counts[i] << "\n";
     }
   }
 
   /* generate shuffled sequence */
 
-  out = markov_loop(klets, kletsm1, let_counts, lets_uniq, gen, seqlen, k);
+  out = markov_loop(klets, kletsm1, let_counts, lets_uniq, gen, seqlen, k, verbose);
 
   /* return */
 
