@@ -29,7 +29,6 @@ using namespace std;
 
 void usage() {
   printf(
-    "                                                                                \n"
     "Usage:  countlets -k [num] -i [filename] -o [filename]                          \n"
     "        countlets -k [num] -i [filename] > [filename]                           \n"
     "        cat [filename] | countlets -k [num] -o [filename]                       \n"
@@ -83,10 +82,10 @@ int main(int argc, char **argv) {
                 break;
 
       case 'h': usage();
-                exit(EXIT_FAILURE);
+                return 0;
 
       default: usage();
-               exit(EXIT_FAILURE);
+               return 0;
 
     }
   }

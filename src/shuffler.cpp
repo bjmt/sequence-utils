@@ -26,14 +26,13 @@
 #include <ctime>
 #include <random>
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include "shuffle_linear.hpp"
 #include "shuffle_markov.hpp"
 using namespace std;
 
 void usage() {
   printf(
-    "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        shuffler [options] -i [filename] > [filename]                           \n"
     "        cat [filename] | shuffler [options] -o [filename]                       \n"
@@ -103,10 +102,10 @@ int main(int argc, char **argv) {
                 break;
 
       case 'h': usage();
-                exit(EXIT_FAILURE);
+                return 0;
 
       default: usage();
-               exit(EXIT_FAILURE);
+               return 0;
 
     }
   }

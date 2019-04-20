@@ -23,7 +23,7 @@
 #include <random>
 #include <set>
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include "klets.hpp"
 using namespace std;
 
