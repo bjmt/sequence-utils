@@ -55,3 +55,4 @@ The markov method works by getting the total number of all possible k-lets.
 Following this, a new sequence (of equal length) is created. Every new letter
 is chosen based on the probability of that letter appearing in a k-let with the
 last k - 1 letters in the original sequence.
+
