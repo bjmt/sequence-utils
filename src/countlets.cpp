@@ -24,7 +24,7 @@
 #include <string>
 #include <set>
 #include <unistd.h>
-#include "shuffle_markov.hpp"
+#include "klets.hpp"
 using namespace std;
 
 void usage() {

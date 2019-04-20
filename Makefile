@@ -1,4 +1,4 @@
-SRC := countlets.cpp shuffler.cpp shuffle_linear.cpp shuffle_markov.cpp
+SRC := countlets.cpp klets.cpp shuffler.cpp shuffle_linear.cpp shuffle_markov.cpp
 # OBJ := $(addsuffix .o, $(basename $(SRC)))
 CC  := g++
 
@@ -11,8 +11,8 @@ build:
 install:
 	mkdir -p bin;\
 	cd src;\
-	$(CC) shuffler.o shuffle_linear.o shuffle_markov.o -o ../bin/shuffler;\
-	$(CC) countlets.o shuffle_markov.o -o ../bin/countlets
+	$(CC) shuffler.o klets.o shuffle_linear.o shuffle_markov.o -o ../bin/shuffler;\
+	$(CC) countlets.o klets.o -o ../bin/countlets
 
 clean:
 	cd src;\

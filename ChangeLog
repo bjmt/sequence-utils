@@ -2,6 +2,7 @@
 
 * For markov shuffling method verbose mode: instead of showing k-let counts,
 shows before and after counts of individual letters
+* make_klets() and count_klets() have been moved to klets.cpp
 
 2019-04-20  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 

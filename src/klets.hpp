@@ -18,14 +18,15 @@
  *
  */
 
-#ifndef _SHUFFLE_MARKOV_
-#define _SHUFFLE_MARKOV_
+#ifndef _KLETS_
+#define _KLETS_
 
 #include <vector>
 #include <string>
-#include <random>
 
-std::string shuffle_markov(std::vector<char> letters, std::default_random_engine gen,
-    int k, bool verbose);
+std::vector<std::string> make_klets(std::vector<char> lets_uniq, int k);
+
+std::vector<int> count_klets(std::vector<char> letters, std::vector<std::string> klets,
+    int k, int alphlen);
 
 #endif
