@@ -19,6 +19,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -47,7 +48,7 @@ int main(int argc, char **argv) {
   /* variables */
 
   int k {1};
-  int opt, seqlen, alphlen;
+  int opt, seqlen, alphlen, alignlen;
   ifstream seqfile;
   ofstream outfile;
   bool has_file {false}, has_out {false};
@@ -125,13 +126,15 @@ int main(int argc, char **argv) {
 
   /* return */
 
+  alignlen = to_string(max_element(counts.begin(), counts.end())[0]).length();
+
   if (has_out) {
     for (int i = 0; i < klets.size(); ++i) {
-      outfile << klets[i] << "  " << counts[i] << endl;
+      outfile << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
     }
   } else {
     for (int i = 0; i < klets.size(); ++i) {
-      cout << klets[i] << "  " << counts[i] << endl;
+      cout << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
     }
   }
 

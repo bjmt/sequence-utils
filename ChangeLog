@@ -4,6 +4,7 @@
 shows before and after counts of individual letters
 * make_klets() and count_klets() have been moved to klets.cpp
 * Changed exit behaviour for requesting usage
+* Count numbers are printed right aligned
 
 2019-04-20  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 

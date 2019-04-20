@@ -23,6 +23,7 @@
 #include <random>
 #include <set>
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include "klets.hpp"
 using namespace std;
@@ -76,9 +77,10 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
   if (verbose) {
     vector<string> k1lets = make_klets(lets_uniq, 1);
     vector<int> k1_counts = count_klets(out_split, k1lets, 1, alphlen);
+    int alignlen = to_string(max_element(k1_counts.begin(), k1_counts.end())[0]).length();
     cerr << "  After shuffling:" << endl;
     for (int i = 0; i < alphlen; ++i) {
-      cerr << "    " << k1lets[i] << " " << k1_counts[i] << "\n";
+      cerr << "    " << k1lets[i] << "  " << setw(alignlen) << k1_counts[i] << "\n";
     }
   }
 
@@ -127,10 +129,11 @@ string shuffle_markov(vector<char> letters, default_random_engine gen, int k,
   if (verbose) {
     vector<string> k1lets = make_klets(lets_uniq, 1);
     vector<int> k1_counts = count_klets(letters, k1lets, 1, alphlen);
+    int alignlen = to_string(max_element(k1_counts.begin(), k1_counts.end())[0]).length();
     cerr << "Letter counts:" << endl;
     cerr << "  Before shuffling:" << endl;
     for (int i = 0; i < alphlen; ++i) {
-      cerr << "    " << k1lets[i] << " " << k1_counts[i] << "\n";
+      cerr << "    " << k1lets[i] << "  " << setw(alignlen) << k1_counts[i] << "\n";
     }
   }
 
