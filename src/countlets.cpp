@@ -44,6 +44,8 @@ void usage() {
 
 int main(int argc, char **argv) {
 
+  /* variables */
+
   int k {1};
   int opt, seqlen, alphlen;
   ifstream seqfile;
@@ -95,6 +97,8 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
+  /* read input */
+
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
       usage();
@@ -106,6 +110,8 @@ int main(int argc, char **argv) {
     seqfile.close();
   }
 
+  /* make and count klets */
+
   seqlen = letters.size();
 
   for (int i = 0; i < seqlen; ++i) {
@@ -116,6 +122,8 @@ int main(int argc, char **argv) {
 
   klets = make_klets(lets_uniq, k);
   counts = count_klets(letters, klets, k, alphlen);
+
+  /* return */
 
   if (has_out) {
     for (int i = 0; i < klets.size(); ++i) {
