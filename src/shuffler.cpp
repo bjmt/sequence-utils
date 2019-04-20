@@ -45,6 +45,7 @@ void usage() {
     " -s <int>     RNG seed number. Defaults to time in seconds.                     \n"
     " -m           Use the markov shuffling method (defaults to linear).             \n"
     " -v           Verbose mode.                                                     \n"
+    " -h           Show usage.                                                       \n"
     "                                                                                \n"
   );
 }
@@ -66,7 +67,7 @@ int main(int argc, char **argv) {
 
   /* arguments */
 
-  while ((opt = getopt(argc, argv, "i:k:s:o:mv")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:s:o:mvh")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -100,6 +101,9 @@ int main(int argc, char **argv) {
 
       case 'v': verbose = true;
                 break;
+
+      case 'h': usage();
+                exit(EXIT_FAILURE);
 
       default: usage();
                exit(EXIT_FAILURE);

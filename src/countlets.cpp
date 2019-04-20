@@ -38,6 +38,7 @@ void usage() {
     " -i <string>  Input filename. All white space will be removed. Alternatively,   \n"
     "              can take string input from a pipe.                                \n"
     " -o <string>  Output filename. Alternatively, prints to stdout.                 \n"
+    " -h           Show usage.                                                       \n"
     "                                                                                \n"
   );
 }
@@ -55,7 +56,7 @@ int main(int argc, char **argv) {
   vector<string> klets;
   vector<int> counts;
 
-  while ((opt = getopt(argc, argv, "i:k:o:")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:o:h")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -80,6 +81,9 @@ int main(int argc, char **argv) {
                   has_out = true;
                 }
                 break;
+
+      case 'h': usage();
+                exit(EXIT_FAILURE);
 
       default: usage();
                exit(EXIT_FAILURE);

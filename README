@@ -17,7 +17,7 @@ This creates the following binaries:
     bin/countlets
     bin/shuffler
 
-Run these without any arguments to see usage.
+Run these without any arguments or with the -h flag to see usage.
 
 countlets
 ---------
