@@ -1,8 +1,8 @@
 SRC := countlets.cpp klets.cpp shuffler.cpp shuffle_euler.cpp \
-  shuffle_linear.cpp shuffle_markov.cpp progress.cpp
-OBJ_COUNTLETS := countlets.o klets.o progress.o
+  shuffle_linear.cpp shuffle_markov.cpp
+OBJ_COUNTLETS := countlets.o klets.o
 OBJ_SHUFFLER := shuffler.o klets.o shuffle_euler.o shuffle_linear.o \
-  shuffle_markov.o progress.o
+  shuffle_markov.o
 CC := g++
 
 all: build install

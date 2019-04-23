@@ -21,8 +21,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include <cmath>
-#include "progress.hpp"
 using namespace std;
 
 vector<string> make_klets(vector<char> lets_uniq, int k) {
@@ -100,10 +100,16 @@ vector<int> count_klets(vector<char> letters, vector<string> klets, int k,
    */
 
   int stop = seqlen - k;
+  int i_percent;
+  if (progress) cerr << "  0%";
 
   for (int i = 0; i < seqlen - k + 1; ++i) {
 
-    if (progress) progress_meter(i, stop);
+    if (progress) {
+      i_percent = (i * 100) / stop;
+      if (i_percent != ((i - 1) * 100) / stop)
+        cerr << "\b\b\b\b" << setw(3) << (i * 100) / stop << "%";
+    }
 
     let_j.clear();
 
@@ -122,6 +128,7 @@ vector<int> count_klets(vector<char> letters, vector<string> klets, int k,
 
   }
 
+  if (progress) cerr << endl;
 
   return let_counts;
 
