@@ -63,68 +63,46 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
 
 }
 
-vector<int> count_klets(vector<char> letters, vector<string> klets, int k,
-    int alphlen, bool progress = false) {
+vector<int> count_klets(vector<char> letters, vector<string> klets,
+    vector<char> lets_uniq, int k, int alphlen, bool progress = false) {
 
   int seqlen = letters.size();
   int nlets = pow(alphlen, k);
-  string let_j;
-  vector<int> let_counts;
+  vector<int> intletters, let_counts;
   for (int i = 0; i < nlets; ++i) {
     let_counts.push_back(0);
   }
 
-  /* If the make_klets() step fails, it can lead to confusing crashes; best to
-   * check before using it
-   */
-
-  if (klets.size() == 0) {
-    cerr << "Error: empty klets vector [count_klets()]" << endl;
-    exit(EXIT_FAILURE);
+  for (int i = 0; i < seqlen; ++i) {
+    for (int j = 0; j < alphlen; ++j) {
+      if (letters[i] == lets_uniq[j]) {
+        intletters.push_back(j);
+        break;
+      }
+    }
   }
 
-  /* This counting loop should be changed to use pure ints instead of pasting
-   * chars. It's quite fast for low k (2-6), but slows down miserably with
-   * increasing k.
-   * --TIMINGS--
-   * bin/./countlets -i example/sequence.txt \
-   *   -k  2:   0.00s
-   *   -k  3:   0.01s
-   *   -k  4:   0.04s
-   *   -k  5:   0.13s
-   *   -k  6:   0.51s
-   *   -k  7:   2.03s
-   *   -k  8:   8.28s
-   *   -k  9:  33.15s
-   *   -k 10: 130.00s
-   */
-
-  int stop = seqlen - k;
+  int stop {seqlen - k};
   int i_percent;
   if (progress) cerr << "  0%";
 
+  int l;
+  int counter {0};
   for (int i = 0; i < seqlen - k + 1; ++i) {
 
     if (progress) {
-      i_percent = (i * 100) / stop;
+      i_percent = i * 100 / stop;
       if (i_percent != ((i - 1) * 100) / stop)
-        cerr << "\b\b\b\b" << setw(3) << (i * 100) / stop << "%";
+        cerr << "\b\b\b\b" << setw(3) << i * 100 / stop << "%";
     }
 
-    let_j.clear();
-
-    for (int j = 0; j < k; ++j) {
-      let_j += letters[i + j];
+    l = 0;
+    for (int j = k - 1; j >= 0; --j) {
+      l += pow(alphlen, j) * intletters[i + counter];
+      ++counter;
     }
-
-    for (int j = 0; j < nlets; ++j) {
-
-      if (let_j.compare(klets[j]) == 0) {
-        ++let_counts[j];
-        break;
-      }
-
-    }
+    ++let_counts[l];
+    counter = 0;
 
   }
 

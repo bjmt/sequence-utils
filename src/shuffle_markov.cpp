@@ -61,6 +61,11 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
     for (int j = 0; j < nletsm1; ++j) {
 
+      /* Perhaps experiment with using ints instead of chars here. Not convinced
+       * it would lead to much speed increase since in the end a new string has
+       * to be pasted together.
+       */
+
       if (tmp_let.compare(kletsm1[j]) == 0) {
         x = j * alphlen;
         y = nlets - x - alphlen;
@@ -76,7 +81,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
   if (verbose) {
     vector<string> k1lets = make_klets(lets_uniq, 1);
-    vector<int> k1_counts = count_klets(out_split, k1lets, 1, alphlen);
+    vector<int> k1_counts = count_klets(out_split, k1lets, lets_uniq, 1, alphlen);
     int alignlen = to_string(max_element(k1_counts.begin(), k1_counts.end())[0]).length();
     cerr << "  After shuffling:" << endl;
     for (int i = 0; i < alphlen; ++i) {
@@ -124,11 +129,11 @@ string shuffle_markov(vector<char> letters, default_random_engine gen, int k,
 
   /* count k-lets */
 
-  let_counts = count_klets(letters, klets, k, alphlen);
+  let_counts = count_klets(letters, klets, lets_uniq, k, alphlen);
 
   if (verbose) {
     vector<string> k1lets = make_klets(lets_uniq, 1);
-    vector<int> k1_counts = count_klets(letters, k1lets, 1, alphlen);
+    vector<int> k1_counts = count_klets(letters, k1lets, lets_uniq, 1, alphlen);
     int alignlen = to_string(max_element(k1_counts.begin(), k1_counts.end())[0]).length();
     cerr << "Letter counts:" << endl;
     cerr << "  Before shuffling:" << endl;

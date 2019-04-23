@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 
   klets = make_klets(lets_uniq, k);
   if (progress) cerr << "Counting " << k << "-lets: ";
-  counts = count_klets(letters, klets, k, alphlen, progress);
+  counts = count_klets(letters, klets, lets_uniq, k, alphlen, progress);
 
   /* return */
 
