@@ -30,16 +30,19 @@ using namespace std;
 
 void usage() {
   printf(
+    "countlets v1.0                                                                  \n"
+    "Created by Benjamin Jean-Marie Tremblay, 2019.                                  \n"
+    "                                                                                \n"
     "Usage:  countlets -k [num] -i [filename] -o [filename]                          \n"
     "        countlets -k [num] -i [filename] > [filename]                           \n"
     "        cat [filename] | countlets -k [num] -o [filename]                       \n"
     "                                                                                \n"
-    " -k <int>     K-let size. Defaults to 1.                                        \n"
-    " -i <string>  Input filename. All white space will be removed. Alternatively,   \n"
-    "              can take string input from a pipe.                                \n"
-    " -o <string>  Output filename. Alternatively, prints to stdout.                 \n"
-    " -h           Show usage.                                                       \n"
-    "                                                                                \n"
+    " -k <int>   K-let size. Defaults to 1.                                          \n"
+    " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
+    "            take string input from a pipe.                                      \n"
+    " -o <str>   Output filename. Alternatively, prints to stdout.                   \n"
+    " -p         Show k-let counting progress.                                       \n"
+    " -h         Show usage.                                                         \n"
   );
 }
 
@@ -51,14 +54,14 @@ int main(int argc, char **argv) {
   int opt, seqlen, alphlen, alignlen;
   ifstream seqfile;
   ofstream outfile;
-  bool has_file {false}, has_out {false};
+  bool has_file {false}, has_out {false}, progress {false};
   char l;
   set<int> lets_set;
   vector<char> letters, lets_uniq;
   vector<string> klets;
   vector<int> counts;
 
-  while ((opt = getopt(argc, argv, "i:k:o:h")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:o:hp")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -82,6 +85,9 @@ int main(int argc, char **argv) {
                   }
                   has_out = true;
                 }
+                break;
+
+      case 'p': progress = true;
                 break;
 
       case 'h': usage();
@@ -122,7 +128,8 @@ int main(int argc, char **argv) {
   alphlen = lets_uniq.size();
 
   klets = make_klets(lets_uniq, k);
-  counts = count_klets(letters, klets, k, alphlen);
+  if (progress) cerr << "Counting " << k << "-lets: ";
+  counts = count_klets(letters, klets, k, alphlen, progress);
 
   /* return */
 

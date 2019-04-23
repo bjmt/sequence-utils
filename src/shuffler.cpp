@@ -29,23 +29,27 @@
 #include <cstdlib>
 #include "shuffle_linear.hpp"
 #include "shuffle_markov.hpp"
+#include "shuffle_euler.hpp"
 using namespace std;
 
 void usage() {
   printf(
+    "shuffler v1.0                                                                   \n"
+    "Created by Benjamin Jean-Marie Tremblay, 2019.                                  \n"
+    "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        shuffler [options] -i [filename] > [filename]                           \n"
     "        cat [filename] | shuffler [options] -o [filename]                       \n"
     "                                                                                \n"
-    " -i <string>  Input filename. All white space will be removed. Alternatively,   \n"
-    "              can take string input from a pipe.                                \n"
-    " -o <string>  Output filename. Alternatively, prints to stdout.                 \n"
-    " -k <int>     K-let size. Defaults to 1.                                        \n"
-    " -s <int>     RNG seed number. Defaults to time in seconds.                     \n"
-    " -m           Use the markov shuffling method (defaults to linear).             \n"
-    " -v           Verbose mode.                                                     \n"
-    " -h           Show usage.                                                       \n"
-    "                                                                                \n"
+    " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
+    "            take string input from a pipe.                                      \n"
+    " -o <str>   Output filename. Alternatively, prints to stdout.                   \n"
+    " -k <int>   K-let size. Defaults to 1.                                          \n"
+    " -s <int>   RNG seed number. Defaults to time in seconds.                       \n"
+    " -m         Use the markov shuffling method (defaults to euler).                \n"
+    " -l         Use the linear shuffling method (defaults to euler).                \n"
+    " -v         Verbose mode.                                                       \n"
+    " -h         Show usage.                                                         \n"
   );
 }
 
@@ -57,7 +61,9 @@ int main(int argc, char **argv) {
   int opt;
   ifstream seqfile;
   ofstream outfile;
-  bool has_file {false}, has_out {false}, use_markov {false}, verbose {false};
+  bool has_file {false}, has_out {false};
+  bool use_linear {false}, use_markov {false};
+  bool verbose {false};
   unsigned int iseed = time(0);
   char l;
   vector<char> letters;
@@ -66,7 +72,7 @@ int main(int argc, char **argv) {
 
   /* arguments */
 
-  while ((opt = getopt(argc, argv, "i:k:s:o:mvh")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:s:o:mvhl")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -98,6 +104,9 @@ int main(int argc, char **argv) {
       case 'm': use_markov = true;
                 break;
 
+      case 'l': use_linear = true;
+                break;
+
       case 'v': verbose = true;
                 break;
 
@@ -112,6 +121,11 @@ int main(int argc, char **argv) {
 
   if (k < 1) {
     cerr << "Error: k must be greater than 0" << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  if (use_linear && use_markov) {
+    cerr << "Error: only use one of -l and -m flags" << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -144,7 +158,8 @@ int main(int argc, char **argv) {
     if (k > 1) {
       cerr << "Shuffling method: ";
       if (use_markov) cerr << "markov";
-      else cerr << "linear";
+      else if (use_linear) cerr << "linear";
+      else cerr << "euler";
       cerr << endl;
     }
   }
@@ -154,7 +169,8 @@ int main(int argc, char **argv) {
     outletters = string(letters.begin(), letters.end());
   } else {
     if (use_markov) outletters = shuffle_markov(letters, gen, k, verbose);
-    else outletters = shuffle_linear(letters, gen, k, verbose);
+    else if (use_linear) outletters = shuffle_linear(letters, gen, k, verbose);
+    else outletters = shuffle_euler(letters, gen, k, verbose);
   }
 
   /* return */

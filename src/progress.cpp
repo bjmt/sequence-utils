@@ -18,15 +18,31 @@
  *
  */
 
-#ifndef _KLETS_
-#define _KLETS_
+#include <iostream>
+using namespace std;
 
-#include <vector>
-#include <string>
+void progress_meter(int i, int stop) {
 
-std::vector<std::string> make_klets(std::vector<char> lets_uniq, int k);
+  if (i == 0) {
+    cerr << "  0%";
+    return;
+  }
 
-std::vector<int> count_klets(std::vector<char> letters, std::vector<std::string> klets,
-    int k, int alphlen, bool progress = false);
+  if (i == stop) {
+    cerr << "\b\b\b\b100%" << endl;
+    return;
+  }
 
-#endif
+  i *= 100;
+  i /= stop;
+
+  if (i != ((i - 1) * 100) / stop) {
+    if (i < 10)
+      cerr << "\b\b\b\b  " << i << "%";
+    else
+      cerr << "\b\b\b\b " << i << "%";
+  }
+
+  return;
+
+}

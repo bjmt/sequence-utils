@@ -18,15 +18,11 @@
  *
  */
 
-#ifndef _KLETS_
-#define _KLETS_
+#ifndef _PROGRESS_
+#define _PROGRESS_
 
-#include <vector>
-#include <string>
+#include <cstdio>
 
-std::vector<std::string> make_klets(std::vector<char> lets_uniq, int k);
-
-std::vector<int> count_klets(std::vector<char> letters, std::vector<std::string> klets,
-    int k, int alphlen, bool progress = false);
+void progress_meter(int i, int stop);
 
 #endif

@@ -22,6 +22,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include "progress.hpp"
 using namespace std;
 
 vector<string> make_klets(vector<char> lets_uniq, int k) {
@@ -33,6 +34,8 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
   for (int i = 0; i < nlets; ++i) {
     klets.push_back("");
   }
+
+  /* perhaps a bit primitive, but it works */
 
   for (int i = k - 1; i >= 0; --i) {
 
@@ -61,7 +64,7 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
 }
 
 vector<int> count_klets(vector<char> letters, vector<string> klets, int k,
-    int alphlen) {
+    int alphlen, bool progress = false) {
 
   int seqlen = letters.size();
   int nlets = pow(alphlen, k);
@@ -71,12 +74,36 @@ vector<int> count_klets(vector<char> letters, vector<string> klets, int k,
     let_counts.push_back(0);
   }
 
+  /* If the make_klets() step fails, it can lead to confusing crashes; best to
+   * check before using it
+   */
+
   if (klets.size() == 0) {
     cerr << "Error: empty klets vector [count_klets()]" << endl;
     exit(EXIT_FAILURE);
   }
 
+  /* This counting loop should be changed to use pure ints instead of pasting
+   * chars. It's quite fast for low k (2-6), but slows down miserably with
+   * increasing k.
+   * --TIMINGS--
+   * bin/./countlets -i example/sequence.txt \
+   *   -k  2:   0.00s
+   *   -k  3:   0.01s
+   *   -k  4:   0.04s
+   *   -k  5:   0.13s
+   *   -k  6:   0.51s
+   *   -k  7:   2.03s
+   *   -k  8:   8.28s
+   *   -k  9:  33.15s
+   *   -k 10: 130.00s
+   */
+
+  int stop = seqlen - k;
+
   for (int i = 0; i < seqlen - k + 1; ++i) {
+
+    if (progress) progress_meter(i, stop);
 
     let_j.clear();
 
@@ -94,6 +121,7 @@ vector<int> count_klets(vector<char> letters, vector<string> klets, int k,
     }
 
   }
+
 
   return let_counts;
 
