@@ -21,7 +21,8 @@ Run these without any arguments or with the -h flag to see usage.
 countlets
 ---------
 
-This utility counts the total number of k-lets in the input sequence.
+This utility counts the total number of k-lets in the input sequence. Be aware
+that the total number of k-lets is n^k, where n is the alphabet length.
 
     bin/./countlets -k 1 -i example/sequence.txt
 
@@ -37,7 +38,14 @@ Shuffles an input sequence using one of three methods. The default, euler,
 preserves exact k-let counts by performing a random Eulerian walk through the
 sequence. The implementation is based on the concept proposed by Altschul and
 Erickson (1985) as well as the cycle-popping algorithm proposed by Propp and
-Wilson (1998) for finding randomised Eulerian walks.
+Wilson (1998) for finding randomised Eulerian walks. One warning regarding this
+method: the number of vertices is equal to n^k, where n is the alphabet length.
+This means that if trying to shuffle a DNA sequence with k = 15, there will be
+over one billion vertices; and every vertex present in the input sequence has
+to be walked to the ending vertex, and those walks could potential be quite
+long themselves. Once a new Eulerian walk has been found, the process is quite
+fast regardless of k; but the program may stall for quite some time trying to
+find such a path.
 
 The second method, linear, splits the sequence every k letters before shuffling
 these around.
@@ -61,6 +69,9 @@ Every new letter is chosen based on the probability of that letter (and the
 last k - 1 letters) appearing in a k-let in the original sequence. This results
 in a new sequence with similar (but not identical) k-let counts. The idea for
 this type of shuffling is discussed by Fitch (1983).
+
+Note: these methods only apply for k > 1. Otherwise, a simple shuffle call is
+performed.
 
 References
 ----------

@@ -47,7 +47,8 @@ void usage() {
     " -m         Use the markov shuffling method. Defaults to euler.                 \n"
     " -l         Use the linear shuffling method. Defaults to euler.                 \n"
     " -f         Indicate the input is fasta formatted. Each sequence will be        \n"
-    "            shuffled individually.                                              \n"
+    "            shuffled individually. Text preceding the first sequence entry is   \n"
+    "            ignored.                                                            \n"
     " -v         Verbose mode.                                                       \n"
     " -h         Show usage.                                                         \n"
   );
@@ -289,6 +290,13 @@ int main(int argc, char **argv) {
     if (fa_names.size() != fa_seqs.size()) {
       cerr << "Error: mismatching name [" << fa_names.size()
         << "] and sequence [" << fa_seqs.size() << "] counts" << endl;
+      exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < fa_seqs.size(); ++i) {
+      if (fa_seqs[i].length() == 0) {
+        cerr << "Error: found a length 0 sequence [" << fa_names[i] << "]" << endl;
+        exit(EXIT_FAILURE);
+      }
     }
 
     for (int i = 0; i < fa_names.size(); ++i) {
