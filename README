@@ -7,14 +7,14 @@ Date: 2019-04-24
 Installation
 ------------
 
-Enter the directory and run:
-
+    git clone https://github.com/bjmt/sequenceshuffler
+    cd sequenceshuffler
     make
 
 The following binaries are created:
 
-    bin/countlets
-    bin/shuffler
+    sequenceshuffler/bin/countlets
+    sequenceshuffler/bin/shuffler
 
 Run these without any arguments or with the -h flag to see usage.
 
