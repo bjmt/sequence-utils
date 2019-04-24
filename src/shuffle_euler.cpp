@@ -66,7 +66,7 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
    * vertex makes it so that a walk with no dead-ends to the tree root is
    * possible. Of course, not all klets/vertices have to be connected in
    * edge graph; these don't need to be checked.
-   * */
+   */
 
   for (int i = 0; i < nletsm1; ++i) {
     vertices.push_back(false);
@@ -155,7 +155,7 @@ vector<vector<int>> fill_vertices(vector<vector<int>> edgelist,
 
 }
 
-string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
+vector<int> walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
     vector<char> lets_uniq, default_random_engine gen, vector<int> last_letsi,
     string firstl, string lastl, int lasti) {
 
@@ -164,7 +164,6 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
   int nletsm1 = edgelist.size();
   int current {0};
   int n = firstl.length();
-  string out;
 
   for (int i = 0; i < nletsm1; ++i) {
     edgelist_counter.push_back(0);
@@ -179,6 +178,8 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
       }
     }
   }
+
+  /* walk */
 
   for (int i = n - 1; i < seqlen - 1; ++i) {
 
@@ -197,12 +198,7 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
 
   }
 
-  /* indices --> letters */
-  for (int i = 0; i < out_i.size(); ++i) {
-    out += lets_uniq[out_i[i]];
-  }
-
-  return out;
+  return out_i;
 
 }
 
@@ -212,7 +208,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   int seqlen = letters.size();
   int alphlen, nlets, nletsm1;
   int lasti {-1};
-  vector<int> let_counts, last_letsi;
+  vector<int> let_counts, last_letsi, out_i;
   vector<char> lets_uniq;
   set<int> lets_set;
   vector<string> klets, kletsm1;
@@ -285,8 +281,13 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
 
   if (verbose) cerr << "  Walking new Eulerian path" << endl;
 
-  /* walk new Eulerian path and paste together out string */
-  out = walk_euler(edgelist2, seqlen, k, lets_uniq, gen, last_letsi, firstl, lastl, lasti);
+  /* walk new Eulerian path */
+  out_i = walk_euler(edgelist2, seqlen, k, lets_uniq, gen, last_letsi, firstl, lastl, lasti);
+
+  /* indices --> letters */
+  for (int i = 0; i < out_i.size(); ++i) {
+    out += lets_uniq[out_i[i]];
+  }
 
   return out;
 
