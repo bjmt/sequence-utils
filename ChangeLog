@@ -1,3 +1,11 @@
+2019-04-24  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+
+* New default shuffling method: euler
+* The linear shuffling method can still be used with -l flag
+* Added version numbers to usage
+* countlets can show progress with -p flag
+* Rewrote count_klets() internals, much faster now
+
 2019-04-20  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * For markov shuffling method verbose mode: instead of showing k-let counts,
