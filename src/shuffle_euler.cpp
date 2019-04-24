@@ -53,11 +53,13 @@ vector<vector<int>> make_edgelist(vector<int> let_counts, int nletsm1, int alphl
 }
 
 vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
-    default_random_engine gen, int alphlen, int k, vector<bool> empty_vertices) {
+    default_random_engine gen, int alphlen, int k, vector<bool> empty_vertices,
+    bool verbose) {
 
   vector<int> last_letsi;
   vector<bool> vertices;
   int u;
+  int good_v {0};
 
   /* The idea is to go through and make sure that every last letter for each
    * vertex makes it so that a walk with no dead-ends to the tree root is
@@ -73,7 +75,10 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
 
   for (int i = 0; i < nletsm1; ++i) {
     if (empty_vertices[i]) vertices[i] = true;  /* ignore unconnected vertices */
+    else ++good_v;
   }
+
+  if (verbose) cerr << "    Total vertices to travel: " << good_v << endl;
 
   for (int i = 0; i < nletsm1; ++i) {
 
@@ -206,7 +211,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   vector<vector<int>> edgelist;
   string firstl, lastl, out;
 
-  /* the first and last letters remain unchaged; these are special vertices
+  /* the first and last letters remain unchanged; these are special vertices
    * which only have a single directed edge to them
    */
   for (int i = 0; i < k - 1; ++i) {
@@ -253,16 +258,24 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
     }
   }
 
+
+  if (verbose) cerr << "  Finding a random Eulerian path" << endl;
+
   /* find a new Eulerian path */
-  last_letsi = find_euler(edgelist, lasti, nletsm1, gen, alphlen, k, empty_vertices);
+  last_letsi = find_euler(edgelist, lasti, nletsm1, gen, alphlen, k, empty_vertices, verbose);
 
   /* delete last edges from edge pool */
   vector<vector<int>> edgelist2;
   for (int i = 0; i < last_letsi.size(); ++i) {
     if (i != lasti) --edgelist[i][last_letsi[i]];
   }
+
+  if (verbose) cerr << "  Generating random vertices" << endl;
+
   /* generate edge indices + shuffle */
   edgelist2 = fill_vertices(edgelist, last_letsi, nletsm1, alphlen, lasti, gen);
+
+  if (verbose) cerr << "  Walking new Eulerian path" << endl;
 
   /* walk new Eulerian path and paste together out string */
   out = walk_euler(edgelist2, seqlen, k, lets_uniq, gen, last_letsi, firstl, lastl, lasti);
