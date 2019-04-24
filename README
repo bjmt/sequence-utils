@@ -38,12 +38,12 @@ Shuffles an input sequence using one of three methods. The default, euler,
 preserves exact k-let counts by performing a random Eulerian walk through the
 sequence. The implementation is based on the concept proposed by Altschul and
 Erickson (1985) as well as the cycle-popping algorithm proposed by Propp and
-Wilson (1998) for finding randomised Eulerian walks. One warning regarding this
+Wilson (1998) for finding randomised Eulerian paths. One warning regarding this
 method: the number of vertices is equal to n^k, where n is the alphabet length.
 This means that if trying to shuffle a DNA sequence with k = 15, there will be
 over one billion vertices; and every vertex present in the input sequence has
 to be walked to the ending vertex, and those walks could potential be quite
-long themselves. Once a new Eulerian walk has been found, the process is quite
+long themselves. Once a new Eulerian path has been found, the process is quite
 fast regardless of k; but the program may stall for quite some time trying to
 find such a path.
 
