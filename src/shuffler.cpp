@@ -34,8 +34,8 @@ using namespace std;
 
 void usage() {
   printf(
-    "shuffler v1.0                                                                   \n"
-    "Created by Benjamin Jean-Marie Tremblay, 2019.                                  \n"
+    "shuffler v1.0 (2019-20-04)                                                      \n"
+    "Created by Benjamin Jean-Marie Tremblay <benjmtremblay@gmail.com>               \n"
     "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        echo [string] | shuffler [options] > [filename]                         \n"

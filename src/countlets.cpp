@@ -30,8 +30,8 @@ using namespace std;
 
 void usage() {
   printf(
-    "countlets v1.0                                                                  \n"
-    "Created by Benjamin Jean-Marie Tremblay, 2019.                                  \n"
+    "countlets v1.0 (2019-20-04)                                                     \n"
+    "Created by Benjamin Jean-Marie Tremblay <benjmtremblay@gmail.com>               \n"
     "                                                                                \n"
     "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
     "        echo [string] | countlets [options] > [filename]                        \n"
