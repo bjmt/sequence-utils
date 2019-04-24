@@ -34,8 +34,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "shuffler v1.0 (2019-04-24)                                                      \n"
-    "Created by Benjamin Jean-Marie Tremblay <benjmtremblay@gmail.com>               \n"
+    "shuffler v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
     "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        echo [string] | shuffler [options] > [filename]                         \n"
@@ -45,8 +44,8 @@ void usage() {
     " -o <str>   Output filename. Alternatively, prints to stdout.                   \n"
     " -k <int>   K-let size. Defaults to 1.                                          \n"
     " -s <int>   RNG seed number. Defaults to time in seconds.                       \n"
-    " -m         Use the markov shuffling method (defaults to euler).                \n"
-    " -l         Use the linear shuffling method (defaults to euler).                \n"
+    " -m         Use the markov shuffling method. Defaults to euler.                 \n"
+    " -l         Use the linear shuffling method. Defaults to euler.                 \n"
     " -v         Verbose mode.                                                       \n"
     " -h         Show usage.                                                         \n"
   );
