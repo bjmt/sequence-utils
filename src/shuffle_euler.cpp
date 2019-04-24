@@ -74,6 +74,7 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
   }
   vertices[lasti] = true;  /* tree root */
 
+  /* I don't think there's a formula for this, so just prepare these beforehand */
   for (int i = 0; i < nletsm1; ++i) {
     next_let_i.push_back(counter * alphlen);
     if (counter == nletsm2 - 1) counter = 0;
@@ -100,7 +101,6 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
         u = last_letsi[u];
       else
         u = next_let_i[u] + last_letsi[u];
-      // cerr << u << " ";
     }
 
     u = i;
@@ -278,7 +278,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
     if (i != lasti) --edgelist[i][last_letsi[i]];
   }
 
-  if (verbose) cerr << "  Generating random vertices" << endl;
+  if (verbose) cerr << "  Generating random edges" << endl;
 
   /* generate edge indices + shuffle */
   edgelist2 = fill_vertices(edgelist, last_letsi, nletsm1, alphlen, lasti, gen);
