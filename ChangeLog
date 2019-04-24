@@ -1,8 +1,8 @@
 2019-04-24  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
+* countlets and shuffler are now v1.0
 * New default shuffling method: euler
 * The linear shuffling method can still be used with -l flag
-* Added version numbers to usage
 * countlets can show progress with -p flag
 * Rewrote count_klets() internals, much faster now
 * shuffler can work on fasta-formatted input with -f flag

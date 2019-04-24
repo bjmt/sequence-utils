@@ -34,7 +34,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "shuffler v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
+    "shuffler v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
     "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        echo [string] | shuffler [options] > [filename]                         \n"
@@ -46,9 +46,8 @@ void usage() {
     " -s <int>   RNG seed number. Defaults to time in seconds.                       \n"
     " -m         Use the markov shuffling method. Defaults to euler.                 \n"
     " -l         Use the linear shuffling method. Defaults to euler.                 \n"
-    " -f         Indicate the input is fasta formatted. Newlines are allowed, but    \n"
-    "            spaces are not (as opposed to non-fasta input). Each sequence will  \n"
-    "            be shuffled individually.                                           \n"
+    " -f         Indicate the input is fasta formatted. Each sequence will be        \n"
+    "            shuffled individually.                                              \n"
     " -v         Verbose mode.                                                       \n"
     " -h         Show usage.                                                         \n"
   );
@@ -172,6 +171,10 @@ int main(int argc, char **argv) {
         } else if (!name.empty()) {
 
           if (line.find(' ') != string::npos) {
+            line.erase(remove(line.begin(), line.end(), ' '), line.end());
+          }
+
+          if (line.length() == 0) {
             name.clear();
             content.clear();
           } else {
@@ -207,6 +210,10 @@ int main(int argc, char **argv) {
         } else if (!name.empty()) {
 
           if (line.find(' ') != string::npos) {
+            line.erase(remove(line.begin(), line.end(), ' '), line.end());
+          }
+
+          if (line.length() == 0) {
             name.clear();
             content.clear();
           } else {
