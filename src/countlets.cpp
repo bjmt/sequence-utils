@@ -35,10 +35,10 @@ void usage() {
     "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
     "        echo [string] | countlets [options] > [filename]                        \n"
     "                                                                                \n"
-    " -k <int>   K-let size. Defaults to 1.                                          \n"
     " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
     "            take string input from a pipe.                                      \n"
     " -o <str>   Output filename. Alternatively, prints to stdout.                   \n"
+    " -k <int>   K-let size. Defaults to 1.                                          \n"
     " -p         Show k-let counting progress.                                       \n"
     " -h         Show usage.                                                         \n"
   );

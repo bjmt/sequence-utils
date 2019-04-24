@@ -56,10 +56,11 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
     default_random_engine gen, int alphlen, int k, vector<bool> empty_vertices,
     bool verbose) {
 
-  vector<int> last_letsi;
+  vector<int> last_letsi, next_let_i;
   vector<bool> vertices;
   int u;
-  int good_v {0};
+  int nletsm2 = pow(alphlen, k - 2);
+  int good_v {0}, counter {0};
 
   /* The idea is to go through and make sure that every last letter for each
    * vertex makes it so that a walk with no dead-ends to the tree root is
@@ -72,6 +73,12 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
     last_letsi.push_back(0);
   }
   vertices[lasti] = true;  /* tree root */
+
+  for (int i = 0; i < nletsm1; ++i) {
+    next_let_i.push_back(counter * alphlen);
+    if (counter == nletsm2 - 1) counter = 0;
+    else ++counter;
+  }
 
   for (int i = 0; i < nletsm1; ++i) {
     if (empty_vertices[i]) vertices[i] = true;  /* ignore unconnected vertices */
@@ -92,7 +99,8 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
       if (k == 2)
         u = last_letsi[u];
       else
-        u = pow(alphlen, k - 2) * (u % alphlen) + last_letsi[u];
+        u = next_let_i[u] + last_letsi[u];
+      // cerr << u << " ";
     }
 
     u = i;
@@ -105,7 +113,7 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
       if (k == 2)
         u = last_letsi[u];
       else
-        u = pow(alphlen, k - 2) * (u % alphlen) + last_letsi[u];
+        u = next_let_i[u] + last_letsi[u];
     }
 
   }
