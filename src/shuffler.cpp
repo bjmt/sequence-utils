@@ -286,6 +286,11 @@ int main(int argc, char **argv) {
 
   } else {
 
+    if (fa_names.size() != fa_seqs.size()) {
+      cerr << "Error: mismatching name [" << fa_names.size()
+        << "] and sequence [" << fa_seqs.size() << "] counts" << endl;
+    }
+
     for (int i = 0; i < fa_names.size(); ++i) {
       vector<char> letters2(fa_seqs[i].begin(), fa_seqs[i].end());
       if (k >= letters2.size()) {
