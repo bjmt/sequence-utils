@@ -59,13 +59,10 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
     vertices.push_back(false);
     last_letsi.push_back(0);
   }
-  cerr << "lasti=" << lasti << endl;
-  cerr << "nletsm1=" << nletsm1 << endl;
   vertices[lasti] = true;  /* tree root */
 
   for (int i = 0; i < nletsm1; ++i) {
     if (empty_vertices[i]) vertices[i] = true;  /* ignore unconnected vertices */
-    cerr << "vertices[" << i << "]: " << vertices[i] << endl;
   }
 
   for (int i = 0; i < nletsm1; ++i) {
@@ -73,21 +70,23 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
     u = i;
 
     while (!vertices[u]) {
-      cerr << u << "a ";
       discrete_distribution<int> next_let(edgelist[u].begin(), edgelist[u].end());
       last_letsi[u] = next_let(gen);
-      u = pow(alphlen, k - 2) * (u % alphlen) + last_letsi[u];
+      if (k == 2)
+        u = last_letsi[u];
+      else
+        u = pow(alphlen, k - 2) * (u % alphlen) + last_letsi[u];
     }
-    cerr << endl;
 
     u = i;
 
     while (!vertices[u]) {
-      cerr << u << "b ";
       vertices[u] = true;
-      u = pow(alphlen, k - 2) * (u % alphlen) + last_letsi[u];
+      if (k == 2)
+        u = last_letsi[u];
+      else
+        u = pow(alphlen, k - 2) * (u % alphlen) + last_letsi[u];
     }
-    cerr << endl;
 
   }
 
@@ -131,13 +130,14 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
   int alphlen = lets_uniq.size();
   int nletsm1 = edgelist.size();
   int current {0};
+  int n = firstl.length();
   string out;
 
   for (int i = 0; i < nletsm1; ++i) {
     edgelist_counter.push_back(0);
   }
 
-  for (int i = 0; i < firstl.length(); ++i) {
+  for (int i = 0; i < n; ++i) {
     for (int j = 0; j < alphlen; ++j) {
       if (firstl.substr(i, 1)[0] == lets_uniq[j]) {
         out_i.push_back(j);
@@ -146,47 +146,24 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
     }
   }
 
-  //-------------------------------------------//
-  cerr << "init: ";                            //
-  for (int i = 0; i < out_i.size(); ++i) {     //
-    cerr << lets_uniq[out_i[i]];               //
-  }                                            //
-  cerr << endl;                                //
-  string tmp;                                  //
-  //-------------------------------------------//
-  for (int i = k; i < seqlen; ++i) {
+  for (int i = n - 1; i < seqlen - 1; ++i) {
 
     current = 0;
-    for (int j = k - 2; j >= 0; --j) {
-      current += pow(alphlen, j) * out_i[i - k];
+    for (int j = n - 1; j >= 0; --j) {
+      if (j == 0)
+        current += out_i[i];
+      else
+        current += pow(alphlen, j) * (out_i[i - j] % alphlen);
     }
-
-  //------------------------------------------------------//
-    tmp += lets_uniq[current];                            //
-    cerr << "current: " << lets_uniq[current] << endl;    //
-    cerr << "seq: " << tmp << " [i=" << i << "]" << endl; //
-  //------------------------------------------------------//
 
     out_i.push_back(edgelist[current][edgelist_counter[current]]);
     ++edgelist_counter[current];
-
-  //----------------------------------------------------------------//
-    cerr << "next: " << lets_uniq[out_i[out_i.size() - 1]] << endl; //
-  //----------------------------------------------------------------//
 
   }
 
   for (int i = 0; i < out_i.size(); ++i) {
     out += lets_uniq[out_i[i]];
   }
-
-  //-------------------------------------------//
-  cerr << "lastl: " << lastl << endl;          //
-  //-------------------------------------------//
-  out += lastl;
-  //--------------------------------------------------------------//
-  cerr << "final: " << out << "[" << out.length() << "]" << endl; //
-  //--------------------------------------------------------------//
 
   return out;
 
@@ -204,8 +181,6 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   vector<string> klets, kletsm1;
   vector<vector<int>> edgelist;
   string firstl, lastl, out;
-
-  cerr << "char count: " << letters.size() << endl;
 
   for (int i = 0; i < k - 1; ++i) {
     firstl += letters[i];
@@ -236,14 +211,6 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
 
   edgelist = make_edgelist(let_counts, nletsm1, alphlen);
 
-  int counter = 0;
-  for (int i = 0; i < nletsm1; ++i) {
-    for (int j = 0; j < alphlen; ++j) {
-      cerr << klets[counter] << "  " << edgelist[i][j] << endl;
-      ++counter;
-    }
-  }
-
   vector<bool> empty_vertices;
   for (int i = 0; i < nletsm1; ++i) {
     empty_vertices.push_back(true);
@@ -256,11 +223,6 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   }
 
   last_letsi = find_euler(edgelist, lasti, nletsm1, gen, alphlen, k, empty_vertices);
-
-  cerr << "Last lets:" << endl;
-  for (int i = 0; i < nletsm1; ++i) {
-    cerr << kletsm1[i] << " " << lets_uniq[last_letsi[i]] << endl;
-  }
 
   vector<vector<int>> edgelist2;
   for (int i = 0; i < last_letsi.size(); ++i) {
