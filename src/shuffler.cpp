@@ -34,7 +34,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "shuffler v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
+    "shuffler v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
     "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        echo [string] | shuffler [options] > [filename]                         \n"
@@ -46,6 +46,9 @@ void usage() {
     " -s <int>   RNG seed number. Defaults to time in seconds.                       \n"
     " -m         Use the markov shuffling method. Defaults to euler.                 \n"
     " -l         Use the linear shuffling method. Defaults to euler.                 \n"
+    " -f         Indicate the input is fasta formatted. Newlines are allowed, but    \n"
+    "            spaces are not (as opposed to non-fasta input). Each sequence will  \n"
+    "            be shuffled individually.                                           \n"
     " -v         Verbose mode.                                                       \n"
     " -h         Show usage.                                                         \n"
   );
@@ -59,18 +62,19 @@ int main(int argc, char **argv) {
   int opt;
   ifstream seqfile;
   ofstream outfile;
-  bool has_file {false}, has_out {false};
+  bool has_file {false}, has_out {false}, is_fasta {false};
   bool use_linear {false}, use_markov {false};
   bool verbose {false};
   unsigned int iseed = time(0);
   char l;
   vector<char> letters;
+  vector<string> fa_names, fa_seqs;
   string outletters;
   default_random_engine gen;
 
   /* arguments */
 
-  while ((opt = getopt(argc, argv, "i:k:s:o:mvhl")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:s:o:mvhlf")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -108,6 +112,9 @@ int main(int argc, char **argv) {
       case 'v': verbose = true;
                 break;
 
+      case 'f': is_fasta = true;
+                break;
+
       case 'h': usage();
                 return 0;
 
@@ -129,28 +136,109 @@ int main(int argc, char **argv) {
 
   /* read letters */
 
-  if (!has_file) {
-    if (isatty(STDIN_FILENO)) {
-      usage();
-      exit(EXIT_FAILURE);
+  if (!is_fasta) {
+
+    if (!has_file) {
+      if (isatty(STDIN_FILENO)) {
+        usage();
+        exit(EXIT_FAILURE);
+      }
+      while (cin >> l) letters.push_back(l);
+    } else {
+      while (seqfile >> l) letters.push_back(l);
+      seqfile.close();
     }
-    while (cin >> l) letters.push_back(l);
+
   } else {
-    while (seqfile >> l) letters.push_back(l);
-    seqfile.close();
+
+    string line, name, content;
+
+    if (!has_file) {
+
+      while (getline(cin, line).good()) {
+
+        if (line.empty() || line[0] == '>') {
+
+          if (!name.empty()) {
+            fa_names.push_back(name);
+            name.clear();
+          }
+          if (!line.empty()) {
+            name = line;
+          }
+          if (content.length() > 0) fa_seqs.push_back(content);
+          content.clear();
+
+        } else if (!name.empty()) {
+
+          if (line.find(' ') != string::npos) {
+            name.clear();
+            content.clear();
+          } else {
+            content += line;
+          }
+
+        }
+
+
+      }
+
+      if (!name.empty()) {
+        fa_names.push_back(name);
+        fa_seqs.push_back(content);
+      }
+
+    } else {
+
+      while (getline(seqfile, line).good()) {
+
+        if (line.empty() || line[0] == '>') {
+
+          if (!name.empty()) {
+            fa_names.push_back(name);
+            name.clear();
+          }
+          if (!line.empty()) {
+            name = line;
+          }
+          if (content.length() > 0) fa_seqs.push_back(content);
+          content.clear();
+
+        } else if (!name.empty()) {
+
+          if (line.find(' ') != string::npos) {
+            name.clear();
+            content.clear();
+          } else {
+            content += line;
+          }
+
+        }
+
+
+      }
+
+      if (!name.empty()) {
+        fa_names.push_back(name);
+        fa_seqs.push_back(content);
+      }
+
+      seqfile.close();
+
+    }
+
   }
 
   /* shuffle */
 
   gen = default_random_engine(iseed);
 
-  if (k >= letters.size()) {
-    cerr << "Error: sequence length must be greater than k" << endl;
-    exit(EXIT_FAILURE);
-  }
-
   if (verbose) {
-    cerr << "Character count: " << letters.size() << endl;
+    if (!is_fasta) {
+      cerr << "Character count: " << letters.size() << endl;
+    } else {
+      cerr << "Fasta file with " << fa_names.size() << " sequences" << endl;
+    }
     cerr << "K-let size: " << k << endl;
     cerr << "RNG seed: " << iseed << endl;
     if (k > 1) {
@@ -162,22 +250,61 @@ int main(int argc, char **argv) {
     }
   }
 
-  if (k == 1) {
-    shuffle(letters.begin(), letters.end(), gen);
-    outletters = string(letters.begin(), letters.end());
-  } else {
-    if (use_markov) outletters = shuffle_markov(letters, gen, k, verbose);
-    else if (use_linear) outletters = shuffle_linear(letters, gen, k, verbose);
-    else outletters = shuffle_euler(letters, gen, k, verbose);
-  }
+  if (!is_fasta) {
 
-  /* return */
+    if (k >= letters.size()) {
+      cerr << "Error: sequence length must be greater than k" << endl;
+      exit(EXIT_FAILURE);
+    }
 
-  if (has_out) {
-    outfile << outletters;
-    outfile.close();
+    if (k == 1) {
+
+      shuffle(letters.begin(), letters.end(), gen);
+      outletters = string(letters.begin(), letters.end());
+
+    } else {
+
+      if (use_markov) outletters = shuffle_markov(letters, gen, k, verbose);
+      else if (use_linear) outletters = shuffle_linear(letters, gen, k, verbose);
+      else outletters = shuffle_euler(letters, gen, k, verbose);
+
+    }
+
+    if (has_out) {
+      outfile << outletters;
+      outfile.close();
+    } else {
+      cout << outletters << endl;
+    }
+
   } else {
-    cout << outletters << endl;
+
+    for (int i = 0; i < fa_names.size(); ++i) {
+      vector<char> letters2(fa_seqs[i].begin(), fa_seqs[i].end());
+      if (k >= letters2.size()) {
+        cerr << "Error: sequence length must be greater than k" << endl;
+        exit(EXIT_FAILURE);
+      }
+
+      if (k == 1) {
+        shuffle(letters2.begin(), letters2.end(), gen);
+        outletters = string(letters2.begin(), letters2.end());
+      } else {
+        if (use_markov) outletters = shuffle_markov(letters2, gen, k, false);
+        else if (use_linear) outletters = shuffle_linear(letters2, gen, k, false);
+        else outletters = shuffle_euler(letters2, gen, k, false);
+      }
+
+      if (has_out) {
+        outfile << fa_names[i] << "\n" << outletters << "\n";
+      } else {
+        cout << fa_names[i] << "\n" << outletters << "\n";
+      }
+
+    }
+
+    if (has_out) outfile.close();
+
   }
 
   return 0;
