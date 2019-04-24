@@ -63,7 +63,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
       /* Perhaps experiment with using ints instead of chars here. Not convinced
        * it would lead to much speed increase since in the end a new string has
-       * to be pasted together.
+       * to be pasted together regardless. I'm probably wrong though.
        */
 
       if (tmp_let.compare(kletsm1[j]) == 0) {

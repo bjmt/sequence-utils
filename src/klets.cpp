@@ -87,7 +87,7 @@ vector<int> count_klets(vector<char> letters, vector<string> klets,
   if (progress) cerr << "  0%";
 
   int l;
-  int counter {0};
+  int counter;
   for (int i = 0; i < seqlen - k + 1; ++i) {
 
     if (progress) {
@@ -96,17 +96,14 @@ vector<int> count_klets(vector<char> letters, vector<string> klets,
         cerr << "\b\b\b\b" << setw(3) << i * 100 / stop << "%";
     }
 
-    l = 0;
+    l = 0; counter = 0;
     for (int j = k - 1; j >= 0; --j) {
       l += pow(alphlen, j) * intletters[i + counter];
       ++counter;
     }
     ++let_counts[l];
-    counter = 0;
 
   }
-
-  if (progress) cerr << endl;
 
   return let_counts;
 

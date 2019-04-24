@@ -33,9 +33,8 @@ void usage() {
     "countlets v1.0                                                                  \n"
     "Created by Benjamin Jean-Marie Tremblay, 2019.                                  \n"
     "                                                                                \n"
-    "Usage:  countlets -k [num] -i [filename] -o [filename]                          \n"
-    "        countlets -k [num] -i [filename] > [filename]                           \n"
-    "        cat [filename] | countlets -k [num] -o [filename]                       \n"
+    "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
+    "        echo [string] | countlets [options] > [filename]                        \n"
     "                                                                                \n"
     " -k <int>   K-let size. Defaults to 1.                                          \n"
     " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
@@ -130,6 +129,7 @@ int main(int argc, char **argv) {
   klets = make_klets(lets_uniq, k);
   if (progress) cerr << "Counting " << k << "-lets: ";
   counts = count_klets(letters, klets, lets_uniq, k, alphlen, progress);
+  if (progress) cerr << endl;
 
   /* return */
 
