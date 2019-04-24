@@ -32,6 +32,10 @@ using namespace std;
 
 vector<vector<int>> make_edgelist(vector<int> let_counts, int nletsm1, int alphlen) {
 
+  /* 1D vector<int> --> 2D vector<vector<int>>
+   * The first layer elements are vertices, second layer are the edges.
+   */
+
   vector<vector<int>> edgelist(nletsm1, vector<int>(alphlen));
   int counter {0};
 
@@ -55,6 +59,12 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
   vector<bool> vertices;
   int u;
 
+  /* The idea is to go through and make sure that every last letter for each
+   * vertex makes it so that a walk with no dead-ends to the tree root is
+   * possible. Of course, not all klets/vertices have to be connected in
+   * edge graph; these don't need to be checked.
+   * */
+
   for (int i = 0; i < nletsm1; ++i) {
     vertices.push_back(false);
     last_letsi.push_back(0);
@@ -70,8 +80,10 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
     u = i;
 
     while (!vertices[u]) {
+      /* pick a random possible edge from the vertex */
       discrete_distribution<int> next_let(edgelist[u].begin(), edgelist[u].end());
       last_letsi[u] = next_let(gen);
+      /* now follow the edge to the next vertex */
       if (k == 2)
         u = last_letsi[u];
       else
@@ -80,6 +92,9 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
 
     u = i;
 
+    /* after a sucessful walk, go back and prevent these vertices from being
+     * checked again
+     */
     while (!vertices[u]) {
       vertices[u] = true;
       if (k == 2)
@@ -98,6 +113,10 @@ vector<vector<int>> fill_vertices(vector<vector<int>> edgelist,
     vector<int> last_letsi, int nletsm1, int alphlen, int lasti,
     default_random_engine gen) {
 
+  /* The incoming edgelist is just a set of counts for each letter. This
+   * will actually create vectors of letter indices based on counts.
+   */
+
   vector<vector<int>> edgelist2(nletsm1);
   int b;
 
@@ -114,6 +133,7 @@ vector<vector<int>> fill_vertices(vector<vector<int>> edgelist,
 
     shuffle(edgelist2[i].begin(), edgelist2[i].end(), gen);
 
+    /* to ensure the walk is Eulerian, manually insert the last edges */
     if (i != lasti) edgelist2[i].push_back(last_letsi[i]);
 
   }
@@ -137,6 +157,7 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
     edgelist_counter.push_back(0);
   }
 
+  /* initialize shuffled sequence with starting vertex */
   for (int i = 0; i < n; ++i) {
     for (int j = 0; j < alphlen; ++j) {
       if (firstl.substr(i, 1)[0] == lets_uniq[j]) {
@@ -148,6 +169,7 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
 
   for (int i = n - 1; i < seqlen - 1; ++i) {
 
+    /* find out which vertex we are sitting on */
     current = 0;
     for (int j = n - 1; j >= 0; --j) {
       if (j == 0)
@@ -156,11 +178,13 @@ string walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
         current += pow(alphlen, j) * (out_i[i - j] % alphlen);
     }
 
+    /* select a random availabe edge */
     out_i.push_back(edgelist[current][edgelist_counter[current]]);
     ++edgelist_counter[current];
 
   }
 
+  /* indices --> letters */
   for (int i = 0; i < out_i.size(); ++i) {
     out += lets_uniq[out_i[i]];
   }
@@ -182,6 +206,9 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   vector<vector<int>> edgelist;
   string firstl, lastl, out;
 
+  /* the first and last letters remain unchaged; these are special vertices
+   * which only have a single directed edge to them
+   */
   for (int i = 0; i < k - 1; ++i) {
     firstl += letters[i];
   }
@@ -200,7 +227,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
 
   klets = make_klets(lets_uniq, k);
   let_counts = count_klets(letters, klets, lets_uniq, k, alphlen);
-  kletsm1 = make_klets(lets_uniq, k - 1);
+  kletsm1 = make_klets(lets_uniq, k - 1);  /* these are the vertices */
 
   for (int i = 0; i < nletsm1; ++i) {
     if (lastl.compare(kletsm1[i]) == 0) {
@@ -209,8 +236,12 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
     }
   }
 
+  /* edgelist with letter counts */
   edgelist = make_edgelist(let_counts, nletsm1, alphlen);
 
+  /* check for unconnected vertices; ignore these when searching for a new
+   * Eulerian path
+   */
   vector<bool> empty_vertices;
   for (int i = 0; i < nletsm1; ++i) {
     empty_vertices.push_back(true);
@@ -222,14 +253,18 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
     }
   }
 
+  /* find a new Eulerian path */
   last_letsi = find_euler(edgelist, lasti, nletsm1, gen, alphlen, k, empty_vertices);
 
+  /* delete last edges from edge pool */
   vector<vector<int>> edgelist2;
   for (int i = 0; i < last_letsi.size(); ++i) {
     if (i != lasti) --edgelist[i][last_letsi[i]];
   }
+  /* generate edge indices + shuffle */
   edgelist2 = fill_vertices(edgelist, last_letsi, nletsm1, alphlen, lasti, gen);
 
+  /* walk new Eulerian path and paste together out string */
   out = walk_euler(edgelist2, seqlen, k, lets_uniq, gen, last_letsi, firstl, lastl, lasti);
 
   return out;

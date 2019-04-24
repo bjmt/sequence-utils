@@ -4,7 +4,6 @@ sequenceshuffler
 Author: Benjamin Jean-Marie Tremblay <benjmtremblay@gmail.com>
 Date: 2019-04-20
 
-
 Installation
 ------------
 
@@ -30,7 +29,6 @@ This utility counts the total number of k-lets in the input sequence.
         C   8081
         G   7583
         T  16952
-
 
 shuffler
 --------
