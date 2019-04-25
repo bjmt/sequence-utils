@@ -54,11 +54,81 @@ void usage() {
   );
 }
 
+void read_fasta(istream &input, vector<string> &fa_names,
+    vector<string> &fa_seqs) {
+
+  string line, name, content;
+
+  while (getline(input, line).good()) {
+
+    if (line.empty() || line[0] == '>') {
+
+      if (!name.empty()) {
+        fa_names.push_back(name);
+        name.clear();
+      }
+      if (!line.empty()) {
+        name = line;
+      }
+      if (content.length() > 0) {
+        fa_seqs.push_back(content);
+      }
+      content.clear();
+
+    } else if (!name.empty()) {
+
+      if (line.find(' ') != string::npos) {
+        line.erase(remove(line.begin(), line.end(), ' '), line.end());
+      }
+
+      if (line.length() == 0) {
+        name.clear();
+        content.clear();
+      } else {
+        content += line;
+      }
+
+    }
+
+  }
+
+  if (!name.empty()) {
+    fa_names.push_back(name);
+    fa_seqs.push_back(content);
+  }
+
+  return;
+
+}
+
+string do_shuffle(vector<char> letters, int k, default_random_engine gen,
+    bool verbose, int method_i) {
+
+  string outletters;
+
+  switch (method_i) {
+
+    case 1: shuffle(letters.begin(), letters.end(), gen);
+            outletters = string(letters.begin(), letters.end());
+            break;
+    case 2: outletters = shuffle_markov(letters, gen, k, verbose);
+            break;
+    case 3: outletters = shuffle_linear(letters, gen, k, verbose);
+            break;
+    case 4: outletters = shuffle_euler(letters, gen, k, verbose);
+            break;
+
+  }
+
+  return outletters;
+
+}
+
 int main(int argc, char **argv) {
 
   /* variables */
 
-  int k {1};
+  int k {1}, method_i {1};
   int opt;
   ifstream seqfile;
   ofstream outfile;
@@ -134,6 +204,12 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
+  if (k > 1) {
+    if (use_markov) method_i = 2;
+    else if (use_linear) method_i = 3;
+    else method_i = 4;
+  }
+
   /* read letters */
 
   if (!is_fasta) {
@@ -151,85 +227,13 @@ int main(int argc, char **argv) {
 
   } else {
 
-    string line, name, content;
-
     if (!has_file) {
 
-      while (getline(cin, line).good()) {
-
-        if (line.empty() || line[0] == '>') {
-
-          if (!name.empty()) {
-            fa_names.push_back(name);
-            name.clear();
-          }
-          if (!line.empty()) {
-            name = line;
-          }
-          if (content.length() > 0) fa_seqs.push_back(content);
-          content.clear();
-
-        } else if (!name.empty()) {
-
-          if (line.find(' ') != string::npos) {
-            line.erase(remove(line.begin(), line.end(), ' '), line.end());
-          }
-
-          if (line.length() == 0) {
-            name.clear();
-            content.clear();
-          } else {
-            content += line;
-          }
-
-        }
-
-
-      }
-
-      if (!name.empty()) {
-        fa_names.push_back(name);
-        fa_seqs.push_back(content);
-      }
+      read_fasta(cin, fa_names, fa_seqs);
 
     } else {
 
-      while (getline(seqfile, line).good()) {
-
-        if (line.empty() || line[0] == '>') {
-
-          if (!name.empty()) {
-            fa_names.push_back(name);
-            name.clear();
-          }
-          if (!line.empty()) {
-            name = line;
-          }
-          if (content.length() > 0) fa_seqs.push_back(content);
-          content.clear();
-
-        } else if (!name.empty()) {
-
-          if (line.find(' ') != string::npos) {
-            line.erase(remove(line.begin(), line.end(), ' '), line.end());
-          }
-
-          if (line.length() == 0) {
-            name.clear();
-            content.clear();
-          } else {
-            content += line;
-          }
-
-        }
-
-
-      }
-
-      if (!name.empty()) {
-        fa_names.push_back(name);
-        fa_seqs.push_back(content);
-      }
+      read_fasta(seqfile, fa_names, fa_seqs);
 
       seqfile.close();
 
@@ -265,18 +269,7 @@ int main(int argc, char **argv) {
       exit(EXIT_FAILURE);
     }
 
-    if (k == 1) {
-
-      shuffle(letters.begin(), letters.end(), gen);
-      outletters = string(letters.begin(), letters.end());
-
-    } else {
-
-      if (use_markov) outletters = shuffle_markov(letters, gen, k, verbose);
-      else if (use_linear) outletters = shuffle_linear(letters, gen, k, verbose);
-      else outletters = shuffle_euler(letters, gen, k, verbose);
-
-    }
+    outletters = do_shuffle(letters, k, gen, verbose, method_i);
 
     if (has_out) {
       outfile << outletters;
@@ -306,14 +299,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
       }
 
-      if (k == 1) {
-        shuffle(letters2.begin(), letters2.end(), gen);
-        outletters = string(letters2.begin(), letters2.end());
-      } else {
-        if (use_markov) outletters = shuffle_markov(letters2, gen, k, false);
-        else if (use_linear) outletters = shuffle_linear(letters2, gen, k, false);
-        else outletters = shuffle_euler(letters2, gen, k, false);
-      }
+      outletters = do_shuffle(letters2, k, gen, false, method_i);
 
       if (has_out) {
         outfile << fa_names[i] << "\n" << outletters << "\n";
