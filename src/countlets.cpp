@@ -48,11 +48,11 @@ int main(int argc, char **argv) {
 
   /* variables */
 
-  int k {1};
+  int k{1};
   int opt, seqlen, alphlen, alignlen;
   ifstream seqfile;
   ofstream outfile;
-  bool has_file {false}, has_out {false}, progress {false};
+  bool has_file{false}, has_out{false}, progress{false};
   char l;
   set<int> lets_set;
   vector<char> letters, lets_uniq;

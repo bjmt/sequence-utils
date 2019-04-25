@@ -54,8 +54,7 @@ void usage() {
   );
 }
 
-void read_fasta(istream &input, vector<string> &fa_names,
-    vector<string> &fa_seqs) {
+void read_fasta(istream &input, vector<string> &fa_names, vector<string> &fa_seqs) {
 
   string line, name, content;
 
@@ -128,13 +127,13 @@ int main(int argc, char **argv) {
 
   /* variables */
 
-  int k {1}, method_i {1};
+  int k{1}, method_i{1};
   int opt;
   ifstream seqfile;
   ofstream outfile;
-  bool has_file {false}, has_out {false}, is_fasta {false};
-  bool use_linear {false}, use_markov {false};
-  bool verbose {false};
+  bool has_file{false}, has_out{false}, is_fasta{false};
+  bool use_linear{false}, use_markov{false};
+  bool verbose{false};
   unsigned int iseed = time(0);
   char l;
   vector<char> letters;
@@ -234,7 +233,6 @@ int main(int argc, char **argv) {
     } else {
 
       read_fasta(seqfile, fa_names, fa_seqs);
-
       seqfile.close();
 
     }

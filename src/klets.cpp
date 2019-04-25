@@ -30,10 +30,7 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
   int alphlen = lets_uniq.size();
   int nlets = pow(alphlen, k);
   int let_i, counter, step;
-  vector<string> klets;
-  for (int i = 0; i < nlets; ++i) {
-    klets.push_back("");
-  }
+  vector<string> klets(nlets, "");
 
   /* perhaps a bit primitive, but it works */
 
@@ -68,10 +65,8 @@ vector<int> count_klets(vector<char> letters, vector<string> klets,
 
   int seqlen = letters.size();
   int nlets = pow(alphlen, k);
-  vector<int> intletters, let_counts;
-  for (int i = 0; i < nlets; ++i) {
-    let_counts.push_back(0);
-  }
+  vector<int> intletters;
+  vector<int> let_counts(nlets, 0);
 
   for (int i = 0; i < seqlen; ++i) {
     for (int j = 0; j < alphlen; ++j) {

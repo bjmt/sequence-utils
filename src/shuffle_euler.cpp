@@ -56,11 +56,13 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
     default_random_engine gen, int alphlen, int k, vector<bool> empty_vertices,
     bool verbose) {
 
-  vector<int> last_letsi, next_let_i;
-  vector<bool> vertices;
   int u;
   int nletsm2 = pow(alphlen, k - 2);
   int good_v {0}, counter {0};
+  vector<bool> vertices(nletsm1, false);
+  vector<int> last_letsi(nletsm1, 0);
+  vector<int> next_let_i;
+  next_let_i.reserve(nletsm1);
 
   /* The idea is to go through and make sure that every last letter for each
    * vertex makes it so that a walk with no dead-ends to the tree root is
@@ -68,10 +70,6 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
    * edge graph; these don't need to be checked.
    */
 
-  for (int i = 0; i < nletsm1; ++i) {
-    vertices.push_back(false);
-    last_letsi.push_back(0);
-  }
   vertices[lasti] = true;  /* tree root */
 
   /* I don't think there's a formula for this, so just prepare these beforehand */
@@ -159,15 +157,12 @@ vector<int> walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
     vector<char> lets_uniq, default_random_engine gen, vector<int> last_letsi,
     string firstl, string lastl, int lasti) {
 
-  vector<int> out_i, edgelist_counter;
+  vector<int> out_i;
   int alphlen = lets_uniq.size();
   int nletsm1 = edgelist.size();
   int current {0};
   int n = firstl.length();
-
-  for (int i = 0; i < nletsm1; ++i) {
-    edgelist_counter.push_back(0);
-  }
+  vector<int> edgelist_counter(nletsm1, 0);
 
   /* initialize shuffled sequence with starting vertex */
   for (int i = 0; i < n; ++i) {
