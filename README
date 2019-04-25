@@ -115,6 +115,33 @@ this type of shuffling is discussed by Fitch (1983).
 Note: these methods only apply for k > 1. Otherwise, a simple shuffle call is
 performed.
 
+Example usage:
+
+  euler shuffling:
+
+    bin/./shuffler -i example/sequence.txt -k 2 | bin/./countlets
+
+        A  17384
+        C   8081
+        G   7583
+        T  16952
+
+  markov shuffling:
+
+    bin/./shuffler -i example/sequence.txt -k 2 -s 1 -m | bin/./countlets
+
+        A  17421
+        C   8122
+        G   7472
+        T  16984
+
+  linear + fasta-formatted shuffling:
+
+    echo ">seq\nASCASCASDASCASDASDASC" | bin/./shuffler -k 2 -l -s 1 -f
+
+        >seq
+        CAASASASSCSCDAASSDDAC
+
 
 References
 ----------
