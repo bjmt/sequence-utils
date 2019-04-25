@@ -30,9 +30,9 @@ string shuffle_linear(vector<char> letters, default_random_engine gen, int k,
   /* variables */
 
   int seqlen1 = letters.size();
-  int seqlen2 {seqlen1 / k};
-  int seqrem {seqlen1 % k};
-  int seqremlen {seqlen1 - seqrem};
+  int seqlen2{seqlen1 / k};
+  int seqrem{seqlen1 % k};
+  int seqremlen{seqlen1 - seqrem};
 
   if (verbose) {
     cerr << "  Times split: " << seqlen2 << endl;

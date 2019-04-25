@@ -2,7 +2,8 @@ sequenceshuffler
 ================
 
 Author: Benjamin Jean-Marie Tremblay <benjmtremblay@gmail.com>
-Date: 2019-04-24
+Date: 2019-04-25
+
 
 Installation
 ------------
@@ -13,10 +14,12 @@ Installation
 
 The following binaries are created:
 
-    sequenceshuffler/bin/countlets
-    sequenceshuffler/bin/shuffler
+    bin/countlets
+    bin/seqgen
+    bin/shuffler
 
 Run these without any arguments or with the -h flag to see usage.
+
 
 countlets
 ---------
@@ -24,12 +27,51 @@ countlets
 This utility counts the total number of k-lets in the input sequence. Be aware
 that the total number of k-lets is n^k, where n is the alphabet length.
 
+Example usage:
+
     bin/./countlets -k 1 -i example/sequence.txt
 
         A  17384
         C   8081
         G   7583
         T  16952
+
+
+seqgen
+------
+
+Create random sequences from any alphabet. Letters can be made up of any
+number of characters. Weights can be provided to modify random generation.
+If any of the input letters contain spaces, use quotation marks.
+
+Example usage:
+
+    bin/./seqgen -a A,C,G,T -l 10 -s 11
+
+      CGAACTATTC
+
+    bin/./seqgen -a A,C,G,T -l 1000 -s 1 | bin/./countlets
+
+      A  246
+      C  258
+      G  233
+      T  263
+
+    bin/./seqgen -a "A,B,CD, " -l 10 -s 3
+
+      BCD BBBAAB
+
+    bin/./seqgen -a A,C,G,T -l 10 -s 11 -w 1,0.5,0.5,1
+
+      TTAGAATTTT
+
+    bin/./seqgen -a A,C,G,T -l 1000 -s 11 -w 1,0.5,0.5,1 | bin/./countlets
+
+      A  338
+      C  150
+      G  169
+      T  343
+
 
 shuffler
 --------
@@ -72,6 +114,7 @@ this type of shuffling is discussed by Fitch (1983).
 
 Note: these methods only apply for k > 1. Otherwise, a simple shuffle call is
 performed.
+
 
 References
 ----------

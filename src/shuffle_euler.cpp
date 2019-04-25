@@ -37,7 +37,7 @@ vector<vector<int>> make_edgelist(vector<int> let_counts, int nletsm1, int alphl
    */
 
   vector<vector<int>> edgelist(nletsm1, vector<int>(alphlen));
-  int counter {0};
+  int counter{0};
 
   for (int i = 0; i < nletsm1; ++i) {
 
@@ -58,7 +58,7 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
 
   int u;
   int nletsm2 = pow(alphlen, k - 2);
-  int good_v {0}, counter {0};
+  int good_v{0}, counter{0};
   vector<bool> vertices(nletsm1, false);
   vector<int> last_letsi(nletsm1, 0);
   vector<int> next_let_i;
@@ -160,7 +160,7 @@ vector<int> walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
   vector<int> out_i;
   int alphlen = lets_uniq.size();
   int nletsm1 = edgelist.size();
-  int current {0};
+  int current{0};
   int n = firstl.length();
   vector<int> edgelist_counter(nletsm1, 0);
 
@@ -202,7 +202,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
 
   int seqlen = letters.size();
   int alphlen, nlets, nletsm1;
-  int lasti {-1};
+  int lasti{-1};
   vector<int> let_counts, last_letsi, out_i;
   vector<char> lets_uniq;
   set<int> lets_set;
