@@ -29,7 +29,7 @@ that the total number of k-lets is n^k, where n is the alphabet length.
 
 Example usage:
 
-    bin/./countlets -k 1 -i example/sequence.txt
+    bin/countlets -k 1 -i example/sequence.txt
 
         A  17384
         C   8081
@@ -46,18 +46,18 @@ If any of the input letters contain spaces, use quotation marks.
 
 Example usage:
 
-    bin/./seqgen -a A,C,G,T -l 10 -s 11
+    bin/seqgen -a A,C,G,T -l 10 -s 11
 
       CGAACTATTC
 
-    bin/./seqgen -a A,C,G,T -l 1000 -s 1 | bin/./countlets
+    bin/seqgen -a A,C,G,T -l 1000 -s 1 | bin/./countlets
 
       A  246
       C  258
       G  233
       T  263
 
-    bin/./seqgen -a "A,B,CD, " -l 10 -s 3
+    bin/seqgen -a "A,B,CD, " -l 10 -s 3
 
       BCD BBBAAB
 
@@ -65,7 +65,7 @@ Example usage:
 
       TTAGAATTTT
 
-    bin/./seqgen -a A,C,G,T -l 1000 -s 11 -w 1,0.5,0.5,1 | bin/./countlets
+    bin/seqgen -a A,C,G,T -l 1000 -s 11 -w 1,0.5,0.5,1 | bin/./countlets
 
       A  338
       C  150
@@ -119,7 +119,7 @@ Example usage:
 
   euler shuffling:
 
-    bin/./shuffler -i example/sequence.txt -k 2 | bin/./countlets
+    bin/shuffler -i example/sequence.txt -k 2 | bin/./countlets
 
         A  17384
         C   8081
@@ -128,7 +128,7 @@ Example usage:
 
   markov shuffling:
 
-    bin/./shuffler -i example/sequence.txt -k 2 -s 1 -m | bin/./countlets
+    bin/shuffler -i example/sequence.txt -k 2 -s 1 -m | bin/./countlets
 
         A  17421
         C   8122
