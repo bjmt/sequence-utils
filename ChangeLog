@@ -1,3 +1,8 @@
+2019-04-26  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+
+* Added countfa v1.0
+* shuffler -f now inserts newlines every 80 characters
+
 2019-04-25  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * Added seqgen v1.0

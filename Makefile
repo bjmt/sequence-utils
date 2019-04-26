@@ -1,9 +1,10 @@
 SRC := countlets.cpp klets.cpp shuffler.cpp shuffle_euler.cpp \
-  shuffle_linear.cpp shuffle_markov.cpp seqgen.cpp
+  shuffle_linear.cpp shuffle_markov.cpp seqgen.cpp countfa.cpp
 OBJ_COUNTLETS := countlets.o klets.o
 OBJ_SHUFFLER := shuffler.o klets.o shuffle_euler.o shuffle_linear.o \
   shuffle_markov.o
 OBJ_SEQGEN := seqgen.o
+OBJ_COUNTFA := countfa.o
 CC := g++
 
 all: build install
@@ -11,6 +12,10 @@ all: build install
 build:
 	cd src;\
 	$(CC) --std=c++11 -O2 -Wall -c $(SRC)
+
+countfa:
+	cd src;\
+	  $(CC) $(OBJ_COUNTFA) -o ../bin/countfa
 
 countlets:
 	cd src;\
@@ -27,7 +32,7 @@ seqgen:
 makebin:
 	mkdir -p bin
 
-install: makebin countlets shuffler seqgen
+install: makebin countfa countlets shuffler seqgen
 
 clean:
 	cd src;\

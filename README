@@ -14,11 +14,28 @@ Installation
 
 The following binaries are created:
 
+    bin/countfa
     bin/countlets
     bin/seqgen
     bin/shuffler
 
 Run these without any arguments or with the -h flag to see usage.
+
+
+countfa
+-------
+
+Counts the number of characters per sequence in a fasta file. For each sequence,
+the name followed by the character count are returned to stdout.
+
+Example usage:
+
+    echo ">1\nACAAG\n>2\nGCCCGGTTAT" | bin/countfa
+
+        >1
+        5
+        >2
+        10
 
 
 countlets

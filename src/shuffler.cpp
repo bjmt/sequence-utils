@@ -41,7 +41,8 @@ void usage() {
     "                                                                                \n"
     " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
     "            take string input from a pipe.                                      \n"
-    " -o <str>   Output filename. Alternatively, prints to stdout.                   \n"
+    " -o <str>   Output filename. Alternatively, prints to stdout. For fasta input, a\n"
+    "            newline is inserted every 80 characters.                            \n"
     " -k <int>   K-let size. Defaults to 1.                                          \n"
     " -s <int>   RNG seed number. Defaults to time in seconds.                       \n"
     " -m         Use the markov shuffling method. Defaults to euler.                 \n"
@@ -291,6 +292,7 @@ int main(int argc, char **argv) {
     }
 
     for (int i = 0; i < fa_names.size(); ++i) {
+
       vector<char> letters2(fa_seqs[i].begin(), fa_seqs[i].end());
       if (k >= letters2.size()) {
         cerr << "Error: sequence length must be greater than k" << endl;
@@ -300,9 +302,23 @@ int main(int argc, char **argv) {
       outletters = do_shuffle(letters2, k, gen, false, method_i);
 
       if (has_out) {
-        outfile << fa_names[i] << "\n" << outletters << "\n";
+        outfile << fa_names[i] << endl;
+        for (int j = 0; j < outletters.length(); ++j) {
+          if (j % 80 == 0 && j != 0) {
+            outfile << endl;
+          }
+          outfile << outletters[j];
+        }
+        outfile << endl;
       } else {
-        cout << fa_names[i] << "\n" << outletters << "\n";
+        cout << fa_names[i] << endl;
+        for (int j = 0; j < outletters.length(); ++j) {
+          if (j % 80 == 0 && j != 0) {
+            cout << endl;
+          }
+          cout << outletters[j];
+        }
+        cout << endl;
       }
 
     }
