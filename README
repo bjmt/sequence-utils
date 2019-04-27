@@ -81,7 +81,7 @@ Example usage:
 
       CGAACTATTC
 
-    bin/seqgen -a A,C,G,T -l 1000 -s 1 | bin/./countlets
+    bin/seqgen -a A,C,G,T -l 1000 -s 1 | bin/countlets
 
       A  246
       C  258
@@ -96,7 +96,7 @@ Example usage:
 
       TTAGAATTTT
 
-    bin/seqgen -a A,C,G,T -l 1000 -s 11 -w 1,0.5,0.5,1 | bin/./countlets
+    bin/seqgen -a A,C,G,T -l 1000 -s 11 -w 1,0.5,0.5,1 | bin/countlets
 
       A  338
       C  150
@@ -150,7 +150,7 @@ Example usage:
 
   euler shuffling:
 
-    bin/shuffler -i example/sequence.txt -k 2 | bin/./countlets
+    bin/shuffler -i example/sequence.txt -k 2 | bin/countlets
 
         A  17384
         C   8081
@@ -159,7 +159,7 @@ Example usage:
 
   markov shuffling:
 
-    bin/shuffler -i example/sequence.txt -k 2 -s 1 -m | bin/./countlets
+    bin/shuffler -i example/sequence.txt -k 2 -s 1 -m | bin/countlets
 
         A  17421
         C   8122
@@ -168,7 +168,7 @@ Example usage:
 
   linear + fasta-formatted shuffling:
 
-    echo ">seq\nASCASCASDASCASDASDASC" | bin/./shuffler -k 2 -l -s 1 -f
+    echo ">seq\nASCASCASDASCASDASDASC" | bin/shuffler -k 2 -l -s 1 -f
 
         >seq
         CAASASASSCSCDAASSDDAC
