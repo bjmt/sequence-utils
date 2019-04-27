@@ -13,16 +13,16 @@ build:
 	$(CXX) $(CXXFLAGS) -c *.cpp
 
 countfa:
-	  $(CXX) $(LDFLAGS) -o bin/countfa $(addprefix src/, $(OBJ_COUNTFA))
+	  $(CXX) -o bin/countfa $(addprefix src/, $(OBJ_COUNTFA))
 
 countlets:
-	$(CXX) $(LDFLAGS) -o bin/countlets $(addprefix src/, $(OBJ_COUNTLETS))
+	$(CXX) -o bin/countlets $(addprefix src/, $(OBJ_COUNTLETS))
 
 shuffler:
-	$(CXX) $(LDFLAGS) -o bin/shuffler $(addprefix src/, $(OBJ_SHUFFLER))
+	$(CXX) -o bin/shuffler $(addprefix src/, $(OBJ_SHUFFLER))
 
 seqgen:
-	$(CXX) $(LDFLAGS) -o bin/seqgen $(addprefix src/, $(OBJ_SEQGEN))
+	$(CXX) -o bin/seqgen $(addprefix src/, $(OBJ_SEQGEN))
 
 makebin:
 	mkdir -p bin
