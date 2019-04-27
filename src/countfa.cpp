@@ -77,7 +77,7 @@ void do_countfa(istream &input) {
 
   if (!name.empty()) {
     cout << name << endl;
-    cout << counter << endl;
+    if (counter > 0) cout << counter << endl;
   }
 
 }
