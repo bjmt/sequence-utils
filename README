@@ -42,11 +42,22 @@ countlets
 ---------
 
 This utility counts the total number of k-lets in the input sequence. Be aware
-that the total number of k-lets is n^k, where n is the alphabet length.
+that the total number of k-lets is n^k, where n is the alphabet length. For use
+cases involving memory constraints, providing the sequence alphabet head of time
+will allow countlets to count k-lets without loading the entire sequence into
+memory (at the cost of speed for higher k values). When the alphabet is
+provided, it will typically never take up more than 1 MB of memory.
 
 Example usage:
 
     bin/countlets -k 1 -i example/sequence.txt
+
+        A  17384
+        C   8081
+        G   7583
+        T  16952
+
+    bin/countlets -k 1 -a ACGT -i example/sequence.txt
 
         A  17384
         C   8081
@@ -59,7 +70,9 @@ seqgen
 
 Create random sequences from any alphabet. Letters can be made up of any
 number of characters. Weights can be provided to modify random generation.
-If any of the input letters contain spaces, use quotation marks.
+If any of the input letters contain spaces, use quotation marks. New letters
+are streamed directly to the output, meaning memory usage is indendent of
+output sequence length.
 
 Example usage:
 
@@ -158,6 +171,13 @@ Example usage:
 
         >seq
         CAASASASSCSCDAASSDDAC
+
+A note on memory usage:
+
+This program is not terribly memory efficient, usually requiring memory several
+times the size of the input sequence. This means shuffling billions of
+characters is not recommended unless you don't mind letting shuffler take up
+several GBs of memory.
 
 
 References
