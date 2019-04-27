@@ -92,7 +92,7 @@ Example usage:
 
       BCD BBBAAB
 
-    bin/./seqgen -a A,C,G,T -l 10 -s 11 -w 1,0.5,0.5,1
+    bin/seqgen -a A,C,G,T -l 10 -s 11 -w 1,0.5,0.5,1
 
       TTAGAATTTT
 
