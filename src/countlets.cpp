@@ -41,7 +41,7 @@ void usage() {
     " -a <str>   A string containing all of the alphabet letters present in the      \n"
     "            sequence. This allows the program not to have to load the entire    \n"
     "            sequence into memory to find all of the unique letters. The downside\n"
-    "            is that runtime increases much more with increasing k.              \n"
+    "            is that runtime increases more with increasing k.                   \n"
     " -k <int>   K-let size. Defaults to 1.                                          \n"
     " -h         Show usage.                                                         \n"
   );
