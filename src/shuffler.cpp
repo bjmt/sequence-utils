@@ -287,6 +287,7 @@ int main(int argc, char **argv) {
         case 3: cerr << "linear";
                 break;
         case 4: cerr << "euler";
+                break;
       }
       cerr << endl;
     }
