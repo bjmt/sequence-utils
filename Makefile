@@ -1,33 +1,28 @@
-SRC := countlets.cpp klets.cpp shuffler.cpp shuffle_euler.cpp \
-  shuffle_linear.cpp shuffle_markov.cpp seqgen.cpp countfa.cpp
-OBJ_COUNTLETS := countlets.o klets.o
-OBJ_SHUFFLER := shuffler.o klets.o shuffle_euler.o shuffle_linear.o \
-  shuffle_markov.o
-OBJ_SEQGEN := seqgen.o
-OBJ_COUNTFA := countfa.o
-CC := g++
+OBJ_COUNTLETS = countlets.o klets.o
+OBJ_SHUFFLER = shuffler.o klets.o shuffle_euler.o shuffle_linear.o shuffle_markov.o
+OBJ_SEQGEN = seqgen.o
+OBJ_COUNTFA = countfa.o
+
+CXX = g++
+CXXFLAGS += --std=c++11 -O3 -Wall
 
 all: build install
 
 build:
 	cd src;\
-	$(CC) --std=c++11 -O2 -Wall -c $(SRC)
+	$(CXX) $(CXXFLAGS) -c *.cpp
 
 countfa:
-	cd src;\
-	  $(CC) $(OBJ_COUNTFA) -o ../bin/countfa
+	  $(CXX) $(LDFLAGS) -o bin/countfa $(addprefix src/, $(OBJ_COUNTFA))
 
 countlets:
-	cd src;\
-	$(CC) $(OBJ_COUNTLETS) -o ../bin/countlets
+	$(CXX) $(LDFLAGS) -o bin/countlets $(addprefix src/, $(OBJ_COUNTLETS))
 
 shuffler:
-	cd src;\
-	$(CC) $(OBJ_SHUFFLER) -o ../bin/shuffler
+	$(CXX) $(LDFLAGS) -o bin/shuffler $(addprefix src/, $(OBJ_SHUFFLER))
 
 seqgen:
-	cd src;\
-	$(CC) $(OBJ_SEQGEN) -o ../bin/seqgen
+	$(CXX) $(LDFLAGS) -o bin/seqgen $(addprefix src/, $(OBJ_SEQGEN))
 
 makebin:
 	mkdir -p bin
