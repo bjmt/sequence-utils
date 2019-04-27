@@ -46,7 +46,7 @@ that the total number of k-lets is n^k, where n is the alphabet length. For use
 cases involving memory constraints, providing the sequence alphabet head of time
 will allow countlets to count k-lets while only needing to load k + 1 letters
 into memory at a time (at the cost of speed for higher k values). When the
-alphabet is provided, it will typically never take up more than a few MBs of
+alphabet is provided, it will typically never take up more than a couple MBs of
 memory.
 
 Example usage:
