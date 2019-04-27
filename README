@@ -72,7 +72,7 @@ seqgen
 Create random sequences from any alphabet. Letters can be made up of any
 number of characters. Weights can be provided to modify random generation.
 If any of the input letters contain spaces, use quotation marks. New letters
-are streamed directly to the output, meaning memory usage is indendent of
+are streamed directly to the output, meaning memory usage is independent of
 output sequence length.
 
 Example usage:
