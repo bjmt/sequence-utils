@@ -49,28 +49,29 @@ void usage() {
 
 vector<int> count_stream(istream &input, vector<string> klets, int k) {
 
-  int nlets = klets.size();
-  vector<int> counts(nlets, 0);
+  vector<int> counts(klets.size(), 0);
   char l;
   string let;
   let.reserve(k + 1);
 
+  vector<string>::iterator let_i;
+
   while (input >> l) {
     let += l;
+
     if (let.length() >= k) {
+
       if (let.length() == k + 1) let = let.substr(1, k);
-      for (int i = 0; i < nlets; ++i) {
-        if (let.compare(klets[i]) == 0) {
-          ++counts[i];
-          break;
-        }
-        if (i == nlets - 1) {
-          cerr << "Error: found unknown letter ["
-            << l << "]" << endl;
+
+        let_i = lower_bound(klets.begin(), klets.end(), let);
+        if (let_i == klets.end()) {
+          cerr << "Error: found unknown letter [" << l << "]" << endl;
           exit(EXIT_FAILURE);
         }
-      }
+        ++counts[let_i - klets.begin()];
+
     }
+
   }
 
   return counts;
@@ -82,13 +83,12 @@ int main(int argc, char **argv) {
   /* variables */
 
   int k{1};
-  int opt, seqlen, alphlen, alignlen;
+  int opt, alphlen, alignlen;
   ifstream seqfile;
   ofstream outfile;
   bool has_file{false}, has_out{false}, has_alph{false};
-  char l;
   set<int> lets_set;
-  vector<char> letters, lets_uniq;
+  vector<char> lets_uniq;
   vector<string> klets;
   vector<int> counts;
   string alph;
@@ -149,6 +149,10 @@ int main(int argc, char **argv) {
   if (!has_alph) {
 
     /* this version loads the entire sequence into memory */
+
+    vector<char> letters;
+    int seqlen;
+    char l;
 
     if (!has_file) {
       while (cin >> l) letters.push_back(l);
