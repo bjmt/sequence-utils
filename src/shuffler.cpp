@@ -129,15 +129,15 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output, int k,
 
       if (content.length() > 0) {
 
-        if (content.length() <= k) {
-          cerr << "Warning: encountered a sequence where k is too big ["
-            << count_n << "]" << endl;
-        }
         ++count_s;
         if (count_s < count_n) {
           cerr << "Warning: encountered a missing sequence ["
             << count_n - 1 << "]" << endl;
           count_s = count_n;
+        }
+        if (content.length() <= k) {
+          cerr << "Warning: encountered a sequence where k is too big ["
+            << count_n << "]" << endl;
         }
 
         shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
@@ -164,11 +164,13 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output, int k,
   }
 
   if (!name.empty()) {
-    ++count_n;
     output << name << endl;
-    if (content.length() <= k) {
-      cerr << "Error: k must be greater than sequence length ["
-        << name << "]" << endl;
+    if (content.length() == 0) {
+      cerr << "Warning: encountered a missing sequence ["
+        << count_n << "]" << endl;
+    } else if (content.length() <= k) {
+      cerr << "Warning: encountered a sequence where k is too big ["
+        << count_n << "]" << endl;
       exit(EXIT_FAILURE);
     }
     shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
