@@ -281,9 +281,13 @@ int main(int argc, char **argv) {
     cerr << "RNG seed: " << iseed << endl;
     if (k > 1) {
       cerr << "Shuffling method: ";
-      if (use_markov) cerr << "markov";
-      else if (use_linear) cerr << "linear";
-      else cerr << "euler";
+      switch (method_i) {
+        case 2: cerr << "markov";
+                break;
+        case 3: cerr << "linear";
+                break;
+        case 4: cerr << "euler";
+      }
       cerr << endl;
     }
   }
