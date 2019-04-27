@@ -25,8 +25,7 @@ countfa
 Counts the number of characters per sequence in a fasta file. For each sequence,
 the name followed by the character count are returned to stdout. The aim is to
 count sequence lengths without taking up too much memory. To this end, only one
-line is kept in memory at a time. Though this means that if the sequence is not
-split up with newlines, the entire thing will be loaded into memory.
+character is loaded into memory at a time.
 
 Example usage:
 

@@ -39,6 +39,41 @@ void usage() {
 
 void do_countfa(istream &input) {
 
+  bool at_name{false};
+  int counter{0};
+  char l;
+
+  while (input.get(l)) {
+
+    if (l == '>') {
+      if (counter > 0) cout << counter << endl;
+      at_name = true;
+      counter = 0;
+    }
+
+    if (l == '\n' && at_name) {
+      at_name = false;
+      cout << endl;
+    }
+
+    if (at_name) cout << l;
+    else {
+      if (l != ' ' && l != '\n') ++counter;
+    }
+
+  }
+
+  if (!at_name && counter > 0) cout << counter << endl;
+
+  return;
+
+}
+
+/*
+void do_countfa(istream &input) {
+
+  // this version is faster, but potentially loads entire sequence in memory
+
   string name, line;
   int counter{0};
 
@@ -81,6 +116,7 @@ void do_countfa(istream &input) {
   }
 
 }
+*/
 
 int main(int argc, char **argv) {
 
