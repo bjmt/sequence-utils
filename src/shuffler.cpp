@@ -164,6 +164,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output, int k,
   }
 
   if (!name.empty()) {
+    ++count_n;
     output << name << endl;
     if (content.length() == 0) {
       cerr << "Warning: encountered a missing sequence ["
@@ -171,7 +172,6 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output, int k,
     } else if (content.length() <= k) {
       cerr << "Warning: encountered a sequence where k is too big ["
         << count_n << "]" << endl;
-      exit(EXIT_FAILURE);
     }
     shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
         false, method_i, output, true);
