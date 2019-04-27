@@ -61,12 +61,17 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
 }
 
 vector<int> count_klets(vector<char> letters, vector<string> klets,
-    vector<char> lets_uniq, int k, int alphlen, bool progress = false) {
+    vector<char> lets_uniq, int k, int alphlen) {
+
+  /* Scales very well with increasing k, but requires having the entire
+   * sequence in memory.
+   */
 
   int seqlen = letters.size();
   int nlets = pow(alphlen, k);
   vector<int> intletters;
   vector<int> let_counts(nlets, 0);
+  intletters.reserve(seqlen);
 
   for (int i = 0; i < seqlen; ++i) {
     for (int j = 0; j < alphlen; ++j) {
@@ -77,19 +82,9 @@ vector<int> count_klets(vector<char> letters, vector<string> klets,
     }
   }
 
-  int stop {seqlen - k};
-  int i_percent;
-  if (progress) cerr << "  0%";
-
   int l;
   int counter;
   for (int i = 0; i < seqlen - k + 1; ++i) {
-
-    if (progress) {
-      i_percent = i * 100 / stop;
-      if (i_percent != ((i - 1) * 100) / stop)
-        cerr << "\b\b\b\b" << setw(3) << i * 100 / stop << "%";
-    }
 
     l = 0; counter = 0;
     for (int j = k - 1; j >= 0; --j) {

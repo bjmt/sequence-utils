@@ -27,6 +27,6 @@
 std::vector<std::string> make_klets(std::vector<char> lets_uniq, int k);
 
 std::vector<int> count_klets(std::vector<char> letters, std::vector<std::string> klets,
-    std::vector<char> lets_uniq, int k, int alphlen, bool progress = false);
+    std::vector<char> lets_uniq, int k, int alphlen);
 
 #endif

@@ -28,7 +28,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "seqgen v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                   \n"
+    "seqgen v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                   \n"
     "                                                                                \n"
     "Usage:  seqgen [options] -a [letters] -l [length] -o [outfile]                  \n"
     "        seqgen [options] -a [letters] -l [length] > [outfile]                   \n"
@@ -137,35 +137,42 @@ int main(int argc, char **argv) {
 
   }
 
-  /* main seq generation loop */
+  /* main seq generation loop + return */
 
   gen = default_random_engine(iseed);
-  outletters = "";
 
   if (!has_freqs) {
 
-    while (outletters.length() < seqlen) {
-      outletters += lets[gen() % alphlen];
+    if (has_out) {
+      for (int i = 0; i < seqlen; ++i) {
+        outfile << lets[gen() % alphlen];
+      }
+      outfile << endl;
+      outfile.close();
+    } else {
+      for (int i = 0; i < seqlen; ++i) {
+        cout << lets[gen() % alphlen];
+      }
+      cout << endl;
     }
 
   } else {
 
     discrete_distribution<int> next_let(freqs.begin(), freqs.end());
-    while (outletters.length() < seqlen) {
-      outletters += lets[next_let(gen)];
+
+    if (has_out) {
+      for (int i = 0; i < seqlen; ++i) {
+        outfile << lets[next_let(gen)];
+      }
+      outfile << endl;
+      outfile.close();
+    } else {
+      for (int i = 0; i < seqlen; ++i) {
+        cout << lets[next_let(gen)];
+      }
+      cout << endl;
     }
 
-  }
-
-  if (outletters.length() > seqlen)
-     outletters = outletters.substr(0, seqlen);
-
-  /* return */
-
-  if (has_out) {
-    outfile << outletters << endl;
-  } else {
-    cout << outletters << endl;
   }
 
   return 1;

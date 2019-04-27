@@ -40,6 +40,7 @@ string shuffle_linear(vector<char> letters, default_random_engine gen, int k,
   }
 
   string out;
+  out.reserve(seqlen1);
 
   vector<int> seqindex;
   seqindex.reserve(seqlen2);

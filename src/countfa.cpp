@@ -28,8 +28,8 @@ void usage() {
   printf(
     "countfa v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                  \n"
     "                                                                                \n"
-    " Usage:  coutfa -i [filename]                                                   \n"
-    "         cat [filename] | coutfa                                                \n"
+    "Usage:  coutfa -i [filename]                                                    \n"
+    "        cat [filename] | coutfa                                                 \n"
     "                                                                                \n"
     " -i <str>    Input filename. File must be fasta-formatted. Alternatively, takes \n"
     "             input from a pipe.                                                 \n"

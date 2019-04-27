@@ -41,6 +41,8 @@ vector<vector<int>> make_edgelist(vector<int> let_counts, int nletsm1, int alphl
 
   for (int i = 0; i < nletsm1; ++i) {
 
+    edgelist[i].reserve(alphlen);
+
     for (int j = 0; j < alphlen; ++j) {
       edgelist[i][j] = let_counts[counter];
       ++counter;
@@ -133,6 +135,8 @@ vector<vector<int>> fill_vertices(vector<vector<int>> edgelist,
 
   for (int i = 0; i < nletsm1; ++i) {
 
+    edgelist2[i].reserve(accumulate(edgelist2[i].begin(), edgelist2[i].end(), 0));
+
     for (int j = 0; j < alphlen; ++j) {
 
       b = edgelist[i][j];
@@ -163,6 +167,7 @@ vector<int> walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
   int current{0};
   int n = firstl.length();
   vector<int> edgelist_counter(nletsm1, 0);
+  out_i.reserve(seqlen);
 
   /* initialize shuffled sequence with starting vertex */
   for (int i = 0; i < n; ++i) {
@@ -247,6 +252,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
    * Eulerian path
    */
   vector<bool> empty_vertices;
+  empty_vertices.reserve(nletsm1);
   for (int i = 0; i < nletsm1; ++i) {
     empty_vertices.push_back(true);
     for (int j = 0; j < alphlen; ++j) {
@@ -261,7 +267,8 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   if (verbose) cerr << "  Finding a random Eulerian path" << endl;
 
   /* find a new Eulerian path */
-  last_letsi = find_euler(edgelist, lasti, nletsm1, gen, alphlen, k, empty_vertices, verbose);
+  last_letsi = find_euler(edgelist, lasti, nletsm1, gen, alphlen, k,
+      empty_vertices, verbose);
 
   /* delete last edges from edge pool */
   vector<vector<int>> edgelist2;
@@ -277,9 +284,11 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   if (verbose) cerr << "  Walking new Eulerian path" << endl;
 
   /* walk new Eulerian path */
-  out_i = walk_euler(edgelist2, seqlen, k, lets_uniq, gen, last_letsi, firstl, lastl, lasti);
+  out_i = walk_euler(edgelist2, seqlen, k, lets_uniq, gen, last_letsi, firstl,
+      lastl, lasti);
 
   /* indices --> letters */
+  out.reserve(out_i.size());
   for (int i = 0; i < out_i.size(); ++i) {
     out += lets_uniq[out_i[i]];
   }

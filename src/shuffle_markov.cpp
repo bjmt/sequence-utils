@@ -37,6 +37,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
   int nlets = klets.size();
   int nletsm1 = kletsm1.size();
   string tmp_let, out;
+  out.reserve(seqlen);
 
   if (let_counts.size() == 0) {
     cerr << "Error: empty let_counts vector [markov_loop()]" << endl;
@@ -49,6 +50,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
   rand_i = first_let_d(gen);
   tmp_let = klets[rand_i];
   vector<char> out_split(tmp_let.begin(), tmp_let.end());
+  out_split.reserve(seqlen);
 
   /* keep growing */
 

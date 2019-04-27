@@ -30,7 +30,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "countlets v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
+    "countlets v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
     "                                                                                \n"
     "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
     "        echo [string] | countlets [options] > [filename]                        \n"
@@ -38,10 +38,43 @@ void usage() {
     " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
     "            take string input from a pipe.                                      \n"
     " -o <str>   Output filename. Alternatively, prints to stdout.                   \n"
+    " -a <str>   A string containing all of the alphabet letters present in the      \n"
+    "            sequence. This allows the program not to have to load the entire    \n"
+    "            sequence into memory to find all of the unique letters. The downside\n"
+    "            is that runtime increases much more with increasing k.              \n"
     " -k <int>   K-let size. Defaults to 1.                                          \n"
-    " -p         Show k-let counting progress.                                       \n"
     " -h         Show usage.                                                         \n"
   );
+}
+
+vector<int> count_stream(istream &input, vector<string> klets, int k) {
+
+  int nlets = klets.size();
+  vector<int> counts(nlets, 0);
+  char l;
+  string let;
+  let.reserve(k + 1);
+
+  while (input >> l) {
+    let += l;
+    if (let.length() >= k) {
+      if (let.length() == k + 1) let = let.substr(1, k);
+      for (int i = 0; i < nlets; ++i) {
+        if (let.compare(klets[i]) == 0) {
+          ++counts[i];
+          break;
+        }
+        if (i == nlets - 1) {
+          cerr << "Error: found unknown letter ["
+            << l << "]" << endl;
+          exit(EXIT_FAILURE);
+        }
+      }
+    }
+  }
+
+  return counts;
+
 }
 
 int main(int argc, char **argv) {
@@ -52,14 +85,15 @@ int main(int argc, char **argv) {
   int opt, seqlen, alphlen, alignlen;
   ifstream seqfile;
   ofstream outfile;
-  bool has_file{false}, has_out{false}, progress{false};
+  bool has_file{false}, has_out{false}, has_alph{false};
   char l;
   set<int> lets_set;
   vector<char> letters, lets_uniq;
   vector<string> klets;
   vector<int> counts;
+  string alph;
 
-  while ((opt = getopt(argc, argv, "i:k:o:hp")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:o:a:h")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -75,6 +109,10 @@ int main(int argc, char **argv) {
       case 'k': if (optarg) k = atoi(optarg);
                 break;
 
+      case 'a': if (optarg) alph = optarg;
+                has_alph = true;
+                break;
+
       case 'o': if (optarg) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
@@ -83,9 +121,6 @@ int main(int argc, char **argv) {
                   }
                   has_out = true;
                 }
-                break;
-
-      case 'p': progress = true;
                 break;
 
       case 'h': usage();
@@ -102,33 +137,64 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  /* read input */
-
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
       usage();
       exit(EXIT_FAILURE);
     }
-    while (cin >> l) letters.push_back(l);
+  }
+
+  /* read input */
+
+  if (!has_alph) {
+
+    /* this version loads the entire sequence into memory */
+
+    if (!has_file) {
+      while (cin >> l) letters.push_back(l);
+    } else {
+      while (seqfile >> l) letters.push_back(l);
+      seqfile.close();
+    }
+
+    /* make and count klets */
+
+    seqlen = letters.size();
+
+    for (int i = 0; i < seqlen; ++i) {
+      lets_set.insert(letters[i]);
+    }
+    lets_uniq.assign(lets_set.begin(), lets_set.end());
+    alphlen = lets_uniq.size();
+
+    klets = make_klets(lets_uniq, k);
+    counts = count_klets(letters, klets, lets_uniq, k, alphlen);
+
   } else {
-    while (seqfile >> l) letters.push_back(l);
-    seqfile.close();
+
+    /* this version only keeps k+1 characters in memory */
+
+    if (alph.length() < 1) {
+      cerr << "Error: could not parse -a option" << endl;
+      exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < alph.length(); ++i) {
+      lets_set.insert(alph[i]);
+    }
+    lets_uniq.assign(lets_set.begin(), lets_set.end());
+    alphlen = lets_uniq.size();
+
+    klets = make_klets(lets_uniq, k);
+
+    if (!has_file) {
+      counts = count_stream(cin, klets, k);
+    } else {
+      counts = count_stream(seqfile, klets, k);
+      seqfile.close();
+    }
+
   }
-
-  /* make and count klets */
-
-  seqlen = letters.size();
-
-  for (int i = 0; i < seqlen; ++i) {
-    lets_set.insert(letters[i]);
-  }
-  lets_uniq.assign(lets_set.begin(), lets_set.end());
-  alphlen = lets_uniq.size();
-
-  klets = make_klets(lets_uniq, k);
-  if (progress) cerr << "Counting " << k << "-lets: ";
-  counts = count_klets(letters, klets, lets_uniq, k, alphlen, progress);
-  if (progress) cerr << endl;
 
   /* return */
 

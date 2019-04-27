@@ -1,3 +1,14 @@
+2019-04-27  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+
+* Added .reserve() to a few variables
+* seqgen streams new letters directly to output, not keeping entire new
+sequence in memory
+* seqgen version bumped to v1.1
+* Dropped -p option for countlets
+* countlets has a new -a option, allowing to specify alphabet to prevent
+loading entire sequence into memory (at the cost of speed for higher k)
+* countlets version bumped to v1.1
+
 2019-04-26  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * Added countfa v1.0
