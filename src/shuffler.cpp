@@ -34,7 +34,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "shuffler v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
+    "shuffler v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
     "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        echo [string] | shuffler [options] > [filename]                         \n"
@@ -53,52 +53,6 @@ void usage() {
     " -v         Verbose mode.                                                       \n"
     " -h         Show usage.                                                         \n"
   );
-}
-
-void read_fasta(istream &input, vector<string> &fa_names, vector<string> &fa_seqs) {
-
-  string line, name, content;
-
-  while (getline(input, line).good()) {
-
-    if (line.empty() || line[0] == '>') {
-
-      if (!name.empty()) {
-        fa_names.push_back(name);
-        name.clear();
-      }
-      if (!line.empty()) {
-        name = line;
-      }
-      if (content.length() > 0) {
-        fa_seqs.push_back(content);
-      }
-      content.clear();
-
-    } else if (!name.empty()) {
-
-      if (line.find(' ') != string::npos) {
-        line.erase(remove(line.begin(), line.end(), ' '), line.end());
-      }
-
-      if (line.length() == 0) {
-        name.clear();
-        content.clear();
-      } else {
-        content += line;
-      }
-
-    }
-
-  }
-
-  if (!name.empty()) {
-    fa_names.push_back(name);
-    fa_seqs.push_back(content);
-  }
-
-  return;
-
 }
 
 string do_shuffle(vector<char> letters, int k, default_random_engine gen,
@@ -124,6 +78,111 @@ string do_shuffle(vector<char> letters, int k, default_random_engine gen,
 
 }
 
+void shuffle_and_write(vector<char> letters, int k, default_random_engine gen,
+    bool verbose, int method_i, ostream &output, bool is_fasta) {
+
+  string outletters;
+  if (letters.size() > k) {
+    outletters = do_shuffle(letters, k, gen, verbose, method_i);
+  } else {
+    outletters = string(letters.begin(), letters.end());
+  }
+
+  if (!is_fasta) {
+
+    output << outletters << endl;
+
+  } else {
+
+    for (int i = 0; i < outletters.length(); ++i) {
+      if (i % 80 == 0 && i != 0) {
+        output << endl;
+      }
+      output << outletters[i];
+    }
+    output << endl;
+
+  }
+
+  return;
+
+}
+
+void read_fasta_then_shuffle_and_write(istream &input, ostream &output, int k,
+    default_random_engine gen, int method_i, bool verbose) {
+
+  int count_n{0}, count_s{0};
+  string line, name, content;
+
+  while (getline(input, line).good()) {
+
+    if (line.empty() || line[0] == '>') {
+
+      if (!name.empty()) {
+        ++count_n;
+        output << name << endl;
+        name.clear();
+      }
+      if (!line.empty()) {
+        name = line;
+      }
+
+      if (content.length() > 0) {
+
+        if (content.length() <= k) {
+          cerr << "Warning: encountered a sequence where k is too big ["
+            << count_n << "]" << endl;
+        }
+        ++count_s;
+        if (count_s < count_n) {
+          cerr << "Warning: encountered a missing sequence ["
+            << count_n - 1 << "]" << endl;
+          count_s = count_n;
+        }
+
+        shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
+            false, method_i, output, true);
+
+      }
+      content.clear();
+
+    } else if (!name.empty()) {
+
+      if (line.find(' ') != string::npos) {
+        line.erase(remove(line.begin(), line.end(), ' '), line.end());
+      }
+
+      if (line.length() == 0) {
+        name.clear();
+        content.clear();
+      } else {
+        content += line;
+      }
+
+    }
+
+  }
+
+  if (!name.empty()) {
+    ++count_n;
+    output << name << endl;
+    if (content.length() <= k) {
+      cerr << "Error: k must be greater than sequence length ["
+        << name << "]" << endl;
+      exit(EXIT_FAILURE);
+    }
+    shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
+        false, method_i, output, true);
+  }
+
+  if (verbose) {
+    cerr << "Shuffled " << count_n << " sequences" << endl;
+  }
+
+  return;
+
+}
+
 int main(int argc, char **argv) {
 
   /* variables */
@@ -138,8 +197,6 @@ int main(int argc, char **argv) {
   unsigned int iseed = time(0);
   char l;
   vector<char> letters;
-  vector<string> fa_names, fa_seqs;
-  string outletters;
   default_random_engine gen;
 
   /* arguments */
@@ -194,6 +251,11 @@ int main(int argc, char **argv) {
     }
   }
 
+  if (!has_file && isatty(STDIN_FILENO)) {
+    usage();
+    exit(EXIT_FAILURE);
+  }
+
   if (k < 1) {
     cerr << "Error: k must be greater than 0" << endl;
     exit(EXIT_FAILURE);
@@ -210,46 +272,9 @@ int main(int argc, char **argv) {
     else method_i = 4;
   }
 
-  /* read letters */
-
-  if (!is_fasta) {
-
-    if (!has_file) {
-      if (isatty(STDIN_FILENO)) {
-        usage();
-        exit(EXIT_FAILURE);
-      }
-      while (cin >> l) letters.push_back(l);
-    } else {
-      while (seqfile >> l) letters.push_back(l);
-      seqfile.close();
-    }
-
-  } else {
-
-    if (!has_file) {
-
-      read_fasta(cin, fa_names, fa_seqs);
-
-    } else {
-
-      read_fasta(seqfile, fa_names, fa_seqs);
-      seqfile.close();
-
-    }
-
-  }
-
-  /* shuffle */
-
   gen = default_random_engine(iseed);
 
   if (verbose) {
-    if (!is_fasta) {
-      cerr << "Character count: " << letters.size() << endl;
-    } else {
-      cerr << "Fasta file with " << fa_names.size() << " sequences" << endl;
-    }
     cerr << "K-let size: " << k << endl;
     cerr << "RNG seed: " << iseed << endl;
     if (k > 1) {
@@ -261,69 +286,79 @@ int main(int argc, char **argv) {
     }
   }
 
+  /* The code here is a bit spaghetti, but the alternative is to have way more
+   * repeate code. Additionally, for fasta this allows reading+shuffling+writting
+   * per sequence instead of needing to read the whole file before starting.
+   */
+
   if (!is_fasta) {
 
-    if (k >= letters.size()) {
-      cerr << "Error: sequence length must be greater than k" << endl;
-      exit(EXIT_FAILURE);
-    }
+    if (!has_file) {
 
-    outletters = do_shuffle(letters, k, gen, verbose, method_i);
+      while (cin >> l) letters.push_back(l);
 
-    if (has_out) {
-      outfile << outletters;
-      outfile.close();
+      if (letters.size() <= k) {
+        cerr << "Error: k must be greater than sequence length" << endl;
+        exit(EXIT_FAILURE);
+      }
+
+      if (has_out) {
+        shuffle_and_write(letters, k, gen, verbose, method_i, outfile, false);
+        outfile.close();
+      } else {
+        shuffle_and_write(letters, k, gen, verbose, method_i, cout, false);
+      }
+
+      if (verbose) {
+        cerr << "Shuffled " << letters.size() << " characters" << endl;
+      }
+
     } else {
-      cout << outletters << endl;
+
+      while (seqfile >> l) letters.push_back(l);
+      seqfile.close();
+
+      if (letters.size() <= k) {
+        cerr << "Error: k must be greater than sequence length" << endl;
+        exit(EXIT_FAILURE);
+      }
+
+      if (has_out) {
+        shuffle_and_write(letters, k, gen, verbose, method_i, outfile, false);
+        outfile.close();
+      } else {
+        shuffle_and_write(letters, k, gen, verbose, method_i, cout, false);
+      }
+
+      if (verbose) {
+        cerr << "Shuffled " << letters.size() << " characters" << endl;
+      }
+
     }
 
   } else {
 
-    if (fa_names.size() != fa_seqs.size()) {
-      cerr << "Error: mismatching name [" << fa_names.size()
-        << "] and sequence [" << fa_seqs.size() << "] counts" << endl;
-      exit(EXIT_FAILURE);
-    }
-    for (int i = 0; i < fa_seqs.size(); ++i) {
-      if (fa_seqs[i].length() == 0) {
-        cerr << "Error: found a length 0 sequence [" << fa_names[i] << "]" << endl;
-        exit(EXIT_FAILURE);
-      }
-    }
-
-    for (int i = 0; i < fa_names.size(); ++i) {
-
-      vector<char> letters2(fa_seqs[i].begin(), fa_seqs[i].end());
-      if (k >= letters2.size()) {
-        cerr << "Error: sequence length must be greater than k" << endl;
-        exit(EXIT_FAILURE);
-      }
-
-      outletters = do_shuffle(letters2, k, gen, false, method_i);
+    if (!has_file) {
 
       if (has_out) {
-        outfile << fa_names[i] << endl;
-        for (int j = 0; j < outletters.length(); ++j) {
-          if (j % 80 == 0 && j != 0) {
-            outfile << endl;
-          }
-          outfile << outletters[j];
-        }
-        outfile << endl;
+        read_fasta_then_shuffle_and_write(cin, outfile, k, gen, method_i, verbose);
+        outfile.close();
       } else {
-        cout << fa_names[i] << endl;
-        for (int j = 0; j < outletters.length(); ++j) {
-          if (j % 80 == 0 && j != 0) {
-            cout << endl;
-          }
-          cout << outletters[j];
-        }
-        cout << endl;
+        read_fasta_then_shuffle_and_write(cin, cout, k, gen, method_i, verbose);
+      }
+
+    } else {
+
+      if (has_out) {
+        read_fasta_then_shuffle_and_write(seqfile, outfile, k, gen, method_i, verbose);
+        seqfile.close();
+        outfile.close();
+      } else {
+        read_fasta_then_shuffle_and_write(seqfile, cout, k, gen, method_i, verbose);
+        seqfile.close();
       }
 
     }
-
-    if (has_out) outfile.close();
 
   }
 

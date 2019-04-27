@@ -2,6 +2,10 @@
 
 * Added countfa v1.0
 * shuffler -f now inserts newlines every 80 characters
+* Streamlined shuffler internals: sequences in fasta files are loaded,
+shuffled and output one at a time instead of keeping the entire file in
+memory
+* shuffler version bumped to v1.1
 
 2019-04-25  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
