@@ -8,6 +8,7 @@ sequence in memory
 * countlets has a new -a option, allowing to specify alphabet to prevent
 loading entire sequence into memory (at the cost of speed for higher k)
 * countlets version bumped to v1.1
+* countfa now reads one char at a time, version bumped to v1.1
 
 2019-04-26  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 

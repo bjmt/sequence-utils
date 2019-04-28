@@ -26,7 +26,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "countfa v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                  \n"
+    "countfa v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                  \n"
     "                                                                                \n"
     "Usage:  coutfa -i [filename]                                                    \n"
     "        cat [filename] | coutfa                                                 \n"
@@ -57,9 +57,7 @@ void do_countfa(istream &input) {
     }
 
     if (at_name) cout << l;
-    else {
-      if (l != ' ' && l != '\n') ++counter;
-    }
+    else if (l != ' ' && l != '\n') ++counter;
 
   }
 
