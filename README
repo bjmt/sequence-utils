@@ -11,10 +11,10 @@ Installation
 
 The following binaries are created:
 
-    bin/countfa
-    bin/countlets
-    bin/seqgen
-    bin/shuffler
+    bin/countfa       Count length of sequences inside a fasta file
+    bin/countlets     Count k-lets in a string
+    bin/seqgen        Generate random strings
+    bin/shuffler      Shuffle strings or sequences in a fasta file
 
 Run these without any arguments or with the -h flag to see usage.
 
