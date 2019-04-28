@@ -52,17 +52,17 @@ Example usage:
 
     bin/countlets -k 1 -i example/sequence.txt
 
-        A  17384
-        C   8081
-        G   7583
-        T  16952
+        A  3301
+        C  1572
+        G  1619
+        T  3508
 
     bin/countlets -k 1 -a ACGT -i example/sequence.txt
 
-        A  17384
-        C   8081
-        G   7583
-        T  16952
+        A  3301
+        C  1572
+        G  1619
+        T  3508
 
 
 seqgen
@@ -151,19 +151,19 @@ Example usage:
 
     bin/shuffler -i example/sequence.txt -k 2 | bin/countlets
 
-        A  17384
-        C   8081
-        G   7583
-        T  16952
+        A  3301
+        C  1572
+        G  1619
+        T  3508
 
   markov shuffling:
 
     bin/shuffler -i example/sequence.txt -k 2 -s 1 -m | bin/countlets
 
-        A  17421
-        C   8122
-        G   7472
-        T  16984
+        A  3326
+        C  1500
+        G  1613
+        T  3560
 
   linear + fasta-formatted shuffling:
 
