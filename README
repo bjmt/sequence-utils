@@ -1,11 +1,11 @@
-sequenceshuffler
-================
+sequence-utils
+==============
 
 
 Installation
 ------------
 
-    git clone https://github.com/bjmt/sequenceshuffler
+    git clone https://github.com/bjmt/sequence-utils
     cd sequenceshuffler
     make
 
