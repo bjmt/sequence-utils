@@ -13,6 +13,7 @@ The following binaries are created:
 
     bin/countfa       Count length of sequences inside a fasta file
     bin/countlets     Count k-lets in a string
+    bin/countwin      Count k-lets by window in a string
     bin/seqgen        Generate a random string
     bin/shuffler      Shuffle a string or sequences inside a fasta file
 
@@ -63,6 +64,39 @@ Example usage:
         C  1572
         G  1619
         T  3508
+
+
+countwin
+--------
+
+Count k-lets in the input string in windows. The window and step sizes can be
+controlled. The result is a tsv-formatted table with columns START, STOP, LET,
+and COUNT. Optionally, rows where the COUNT column is zero can be ommitted from
+the output.
+
+Example usage:
+
+    echo ACGTGTGA | bin/countwin -a ACGT -k 3 -s 1 -n
+
+        START   STOP    LET     COUNT
+        1       3       ACG     1
+        2       4       CGT     1
+        3       5       GTG     1
+        4       6       TGT     1
+        5       7       GTG     1
+        6       8       TGA     1
+
+    bin/countwin -i example/sequence.txt -a ACGT -k 1 -w 5000
+
+        START   STOP    LET     COUNT
+        1       5000    A       1607
+        1       5000    C       815
+        1       5000    G       828
+        1       5000    T       1750
+        5001    10000   A       1694
+        5001    10000   C       757
+        5001    10000   G       791
+        5001    10000   T       1758
 
 
 seqgen
