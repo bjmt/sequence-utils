@@ -202,6 +202,10 @@ int main(int argc, char **argv) {
     seq = extract_window(cin, window);
   }
   STOP = START + seq.length() - 1;
+  if (seq.length() < k) {
+    cerr << "Error: sequence cannot be smaller than k" << endl;
+    exit(EXIT_FAILURE);
+  }
   counts = count_klets(vector<char>(seq.begin(), seq.end()), klets, lets_uniq, k, alphlen);
   if (has_out) {
     outfile << make_row(to_string(START), to_string(STOP), counts, klets, nozero);
