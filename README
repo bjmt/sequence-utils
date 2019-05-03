@@ -213,7 +213,7 @@ times the size of the input sequence. This means shuffling billions of
 characters is not recommended unless you don't mind letting shuffler take up
 several GBs of memory.
 
-Comparison with uShuffle (Jiang et al. 2008):
+Comparison with the command line version of uShuffle (Jiang et al. 2008):
 
   Pros:                                  Cons:
 
@@ -224,8 +224,7 @@ Comparison with uShuffle (Jiang et al. 2008):
 - Shuffles both strings and
   fasta files
 - No limit on string/sequence size
-  (the command line version of
-   uShuffle is limited to ARG_MAX)
+  (uShuffle is limited to ARG_MAX)
 
 shuffler VS uShuffle benchmarks (using GNU Time):
 
