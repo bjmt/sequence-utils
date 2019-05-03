@@ -217,14 +217,58 @@ Comparison with uShuffle (Jiang et al. 2008):
 
   Pros:                                  Cons:
 
-- Additional linear and markov         - Up to four times slower
+- Additional linear and markov         - Twice as slow (on average)
   shuffling methods
 - Input/output can be read/written
   from/to disk or piped
 - Shuffles both strings and
   fasta files
 - No limit on string/sequence size
-  (uShuffle is limited to ARG_MAX)
+  (the command line version of
+   uShuffle is limited to ARG_MAX)
+
+shuffler (euler method) VS uShuffle benchmarks (using GNU Time):
+
+A random DNA string with 100,000 characters was used as input.
+
+ k     Program    Peak memory (kB)    Elapsed time (s)
+--    --------    ----------------    ----------------
+ 1    uShuffle                1036                0.00
+      shuffler                1428                0.01
+
+ 2    uShuffle                3796                0.00
+      shuffler                3012                0.01
+
+ 3    uShuffle                3796                0.01
+      shuffler                3036                0.02
+
+ 4    uShuffle                3780                0.01
+      shuffler                2788                0.02
+
+ 5    uShuffle                3792                0.01
+      shuffler                2992                0.02
+
+ 6    uShuffle                3820                0.01
+      shuffler                3396                0.03
+
+ 7    uShuffle                3908                0.02
+      shuffler                4768                0.04
+
+ 8    uShuffle                4296                0.05
+      shuffler                8876                0.06
+
+ 9    uShuffle                5384                0.08
+      shuffler               27436                0.16
+
+10    uShuffle                6380                0.10
+      shuffler              102148                0.43
+
+
+shuffler is quite competitive with uShuffle in terms of elapsed time and
+memory usage at low k (1-6). Above that shuffler becomes a bit inefficient;
+this is because shuffler creates a table of all possible k-lets (vertices)
+whereas uShuffle only keeps those found in the sequence in memory. Though
+realistically, most shuffling tasks do not require such high k values.
 
 
 References
