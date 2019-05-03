@@ -217,9 +217,9 @@ Comparison with uShuffle (Jiang et al. 2008):
 
   Pros:                                  Cons:
 
-- Additional linear and markov         - Twice as slow (on average)
-  shuffling methods
-- Input/output can be read/written
+- Additional linear and markov         - Twice as slow (on average) with low k
+  shuffling methods                    - Memory usage and time elapsed does not
+- Input/output can be read/written       scale as well with high k (>8)
   from/to disk or piped
 - Shuffles both strings and
   fasta files
