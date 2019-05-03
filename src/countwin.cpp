@@ -144,9 +144,6 @@ int main(int argc, char **argv) {
       case 'h': usage();
                 return 0;
 
-      default: usage();
-               return 0;
-
     }
   }
 
