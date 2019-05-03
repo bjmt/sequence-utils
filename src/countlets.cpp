@@ -100,6 +100,7 @@ int main(int argc, char **argv) {
                   seqfile.open(optarg);
                   if (seqfile.bad()) {
                     cerr << "Error: file not found" << endl;
+                    cerr << "Run countlets -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -117,6 +118,7 @@ int main(int argc, char **argv) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
                     cerr << "Error: could not create outfile" << endl;
+                    cerr << "Run countlets -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -134,12 +136,14 @@ int main(int argc, char **argv) {
 
   if (k < 1) {
     cerr << "Error: k must be greater than 0" << endl;
+    cerr << "Run countlets -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
-      usage();
+      cerr << "Error: missing input" << endl;
+      cerr << "Run countlets -h to see usage." << endl;
       exit(EXIT_FAILURE);
     }
   }
@@ -180,6 +184,7 @@ int main(int argc, char **argv) {
 
     if (alph.length() < 1) {
       cerr << "Error: could not parse -a option" << endl;
+      cerr << "Run countlets -h to see usage." << endl;
       exit(EXIT_FAILURE);
     }
 

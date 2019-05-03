@@ -128,6 +128,7 @@ int main(int argc, char **argv) {
                   seqfile.open(optarg);
                   if (seqfile.bad()) {
                     cerr << "Error: file not found" << endl;
+                    cerr << "Run countfa -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -140,7 +141,8 @@ int main(int argc, char **argv) {
 
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
-      usage();
+      cerr << "Error: missing input" << endl;
+      cerr << "Run countfa -h to see usage." << endl;
       exit(EXIT_FAILURE);
     }
     do_countfa(cin);

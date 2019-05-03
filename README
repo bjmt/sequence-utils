@@ -17,7 +17,7 @@ The following binaries are created:
     bin/seqgen        Generate a random string
     bin/shuffler      Shuffle a string or sequences inside a fasta file
 
-Run these without any arguments or with the -h flag to see usage.
+Run these with the -h flag to see usage.
 
 
 countfa

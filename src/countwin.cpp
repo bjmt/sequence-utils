@@ -102,6 +102,7 @@ int main(int argc, char **argv) {
                   infile.open(optarg);
                   if (infile.bad()) {
                     cerr << "Error: file not found" << endl;
+                    cerr << "Run countwin -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -112,6 +113,7 @@ int main(int argc, char **argv) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
                     cerr << "Error: could not create outfile" << endl;
+                    cerr << "Run countwin -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -150,12 +152,14 @@ int main(int argc, char **argv) {
 
   if (k < 1) {
     cerr << "Error: k must be greater than 0" << endl;
+    cerr << "Run countwin -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
       cerr << "Error: missing input" << endl;
+      cerr << "Run countwin -h to see usage." << endl;
       exit(EXIT_FAILURE);
     }
   }
@@ -170,6 +174,7 @@ int main(int argc, char **argv) {
   } else {
     if (window < k) {
       cerr << "Error: window size must be equal to or greater than k" << endl;
+      cerr << "Run countwin -h to see usage." << endl;
       exit(EXIT_FAILURE);
     }
   }
@@ -178,6 +183,7 @@ int main(int argc, char **argv) {
 
   if (step < 1 || step > window) {
     cerr << "Error: step size must be between 1 and window size" << endl;
+    cerr << "Run countwin -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -204,6 +210,7 @@ int main(int argc, char **argv) {
   STOP = START + seq.length() - 1;
   if (seq.length() < k) {
     cerr << "Error: sequence cannot be smaller than k" << endl;
+    cerr << "Run countwin -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
   counts = count_klets(vector<char>(seq.begin(), seq.end()), klets, lets_uniq, k, alphlen);

@@ -210,6 +210,7 @@ int main(int argc, char **argv) {
                   seqfile.open(optarg);
                   if (seqfile.bad()) {
                     cerr << "Error: file not found" << endl;
+                    cerr << "Run shuffler -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -226,6 +227,7 @@ int main(int argc, char **argv) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
                     cerr << "Error: could not create outfile" << endl;
+                    cerr << "Run shuffler -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -254,17 +256,20 @@ int main(int argc, char **argv) {
   }
 
   if (!has_file && isatty(STDIN_FILENO)) {
-    usage();
+    cerr << "Error: missing input" << endl;
+    cerr << "Run shuffler -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 
   if (k < 1) {
     cerr << "Error: k must be greater than 0" << endl;
+    cerr << "Run shuffler -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 
   if (use_linear && use_markov) {
     cerr << "Error: only use one of -l and -m flags" << endl;
+    cerr << "Run shuffler -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 

@@ -60,7 +60,8 @@ int main(int argc, char **argv) {
   size_t last, next;
 
   if (argc == 1) {
-    usage();
+    cerr << "Error: missing alphabet and sequence length" << endl;
+    cerr << "Run seqgen -h to see usage." << endl;
     return 0;
   }
 
@@ -70,6 +71,7 @@ int main(int argc, char **argv) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
                     cerr << "Error: could not create outfile" << endl;
+                    cerr << "Run seqgen -h to see usage." << endl;
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -95,6 +97,7 @@ int main(int argc, char **argv) {
 
   if (seqlen < 1) {
     cerr << "Error: please input a desired sequence length above 0" << endl;;
+    cerr << "Run seqgen -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -113,6 +116,7 @@ int main(int argc, char **argv) {
 
   if (alphlen < 1) {
     cerr << "Error: could not parse sequence alphabet" << endl;
+    cerr << "Run seqgen -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
 
