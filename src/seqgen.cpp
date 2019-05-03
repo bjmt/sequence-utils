@@ -28,14 +28,14 @@ using namespace std;
 
 void usage() {
   printf(
-    "seqgen v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                   \n"
+    "seqgen v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                   \n"
     "                                                                                \n"
     "Usage:  seqgen [options] -a [letters] -l [length] -o [outfile]                  \n"
     "        seqgen [options] -a [letters] -l [length] > [outfile]                   \n"
     "                                                                                \n"
     " -o <str>    Output filename. Alternatively, prints to stdout.                  \n"
-    " -a <str>    Comma-seperated sequence letters. Each letter can be made of any   \n"
-    "             number of characters.                                              \n"
+    " -a <str>    Sequence letters. Use commas to separate the letters if any of them\n"
+    "             are longer than a single character.                                \n"
     " -w <str>    Comma-seperated letter weights. Order matches that of letters. If  \n"
     "             missing, assumes equal likelihood for all letters.                 \n"
     " -l <int>    Final sequence length. This length is the number of characters in  \n"
@@ -101,14 +101,20 @@ int main(int argc, char **argv) {
 
   /* split up letters */
 
-  last = 0;
-  next = 0;
-  while ((next = all_lets.find(comma, last)) != string::npos) {
-    lets.push_back(all_lets.substr(last, next - last));
-    last = next + 1;
+  if (all_lets.find_first_of(",") != string::npos) {
+    last = 0;
+    next = 0;
+    while ((next = all_lets.find(comma, last)) != string::npos) {
+      lets.push_back(all_lets.substr(last, next - last));
+      last = next + 1;
+    }
+    final_let = all_lets.substr(last);
+    if (final_let.length() > 0) lets.push_back(final_let);
+  } else {
+    for (int i = 0; i < all_lets.length(); ++i) {
+      lets.push_back(all_lets.substr(i, 1));
+    }
   }
-  final_let = all_lets.substr(last);
-  if (final_let.length() > 0) lets.push_back(final_let);
 
   alphlen = lets.size();
 

@@ -6,6 +6,11 @@ memory efficient at higher k
 * shuffler version bumped to 1.2
 * replaced all instances of count_klets() with count_klets2(), which does not
 require a vector<string> of the actual klets to do counting
+* K-lets with zero counts can be ommitted from countlets output
+* countlets version bumped to 1.2
+* seqgen no longer requires commas to separate alphabets made of single-char
+letters
+* seqgen version bumped to 1.2
 
 2019-05-02  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 

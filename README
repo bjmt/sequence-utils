@@ -47,7 +47,8 @@ cases involving memory constraints, providing the sequence alphabet ahead of
 time will allow countlets to count k-lets while only needing to load k + 1
 letters into memory at a time (at the cost of speed for higher k values). When
 the alphabet is provided, it will typically never take up more than several MBs
-of memory.
+of memory. Optionally, k-lets with counts of zero can be ommitted from the
+output.
 
 Example usage:
 
@@ -64,6 +65,12 @@ Example usage:
         C  1572
         G  1619
         T  3508
+
+    echo ACGTGA | bin/countlets -k 4 -n
+
+        ACGT  1
+        CGTG  1
+        GTGA  1
 
 
 countwin
@@ -106,15 +113,15 @@ Create random sequences from any alphabet. Letters can be made up of any
 number of characters. Weights can be provided to modify random generation.
 If any of the input letters contain spaces, use quotation marks. New letters
 are streamed directly to the output, meaning memory usage is independent of
-output sequence length.
+output sequence length. Use commas to separate letters with multiple characters.
 
 Example usage:
 
-    bin/seqgen -a A,C,G,T -l 10 -s 11
+    bin/seqgen -a ACGT -l 10 -s 11
 
       CGAACTATTC
 
-    bin/seqgen -a A,C,G,T -l 1000 -s 1 | bin/countlets
+    bin/seqgen -a ACGT -l 1000 -s 1 | bin/countlets
 
       A  246
       C  258
@@ -125,11 +132,11 @@ Example usage:
 
       BCD BBBAAB
 
-    bin/seqgen -a A,C,G,T -l 10 -s 11 -w 1,0.5,0.5,1
+    bin/seqgen -a ACGT -l 10 -s 11 -w 1,0.5,0.5,1
 
       TTAGAATTTT
 
-    bin/seqgen -a A,C,G,T -l 1000 -s 11 -w 1,0.5,0.5,1 | bin/countlets
+    bin/seqgen -a ACGT -l 1000 -s 11 -w 1,0.5,0.5,1 | bin/countlets
 
       A  338
       C  150

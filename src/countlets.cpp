@@ -30,7 +30,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "countlets v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
+    "countlets v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
     "                                                                                \n"
     "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
     "        echo [string] | countlets [options] > [filename]                        \n"
@@ -43,6 +43,7 @@ void usage() {
     "            sequence into memory to find all of the unique letters. The downside\n"
     "            is that runtime increases more with increasing k.                   \n"
     " -k <int>   K-let size. Defaults to 1.                                          \n"
+    " -n         Don't print k-lets with counts of zero.                             \n"
     " -h         Show usage.                                                         \n"
   );
 }
@@ -86,14 +87,14 @@ int main(int argc, char **argv) {
   int opt, alphlen, alignlen;
   ifstream seqfile;
   ofstream outfile;
-  bool has_file{false}, has_out{false}, has_alph{false};
+  bool has_file{false}, has_out{false}, has_alph{false}, nozero{false};
   set<int> lets_set;
   vector<char> lets_uniq;
   vector<string> klets;
   vector<int> counts;
   string alph;
 
-  while ((opt = getopt(argc, argv, "i:k:o:a:h")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:o:a:nh")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -123,6 +124,9 @@ int main(int argc, char **argv) {
                   }
                   has_out = true;
                 }
+                break;
+
+      case 'n': nozero = true;
                 break;
 
       case 'h': usage();
@@ -208,11 +212,13 @@ int main(int argc, char **argv) {
 
   if (has_out) {
     for (int i = 0; i < klets.size(); ++i) {
-      outfile << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
+      if (counts[i] > 0 || !nozero)
+        outfile << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
     }
   } else {
     for (int i = 0; i < klets.size(); ++i) {
-      cout << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
+      if (counts[i] > 0 || !nozero)
+        cout << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
     }
   }
 
