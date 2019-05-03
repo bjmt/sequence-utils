@@ -219,9 +219,8 @@ Comparison with uShuffle (Jiang et al. 2008):
 
 - Additional linear and markov         - Up to four times slower
   shuffling methods
-- Input and output can be read/
-  written from/to disk or
-  piped
+- Input/output can be read/written
+  from/to disk or piped
 - Shuffles both strings and
   fasta files
 - No limit on string/sequence size
