@@ -213,6 +213,20 @@ times the size of the input sequence. This means shuffling billions of
 characters is not recommended unless you don't mind letting shuffler take up
 several GBs of memory.
 
+Comparison with uShuffle (Jiang et al. 2008):
+
+  Pros:                                  Cons:
+
+- Additional linear and markov         - Up to four times slower
+  shuffling methods
+- Input and output can be read/
+  written from/to disk or
+  piped
+- Shuffles both strings and
+  fasta files
+- No limit on string/sequence size
+  (uShuffle is limited to ARG_MAX)
+
 
 References
 ----------
@@ -224,6 +238,10 @@ Altschul, S.F. and Erickson, B.W. (1985). Significance of Nucleotide Sequence
 
 Fitch, W.M. (1983). Random Sequences. _Journal of Molecular Biology_, 163(2),
     171-176.
+
+Jiang, M., Anderson, J., Gillespie, J. and Mayne, M. (2008). uShuffle: A
+    Useful Tool for Shuffling Biological Sequences While Preserving the
+    k-let Counts. _BMC Bioinformatics_, 9(192).
 
 Propp, J.G. and Wilson, D.W. (1998). How to Get a Perfectly Random Sample from
     a Generic Markov Chain and Generate a Random Spanning Tree of a Directed
