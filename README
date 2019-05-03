@@ -227,45 +227,64 @@ Comparison with uShuffle (Jiang et al. 2008):
   (the command line version of
    uShuffle is limited to ARG_MAX)
 
-shuffler (euler method) VS uShuffle benchmarks (using GNU Time):
+shuffler VS uShuffle benchmarks (using GNU Time):
 
 A random DNA string with 100,000 characters was used as input.
+(e = euler, l = linear, m = markov)
 
- k     Program    Peak memory (kB)    Elapsed time (s)
---    --------    ----------------    ----------------
- 1    uShuffle                1036                0.00
-      shuffler                1428                0.01
+ k         Program    Peak memory (kB)    Elapsed time (s)
+--    ------------    ----------------    ----------------
+ 1        uShuffle                1036                0.00
+          shuffler                1428                0.01
 
- 2    uShuffle                3796                0.00
-      shuffler                3012                0.01
+ 2        uShuffle                3796                0.00
+      shuffler (e)                3012                0.01
+      shuffler (l)                1760                0.01
+      shuffler (m)                2100                0.04
 
- 3    uShuffle                3796                0.01
-      shuffler                3036                0.02
+ 3        uShuffle                3796                0.01
+      shuffler (e)                3036                0.02
+      shuffler (l)                1556                0.00
+      shuffler (m)                2216                0.04
 
- 4    uShuffle                3780                0.01
-      shuffler                2788                0.02
+ 4        uShuffle                3780                0.01
+      shuffler (e)                2788                0.02
+      shuffler (l)                1520                0.00
+      shuffler (m)                2268                0.06
 
- 5    uShuffle                3792                0.01
-      shuffler                2992                0.02
+ 5        uShuffle                3792                0.01
+      shuffler (e)                2992                0.02
+      shuffler (l)                1644                0.01
+      shuffler (m)                2188                0.10
 
- 6    uShuffle                3820                0.01
-      shuffler                3396                0.03
+ 6        uShuffle                3820                0.01
+      shuffler (e)                3396                0.03
+      shuffler (l)                1488                0.00
+      shuffler (m)                2328                0.28
 
- 7    uShuffle                3908                0.02
-      shuffler                4768                0.04
+ 7        uShuffle                3908                0.02
+      shuffler (e)                4768                0.04
+      shuffler (l)                1592                0.00
+      shuffler (m)                3508                1.08
 
- 8    uShuffle                4296                0.05
-      shuffler                8876                0.06
+ 8        uShuffle                4296                0.05
+      shuffler (e)                8876                0.06
+      shuffler (l)                1612                0.00
+      shuffler (m)                7224                4.20
 
- 9    uShuffle                5384                0.08
-      shuffler               27436                0.16
+ 9        uShuffle                5384                0.08
+      shuffler (e)               27436                0.16
+      shuffler (l)                1468                0.00
+      shuffler (m)               23528               13.11
 
-10    uShuffle                6380                0.10
-      shuffler              102148                0.43
+10        uShuffle                6380                0.10
+      shuffler (e)              102148                0.43
+      shuffler (l)                1608                0.00
+      shuffler (m)               88148             2:12.22
 
 
-shuffler is quite competitive with uShuffle in terms of elapsed time and
-memory usage at low k (1-6). Above that shuffler becomes a bit inefficient;
+shuffler (euler) is quite competitive with uShuffle in terms of elapsed time
+and memory usage at low k (1-6). Above that shuffler becomes a bit inefficient;
 this is because shuffler creates a table of all possible k-lets (vertices)
 whereas uShuffle only keeps those found in the sequence in memory. Though
 realistically, most shuffling tasks do not require such high k values.
