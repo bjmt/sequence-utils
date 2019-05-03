@@ -284,7 +284,7 @@ A random DNA string with 100,000 characters was used as input.
 
 
 shuffler (euler) is quite competitive with uShuffle in terms of elapsed time
-and memory usage at low k (1-6). Above that shuffler becomes a bit inefficient;
+and memory usage at low k (1-8). Above that shuffler becomes a bit inefficient;
 this is because shuffler creates a table of all possible k-lets (vertices)
 whereas uShuffle only keeps those found in the sequence in memory. Though
 realistically, most shuffling tasks do not require such high k values.
