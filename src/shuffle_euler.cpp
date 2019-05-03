@@ -159,7 +159,7 @@ vector<vector<int>> fill_vertices(vector<vector<int>> edgelist,
 
 vector<int> walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
     vector<char> lets_uniq, default_random_engine gen, vector<int> last_letsi,
-    string firstl, string lastl, int lasti) {
+    string firstl, int lasti) {
 
   vector<int> out_i;
   int alphlen = lets_uniq.size();
@@ -207,22 +207,18 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
 
   int seqlen = letters.size();
   int alphlen, nlets, nletsm1;
-  int lasti{-1};
+  int lasti{0};
   vector<int> let_counts, last_letsi, out_i;
   vector<char> lets_uniq;
   set<int> lets_set;
-  vector<string> klets, kletsm1;
   vector<vector<int>> edgelist;
-  string firstl, lastl, out;
+  string firstl, out;
 
   /* the first and last letters remain unchanged; these are special vertices
    * which only have a single directed edge to them
    */
   for (int i = 0; i < k - 1; ++i) {
     firstl += letters[i];
-  }
-  for (int i = seqlen - k + 1; i < seqlen; ++i) {
-    lastl += letters[i];
   }
 
   for (int i = 0; i < seqlen; ++i) {
@@ -234,14 +230,14 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   nlets = pow(alphlen, k);
   nletsm1 = pow(alphlen, k - 1);
 
-  klets = make_klets(lets_uniq, k);
-  let_counts = count_klets(letters, klets, lets_uniq, k, alphlen);
-  kletsm1 = make_klets(lets_uniq, k - 1);  /* these are the vertices */
+  let_counts = count_klets2(letters, lets_uniq, k, alphlen);
 
-  for (int i = 0; i < nletsm1; ++i) {
-    if (lastl.compare(kletsm1[i]) == 0) {
-      lasti = i;
-      break;
+  for (int i = k - 2; i >= 0; --i) {
+    for (int j = 0; j < alphlen; ++j) {
+      if (letters[seqlen - 1 - i] == lets_uniq[j]) {
+        lasti += pow(alphlen, i) * j;
+        continue;
+      }
     }
   }
 
@@ -285,7 +281,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
 
   /* walk new Eulerian path */
   out_i = walk_euler(edgelist2, seqlen, k, lets_uniq, gen, last_letsi, firstl,
-      lastl, lasti);
+      lasti);
 
   /* indices --> letters */
   out.reserve(out_i.size());

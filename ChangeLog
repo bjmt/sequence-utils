@@ -1,6 +1,11 @@
 2019-05-03  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * Removed default entries from getopt switch
+* shuffler (euler) no longer calls make_klets(), making it faster and more
+memory efficient at higher k
+* shuffler version bumped to 1.2
+* replaced all instances of count_klets() with count_klets2(), which does not
+require a vector<string> of the actual klets to do counting
 
 2019-05-02  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 

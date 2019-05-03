@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
     alphlen = lets_uniq.size();
 
     klets = make_klets(lets_uniq, k);
-    counts = count_klets(letters, klets, lets_uniq, k, alphlen);
+    counts = count_klets2(letters, lets_uniq, k, alphlen);
 
   } else {
 

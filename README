@@ -238,47 +238,47 @@ A random DNA string with 100,000 characters was used as input.
       shuffler                    1428                0.01
 
  2    uShuffle                    3796                0.00
-      shuffler (e)                3012                0.01
+      shuffler (e)                2808                0.01
       shuffler (l)                1760                0.01
       shuffler (m)                2100                0.04
 
  3    uShuffle                    3796                0.01
-      shuffler (e)                3036                0.02
+      shuffler (e)                2824                0.02
       shuffler (l)                1556                0.00
       shuffler (m)                2216                0.04
 
  4    uShuffle                    3780                0.01
-      shuffler (e)                2788                0.02
+      shuffler (e)                2764                0.02
       shuffler (l)                1520                0.00
       shuffler (m)                2268                0.06
 
  5    uShuffle                    3792                0.01
-      shuffler (e)                2992                0.02
+      shuffler (e)                2840                0.02
       shuffler (l)                1644                0.01
       shuffler (m)                2188                0.10
 
  6    uShuffle                    3820                0.01
-      shuffler (e)                3396                0.03
+      shuffler (e)                3052                0.03
       shuffler (l)                1488                0.00
       shuffler (m)                2328                0.28
 
  7    uShuffle                    3908                0.02
-      shuffler (e)                4768                0.04
+      shuffler (e)                3612                0.03
       shuffler (l)                1592                0.00
       shuffler (m)                3508                1.08
 
  8    uShuffle                    4296                0.05
-      shuffler (e)                8876                0.06
+      shuffler (e)                5220                0.05
       shuffler (l)                1612                0.00
       shuffler (m)                7224                4.20
 
  9    uShuffle                    5384                0.08
-      shuffler (e)               27436                0.16
+      shuffler (e)               14068                0.15
       shuffler (l)                1468                0.00
       shuffler (m)               23528               13.11
 
 10    uShuffle                    6380                0.10
-      shuffler (e)              102148                0.43
+      shuffler (e)               46660                0.32
       shuffler (l)                1608                0.00
       shuffler (m)               88148             2:12.22
 
