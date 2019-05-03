@@ -1,3 +1,11 @@
+2019-05-03  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+
+* Removed default entries from getopt switch
+
+2019-05-02  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+
+* Made -h flag mandatory to see usage
+
 2019-04-30  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * countwin v1.0 added
