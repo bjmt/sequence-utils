@@ -230,7 +230,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   nlets = pow(alphlen, k);
   nletsm1 = pow(alphlen, k - 1);
 
-  let_counts = count_klets2(letters, lets_uniq, k, alphlen);
+  let_counts = count_klets(letters, lets_uniq, k, alphlen);
 
   for (int i = k - 2; i >= 0; --i) {
     for (int j = 0; j < alphlen; ++j) {

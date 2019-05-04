@@ -210,7 +210,7 @@ int main(int argc, char **argv) {
     cerr << "Run countwin -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
-  counts = count_klets2(vector<char>(seq.begin(), seq.end()), lets_uniq, k, alphlen);
+  counts = count_klets(vector<char>(seq.begin(), seq.end()), lets_uniq, k, alphlen);
   if (has_out) {
     outfile << make_row(to_string(START), to_string(STOP), counts, klets, nozero);
   } else {
@@ -231,7 +231,7 @@ int main(int argc, char **argv) {
 
     if (seq.length() < k) break;
 
-    counts = count_klets2(vector<char>(seq.begin(), seq.end()), lets_uniq, k, alphlen);
+    counts = count_klets(vector<char>(seq.begin(), seq.end()), lets_uniq, k, alphlen);
 
     STOP = START + seq.length() - 1;
 

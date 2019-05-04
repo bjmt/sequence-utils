@@ -61,7 +61,7 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
 
 }
 
-vector<int> count_klets2(vector<char> letters, vector<char> lets_uniq, int k,
+vector<int> count_klets(vector<char> letters, vector<char> lets_uniq, int k,
     int alphlen) {
 
   /* Scales very well with increasing k, but requires having the entire

@@ -67,55 +67,6 @@ void do_countfa(istream &input) {
 
 }
 
-/*
-void do_countfa(istream &input) {
-
-  // this version is faster, but potentially loads entire sequence in memory
-
-  string name, line;
-  int counter{0};
-
-  while (getline(input, line).good()) {
-
-    if (line.empty() || line[0] == '>') {
-
-      if (!name.empty()) {
-        cout << name << endl;
-        name.clear();
-      }
-      if (!line.empty()) {
-        name = line;
-      }
-      if (counter > 0) {
-        cout << counter << endl;
-      }
-      counter = 0;
-
-    } else if (!name.empty()) {
-
-      if (line.find(' ') != string::npos) {
-        line.erase(remove(line.begin(), line.end(), ' '), line.end());
-      }
-
-      if (line.length() == 0) {
-        name.clear();
-        counter = 0;
-      } else {
-        counter += line.length();
-      }
-
-    }
-
-  }
-
-  if (!name.empty()) {
-    cout << name << endl;
-    if (counter > 0) cout << counter << endl;
-  }
-
-}
-*/
-
 int main(int argc, char **argv) {
 
   int opt;
