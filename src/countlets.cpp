@@ -31,7 +31,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "countlets v1.3  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
+    "countlets v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
     "                                                                                \n"
     "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
     "        echo [string] | countlets [options] > [filename]                        \n"
