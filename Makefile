@@ -9,6 +9,9 @@ CXXFLAGS += --std=c++11 -O3 -Wall
 
 all: build install
 
+debug: CXXFLAGS += -g
+debug: build install
+
 build:
 	cd src;\
 	$(CXX) $(CXXFLAGS) -c *.cpp

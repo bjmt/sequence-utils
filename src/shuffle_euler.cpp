@@ -124,16 +124,20 @@ vector<int> find_euler(vector<vector<int>> edgelist, int lasti, int nletsm1,
 
 vector<vector<int>> fill_vertices(vector<vector<int>> edgelist,
     vector<int> last_letsi, int nletsm1, int alphlen, int lasti,
-    default_random_engine gen) {
+    default_random_engine gen, vector<bool> empty_vertices) {
 
   /* The incoming edgelist is just a set of counts for each letter. This
    * will actually create vectors of letter indices based on counts.
    */
 
+  /* TODO: find a cheaper alternative */
+
   vector<vector<int>> edgelist2(nletsm1);
   int b;
 
   for (int i = 0; i < nletsm1; ++i) {
+
+    if (empty_vertices[i]) continue;
 
     edgelist2[i].reserve(accumulate(edgelist2[i].begin(), edgelist2[i].end(), 0));
 
@@ -186,10 +190,7 @@ vector<int> walk_euler(vector<vector<int>> edgelist, int seqlen, int k,
     /* find out which vertex we are sitting on */
     current = 0;
     for (int j = n - 1; j >= 0; --j) {
-      if (j == 0)
-        current += out_i[i];
-      else
-        current += pow(alphlen, j) * (out_i[i - j] % alphlen);
+      current += pow(alphlen, j) * (out_i[i - j] % alphlen);
     }
 
     /* select a random availabe edge */
@@ -275,7 +276,8 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, int k,
   if (verbose) cerr << "  Generating random edges" << endl;
 
   /* generate edge indices + shuffle */
-  edgelist2 = fill_vertices(edgelist, last_letsi, nletsm1, alphlen, lasti, gen);
+  edgelist2 = fill_vertices(edgelist, last_letsi, nletsm1, alphlen, lasti, gen,
+      empty_vertices);
 
   if (verbose) cerr << "  Walking new Eulerian path" << endl;
 
