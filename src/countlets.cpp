@@ -25,19 +25,21 @@
 #include <string>
 #include <set>
 #include <unistd.h>
+#include <map>
 #include "klets.hpp"
 using namespace std;
 
 void usage() {
   printf(
-    "countlets v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
+    "countlets v1.3  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
     "                                                                                \n"
     "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
     "        echo [string] | countlets [options] > [filename]                        \n"
     "                                                                                \n"
     " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
     "            take string input from a pipe.                                      \n"
-    " -o <str>   Output filename. Alternatively, prints to stdout.                   \n"
+    " -o <str>   Output filename. Alternatively, prints to stdout. Output is in tsv  \n"
+    "            format.                                                             \n"
     " -a <str>   A string containing all of the alphabet letters present in the      \n"
     "            sequence. This allows the program not to have to load the entire    \n"
     "            sequence into memory to find all of the unique letters. The downside\n"
@@ -48,32 +50,30 @@ void usage() {
   );
 }
 
-vector<int> count_stream(istream &input, vector<string> klets, int k) {
+map<string, int> count_stream(istream &input, vector<string> klets, int k) {
 
-  vector<int> counts(klets.size(), 0);
   char l;
+
   string let;
   let.reserve(k + 1);
 
-  vector<string>::iterator let_i;
+  map<string, int> counts;
+  for (int i = 0; i < klets.size(); ++i) {
+    counts[klets[i]] = 0;
+  }
+
+  while (let.length() < k) {
+    input >> l;
+    let += l;
+  }
 
   while (input >> l) {
+    ++counts[let];
     let += l;
-
-    if (let.length() >= k) {
-
-      if (let.length() == k + 1) let = let.substr(1, k);
-
-        let_i = lower_bound(klets.begin(), klets.end(), let);
-        if (let_i == klets.end()) {
-          cerr << "Error: found unknown letter [" << l << "]" << endl;
-          exit(EXIT_FAILURE);
-        }
-        ++counts[let_i - klets.begin()];
-
-    }
-
+    let.erase(0, 1);
   }
+
+  ++counts[let];
 
   return counts;
 
@@ -84,14 +84,13 @@ int main(int argc, char **argv) {
   /* variables */
 
   int k{1};
-  int opt, alphlen, alignlen;
+  int opt, alphlen;
   ifstream seqfile;
   ofstream outfile;
   bool has_file{false}, has_out{false}, has_alph{false}, nozero{false};
   set<int> lets_set;
   vector<char> lets_uniq;
   vector<string> klets;
-  vector<int> counts;
   string alph;
 
   while ((opt = getopt(argc, argv, "i:k:o:a:nh")) != -1) {
@@ -155,6 +154,7 @@ int main(int argc, char **argv) {
 
     /* this version loads the entire sequence into memory */
 
+    vector<int> counts;
     vector<char> letters;
     int seqlen;
     char l;
@@ -179,9 +179,25 @@ int main(int argc, char **argv) {
     klets = make_klets(lets_uniq, k);
     counts = count_klets2(letters, lets_uniq, k, alphlen);
 
+    /* return */
+
+    if (has_out) {
+      for (int i = 0; i < klets.size(); ++i) {
+        if (counts[i] > 0 || !nozero)
+          outfile << klets[i] << "  " << "\t" << counts[i] << endl;
+      }
+    } else {
+      for (int i = 0; i < klets.size(); ++i) {
+        if (counts[i] > 0 || !nozero)
+          cout << klets[i] << "  " << "\t" << counts[i] << endl;
+      }
+    }
+
   } else {
 
     /* this version only keeps k+1 characters in memory */
+
+    map<string, int> counts;
 
     if (alph.length() < 1) {
       cerr << "Error: could not parse -a option" << endl;
@@ -204,22 +220,26 @@ int main(int argc, char **argv) {
       seqfile.close();
     }
 
-  }
+    /* return */
 
-  /* return */
-
-  alignlen = to_string(max_element(counts.begin(), counts.end())[0]).length();
-
-  if (has_out) {
-    for (int i = 0; i < klets.size(); ++i) {
-      if (counts[i] > 0 || !nozero)
-        outfile << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
+    if (counts.size() > klets.size()) {
+      cerr << "Warning: foreign character(s) encountered" << endl;
     }
-  } else {
-    for (int i = 0; i < klets.size(); ++i) {
-      if (counts[i] > 0 || !nozero)
-        cout << klets[i] << "  " << setw(alignlen) << counts[i] << endl;
+
+    map<string, int>::iterator it;
+
+    if (has_out) {
+      for (it = counts.begin(); it != counts.end(); ++it) {
+        if (it->second > 0 || !nozero)
+          outfile << it->first << "\t" << it->second << endl;
+      }
+    } else {
+      for (it = counts.begin(); it != counts.end(); ++it) {
+        if (it->second > 0 || !nozero)
+          cout << it->first << "\t" << it->second << endl;
+      }
     }
+
   }
 
   return 0;

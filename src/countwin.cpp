@@ -222,7 +222,7 @@ int main(int argc, char **argv) {
 
   while (true) {
 
-    seq = seq.substr(step, seq.length() - step);
+    seq.erase(0, step);
     if (has_file) {
       seq += extract_window(infile, step);
     } else {

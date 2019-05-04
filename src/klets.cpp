@@ -23,6 +23,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <algorithm>
 using namespace std;
 
 vector<string> make_klets(vector<char> lets_uniq, int k) {
@@ -72,21 +73,16 @@ vector<int> count_klets2(vector<char> letters, vector<char> lets_uniq, int k,
   vector<int> intletters;
   vector<int> let_counts(nlets, 0);
   intletters.reserve(seqlen);
-  bool missing;
 
   for (int i = 0; i < seqlen; ++i) {
-    missing = true;
+
     for (int j = 0; j < alphlen; ++j) {
       if (letters[i] == lets_uniq[j]) {
         intletters.push_back(j);
-        missing = false;
         break;
       }
     }
-    if (missing) {
-      cerr << "Error: foreign character [" << letters[i] << "] encountered" << endl;
-      exit(EXIT_FAILURE);
-    }
+
   }
 
   int l;
