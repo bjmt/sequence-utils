@@ -1,3 +1,7 @@
+2019-05-04  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+
+* Don't bother and try to fill edges of unconnected vertices (shuffle_euler)
+
 2019-05-03  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * Removed default entries from getopt switch
