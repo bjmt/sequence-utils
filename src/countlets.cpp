@@ -25,13 +25,13 @@
 #include <string>
 #include <set>
 #include <unistd.h>
-#include <map>
+#include <unordered_map>
 #include "klets.hpp"
 using namespace std;
 
 void usage() {
   printf(
-    "countlets v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
+    "countlets v1.3  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                \n"
     "                                                                                \n"
     "Usage:  countlets [options] -i [filename] -o [filename]                         \n"
     "        echo [string] | countlets [options] > [filename]                        \n"
@@ -42,15 +42,14 @@ void usage() {
     "            format.                                                             \n"
     " -a <str>   A string containing all of the alphabet letters present in the      \n"
     "            sequence. This allows the program not to have to load the entire    \n"
-    "            sequence into memory to find all of the unique letters. The downside\n"
-    "            is that runtime increases more with increasing k.                   \n"
+    "            sequence into memory to find all of the unique letters.             \n"
     " -k <int>   K-let size. Defaults to 1.                                          \n"
     " -n         Don't print k-lets with counts of zero.                             \n"
     " -h         Show usage.                                                         \n"
   );
 }
 
-map<string, unsigned int> count_stream(istream &input, vector<string> klets,
+unordered_map<string, unsigned int> count_stream(istream &input, vector<string> klets,
     unsigned int k) {
 
   char l;
@@ -58,7 +57,8 @@ map<string, unsigned int> count_stream(istream &input, vector<string> klets,
   string let;
   let.reserve(k + 1);
 
-  map<string, unsigned int> counts;
+  unordered_map<string, unsigned int> counts;
+  counts.reserve(klets.size());
   for (size_t i = 0; i < klets.size(); ++i) {
     counts[klets[i]] = 0;
   }
@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
 
     /* this version only keeps k+1 characters in memory */
 
-    map<string, unsigned int> counts;
+    unordered_map<string, unsigned int> counts;
 
     if (alph.length() < 1) {
       cerr << "Error: could not parse -a option" << endl;
@@ -228,17 +228,15 @@ int main(int argc, char **argv) {
       cerr << "Warning: foreign character(s) encountered" << endl;
     }
 
-    map<string, unsigned int>::iterator it;
-
     if (has_out) {
-      for (it = counts.begin(); it != counts.end(); ++it) {
-        if (it->second > 0 || !nozero)
-          outfile << it->first << "\t" << it->second << endl;
+      for (size_t i = 0; i < klets.size(); ++i) {
+        if (counts[klets[i]] > 0 || !nozero)
+          outfile << klets[i] << "\t" << counts[klets[i]] << "\t" << endl;
       }
     } else {
-      for (it = counts.begin(); it != counts.end(); ++it) {
-        if (it->second > 0 || !nozero)
-          cout << it->first << "\t" << it->second << endl;
+      for (size_t i = 0; i < klets.size(); ++i) {
+        if (counts[klets[i]] > 0 || !nozero)
+          cout << klets[i] << "\t" << counts[klets[i]] << "\t" << endl;
       }
     }
 

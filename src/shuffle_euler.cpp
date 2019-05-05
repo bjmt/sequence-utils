@@ -214,7 +214,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned i
     bool verbose) {
 
   #ifdef ADD_TIMERS
-  cerr << ">shuffler_euler()" << endl;
+  cerr << ">BEGIN shuffler_euler()" << endl;
   auto t0 = Clock::now();
   #endif
 
@@ -341,6 +341,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned i
   cerr << " ---\n fun total\t"
     << chrono::duration_cast<chrono::microseconds>(t16 - t0).count()
     << " us" << endl;
+  cerr << ">END shuffler_euler()" << endl;
   #endif
 
   return out;

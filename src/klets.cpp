@@ -24,7 +24,13 @@
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
+#include <unordered_map>
 using namespace std;
+
+#ifdef ADD_TIMERS
+#include <chrono>
+using Clock = chrono::high_resolution_clock;
+#endif
 
 vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
 
@@ -68,25 +74,35 @@ vector<unsigned int> count_klets(vector<char> letters, vector<char> lets_uniq,
    * sequence in memory.
    */
 
+  #ifdef ADD_TIMERS
+  auto t0 = Clock::now();
+  cerr << ">BEGIN count_klets()" << endl;
+  #endif
+
   size_t seqlen = letters.size();
   unsigned int nlets = pow(alphlen, k);
-  vector<unsigned int> intletters;
+  unsigned int l, counter;
   vector<unsigned int> let_counts(nlets, 0);
+  vector<unsigned int> intletters;
   intletters.reserve(seqlen);
+  unordered_map<char, unsigned int> let2int;
+  let2int.reserve(lets_uniq.size());
 
-  for (size_t i = 0; i < seqlen; ++i) {
-
-    for (size_t j = 0; j < alphlen; ++j) {
-      if (letters[i] == lets_uniq[j]) {
-        intletters.push_back(j);
-        break;
-      }
-    }
-
+  for (size_t i = 0; i < lets_uniq.size(); ++i) {
+    let2int[lets_uniq[i]] = (unsigned int)i;
   }
 
-  unsigned int l;
-  unsigned int counter;
+  for (size_t i = 0; i < seqlen; ++i) {
+    intletters.push_back(let2int[letters[i]]);
+  }
+
+  #ifdef ADD_TIMERS
+  auto t1 = Clock::now();
+  cerr << " lets->ints\t"
+    << chrono::duration_cast<chrono::microseconds>(t1 - t0).count()
+    << " us" << endl;
+  #endif
+
   for (size_t i = 0; i < seqlen - k + 1; ++i) {
 
     l = 0; counter = 0;
@@ -97,6 +113,17 @@ vector<unsigned int> count_klets(vector<char> letters, vector<char> lets_uniq,
     ++let_counts[l];
 
   }
+
+  #ifdef ADD_TIMERS
+  auto t2 = Clock::now();
+  cerr << " count loop\t"
+    << chrono::duration_cast<chrono::microseconds>(t2 - t1).count()
+    << " us" << endl;
+  cerr << " ---\n fun total\t"
+    << chrono::duration_cast<chrono::microseconds>(t2 - t0).count()
+    << " us" << endl;
+  cerr << ">END count_klets()" << endl;
+  #endif
 
   return let_counts;
 
