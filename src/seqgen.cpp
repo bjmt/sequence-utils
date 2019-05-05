@@ -47,7 +47,7 @@ void usage() {
 
 int main(int argc, char **argv) {
 
-  unsigned long seqlen{0};
+  long seqlen{0};
   int opt;
   size_t alphlen;
   ofstream outfile;
@@ -153,13 +153,13 @@ int main(int argc, char **argv) {
   if (!has_freqs) {
 
     if (has_out) {
-      for (unsigned long i = 0; i < seqlen; ++i) {
+      for (long i = 0; i < seqlen; ++i) {
         outfile << lets[gen() % alphlen];
       }
       outfile << '\n';
       outfile.close();
     } else {
-      for (unsigned long i = 0; i < seqlen; ++i) {
+      for (long i = 0; i < seqlen; ++i) {
         cout << lets[gen() % alphlen];
       }
       cout << '\n';
@@ -170,13 +170,13 @@ int main(int argc, char **argv) {
     discrete_distribution<unsigned int> next_let(freqs.begin(), freqs.end());
 
     if (has_out) {
-      for (unsigned long i = 0; i < seqlen; ++i) {
+      for (long i = 0; i < seqlen; ++i) {
         outfile << lets[next_let(gen)];
       }
       outfile << '\n';
       outfile.close();
     } else {
-      for (unsigned long i = 0; i < seqlen; ++i) {
+      for (long i = 0; i < seqlen; ++i) {
         cout << lets[next_let(gen)];
       }
       cout << '\n';
