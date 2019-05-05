@@ -26,6 +26,6 @@
 #include <random>
 
 std::string shuffle_euler(std::vector<char> letters, std::default_random_engine gen,
-    int k, bool verbose);
+    unsigned int k, bool verbose);
 
 #endif

@@ -5,11 +5,11 @@ OBJ_COUNTFA = countfa.o
 OBJ_COUNTWIN = countwin.o klets.o
 
 CXX = g++
-CXXFLAGS += --std=c++11 -O3 -Wall
+CXXFLAGS += --std=c++11 -O3 -Wall -Wextra -pedantic
 
 all: build install
 
-debug: CXXFLAGS += -g
+debug: CXXFLAGS += -g -DADD_TIMERS
 debug: build install
 
 build:

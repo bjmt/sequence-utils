@@ -24,9 +24,9 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> make_klets(std::vector<char> lets_uniq, int k);
+std::vector<std::string> make_klets(std::vector<char> lets_uniq, unsigned int k);
 
-std::vector<int> count_klets(std::vector<char> letters, std::vector<char> lets_uniq,
-    int k, int alphlen);
+std::vector<unsigned int> count_klets(std::vector<char> letters,
+    std::vector<char> lets_uniq, unsigned int k, size_t alphlen);
 
 #endif

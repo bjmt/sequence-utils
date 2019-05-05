@@ -49,12 +49,12 @@ void usage() {
   );
 }
 
-string make_row(string START, string STOP, vector<int> counts,
+string make_row(string START, string STOP, vector<unsigned int> counts,
     vector<string> klets, bool nozero) {
 
   string out;
 
-  for (int i = 0; i < counts.size(); ++i) {
+  for (size_t i = 0; i < counts.size(); ++i) {
     if (counts[i] > 0 || !nozero)
       out += START + "\t" + STOP + "\t" + klets[i] + "\t" + to_string(counts[i]) + "\n";
   }
@@ -63,11 +63,11 @@ string make_row(string START, string STOP, vector<int> counts,
 
 }
 
-string extract_window(istream &input, int window) {
+string extract_window(istream &input, unsigned int window) {
 
   string out;
   char l;
-  int counter{0};
+  unsigned int counter{0};
   out.reserve(window);
 
   while (input >> l) {
@@ -84,16 +84,20 @@ string extract_window(istream &input, int window) {
 
 int main(int argc, char **argv) {
 
-  int k{1}, START{1};
-  int opt, window, alphlen, STOP, step;
+  int ku{1};
+  unsigned int k;
+  unsigned int START{1};
+  int opt;
+  unsigned int window, STOP, step;
+  size_t alphlen;
   string alph, seq;
   ifstream infile;
   ofstream outfile;
   bool has_file{false}, has_out{false}, has_win{false}, nozero{false}, has_step{false};
   vector<string> klets;
-  set<int> lets_set;
+  set<unsigned int> lets_set;
   vector<char> lets_uniq;
-  vector<int> counts;
+  vector<unsigned int> counts;
 
   while ((opt = getopt(argc, argv, "i:o:a:k:w:s:nh")) != -1) {
     switch (opt) {
@@ -123,7 +127,7 @@ int main(int argc, char **argv) {
       case 'a': if (optarg) alph = optarg;
                 break;
 
-      case 'k': if (optarg) k = atoi(optarg);
+      case 'k': if (optarg) ku = atoi(optarg);
                 break;
 
       case 'w': if (optarg) {
@@ -147,11 +151,13 @@ int main(int argc, char **argv) {
     }
   }
 
-  if (k < 1) {
+  if (ku < 1) {
     cerr << "Error: k must be greater than 0" << endl;
     cerr << "Run countwin -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
+
+  k = ku;
 
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
@@ -184,7 +190,7 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  for (int i = 0; i < alph.length(); ++i) {
+  for (size_t i = 0; i < alph.length(); ++i) {
     lets_set.insert(alph[i]);
   }
   lets_uniq.assign(lets_set.begin(), lets_set.end());

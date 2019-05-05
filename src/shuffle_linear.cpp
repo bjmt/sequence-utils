@@ -24,15 +24,15 @@
 #include <iostream>
 using namespace std;
 
-string shuffle_linear(vector<char> letters, default_random_engine gen, int k,
-    bool verbose) {
+string shuffle_linear(vector<char> letters, default_random_engine gen,
+    unsigned int k, bool verbose) {
 
   /* variables */
 
-  int seqlen1 = letters.size();
-  int seqlen2{seqlen1 / k};
-  int seqrem{seqlen1 % k};
-  int seqremlen{seqlen1 - seqrem};
+  unsigned int seqlen1 = letters.size();
+  unsigned int seqlen2{seqlen1 / k};
+  unsigned int seqrem{seqlen1 % k};
+  unsigned int seqremlen{seqlen1 - seqrem};
 
   if (verbose) {
     cerr << "  Times split: " << seqlen2 << endl;
@@ -42,12 +42,12 @@ string shuffle_linear(vector<char> letters, default_random_engine gen, int k,
   string out;
   out.reserve(seqlen1);
 
-  vector<int> seqindex;
+  vector<unsigned int> seqindex;
   seqindex.reserve(seqlen2);
 
   /* shuffle index */
 
-  for (int i = 0; i < seqlen2; ++i) {
+  for (unsigned int i = 0; i < seqlen2; ++i) {
     seqindex.push_back(i * k);
   }
 
@@ -55,8 +55,8 @@ string shuffle_linear(vector<char> letters, default_random_engine gen, int k,
 
   /* build output string from shuffled index */
 
-  for (int i = 0; i < seqlen2; ++i) {
-    for (int j = 0; j < k; ++j) {
+  for (unsigned int i = 0; i < seqlen2; ++i) {
+    for (unsigned int j = 0; j < k; ++j) {
       out += letters[seqindex[i] + j];
     }
   }
@@ -64,7 +64,7 @@ string shuffle_linear(vector<char> letters, default_random_engine gen, int k,
   /* add leftover letters */
 
   if (seqrem > 0) {
-    for (int i = seqremlen; i < seqlen1; ++i) {
+    for (unsigned int i = seqremlen; i < seqlen1; ++i) {
       out += letters[i];
     }
   }

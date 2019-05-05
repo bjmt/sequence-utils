@@ -50,15 +50,16 @@ void usage() {
   );
 }
 
-map<string, int> count_stream(istream &input, vector<string> klets, int k) {
+map<string, unsigned int> count_stream(istream &input, vector<string> klets,
+    unsigned int k) {
 
   char l;
 
   string let;
   let.reserve(k + 1);
 
-  map<string, int> counts;
-  for (int i = 0; i < klets.size(); ++i) {
+  map<string, unsigned int> counts;
+  for (size_t i = 0; i < klets.size(); ++i) {
     counts[klets[i]] = 0;
   }
 
@@ -84,11 +85,12 @@ int main(int argc, char **argv) {
   /* variables */
 
   int k{1};
-  int opt, alphlen;
+  int opt;
+  size_t alphlen;
   ifstream seqfile;
   ofstream outfile;
   bool has_file{false}, has_out{false}, has_alph{false}, nozero{false};
-  set<int> lets_set;
+  set<unsigned int> lets_set;
   vector<char> lets_uniq;
   vector<string> klets;
   string alph;
@@ -154,9 +156,9 @@ int main(int argc, char **argv) {
 
     /* this version loads the entire sequence into memory */
 
-    vector<int> counts;
+    vector<unsigned int> counts;
     vector<char> letters;
-    int seqlen;
+    size_t seqlen;
     char l;
 
     if (!has_file) {
@@ -170,7 +172,7 @@ int main(int argc, char **argv) {
 
     seqlen = letters.size();
 
-    for (int i = 0; i < seqlen; ++i) {
+    for (size_t i = 0; i < seqlen; ++i) {
       lets_set.insert(letters[i]);
     }
     lets_uniq.assign(lets_set.begin(), lets_set.end());
@@ -182,12 +184,12 @@ int main(int argc, char **argv) {
     /* return */
 
     if (has_out) {
-      for (int i = 0; i < klets.size(); ++i) {
+      for (size_t i = 0; i < klets.size(); ++i) {
         if (counts[i] > 0 || !nozero)
           outfile << klets[i] << "  " << "\t" << counts[i] << endl;
       }
     } else {
-      for (int i = 0; i < klets.size(); ++i) {
+      for (size_t i = 0; i < klets.size(); ++i) {
         if (counts[i] > 0 || !nozero)
           cout << klets[i] << "  " << "\t" << counts[i] << endl;
       }
@@ -197,7 +199,7 @@ int main(int argc, char **argv) {
 
     /* this version only keeps k+1 characters in memory */
 
-    map<string, int> counts;
+    map<string, unsigned int> counts;
 
     if (alph.length() < 1) {
       cerr << "Error: could not parse -a option" << endl;
@@ -205,7 +207,7 @@ int main(int argc, char **argv) {
       exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < alph.length(); ++i) {
+    for (size_t i = 0; i < alph.length(); ++i) {
       lets_set.insert(alph[i]);
     }
     lets_uniq.assign(lets_set.begin(), lets_set.end());
@@ -226,7 +228,7 @@ int main(int argc, char **argv) {
       cerr << "Warning: foreign character(s) encountered" << endl;
     }
 
-    map<string, int>::iterator it;
+    map<string, unsigned int>::iterator it;
 
     if (has_out) {
       for (it = counts.begin(); it != counts.end(); ++it) {

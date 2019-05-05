@@ -29,13 +29,13 @@
 using namespace std;
 
 string markov_loop(vector<string> klets, vector<string> kletsm1,
-    vector<int> let_counts, vector<char> lets_uniq, default_random_engine gen,
-    int seqlen, int k, bool verbose) {
+    vector<unsigned int> let_counts, vector<char> lets_uniq,
+    default_random_engine gen, size_t seqlen, unsigned int k, bool verbose) {
 
-  int rand_i, x, y;
-  int alphlen = lets_uniq.size();
-  int nlets = klets.size();
-  int nletsm1 = kletsm1.size();
+  unsigned int rand_i, x, y;
+  size_t alphlen = lets_uniq.size();
+  size_t nlets = klets.size();
+  size_t nletsm1 = kletsm1.size();
   string tmp_let, out;
   out.reserve(seqlen);
 
@@ -46,7 +46,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
   /* initialize sequence */
 
-  discrete_distribution<int> first_let_d(let_counts.begin(), let_counts.end());
+  discrete_distribution<unsigned int> first_let_d(let_counts.begin(), let_counts.end());
   rand_i = first_let_d(gen);
   tmp_let = klets[rand_i];
   vector<char> out_split(tmp_let.begin(), tmp_let.end());
@@ -54,14 +54,14 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
   /* keep growing */
 
-  for (int i = k + 1; i < seqlen; ++i) {
+  for (size_t i = k + 1; i < seqlen; ++i) {
 
     tmp_let.clear();
     for (int j = k - 1; j >= 1; --j) {
       tmp_let += out_split[i - k];
     }
 
-    for (int j = 0; j < nletsm1; ++j) {
+    for (size_t j = 0; j < nletsm1; ++j) {
 
       /* Perhaps experiment with using ints instead of chars here. Not convinced
        * it would lead to much speed increase since in the end a new string has
@@ -71,7 +71,8 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
       if (tmp_let.compare(kletsm1[j]) == 0) {
         x = j * alphlen;
         y = nlets - x - alphlen;
-        discrete_distribution<int> next_let(let_counts.begin() + x, let_counts.end() - y);
+        discrete_distribution<unsigned int> next_let(let_counts.begin() + x,
+            let_counts.end() - y);
         rand_i = next_let(gen);
         out_split.push_back(lets_uniq[rand_i]);
         break;
@@ -83,17 +84,17 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
   if (verbose) {
     vector<string> k1lets = make_klets(lets_uniq, 1);
-    vector<int> k1_counts = count_klets(out_split, lets_uniq, 1, alphlen);
-    int alignlen = to_string(max_element(k1_counts.begin(), k1_counts.end())[0]).length();
+    vector<unsigned int> k1_counts = count_klets(out_split, lets_uniq, 1, alphlen);
+    size_t alignlen = to_string(max_element(k1_counts.begin(), k1_counts.end())[0]).length();
     cerr << "  After shuffling:" << endl;
-    for (int i = 0; i < alphlen; ++i) {
+    for (size_t i = 0; i < alphlen; ++i) {
       cerr << "    " << k1lets[i] << "  " << setw(alignlen) << k1_counts[i] << "\n";
     }
   }
 
   /* return */
 
-  for (int i = 0; i < out_split.size(); ++i) {
+  for (size_t i = 0; i < out_split.size(); ++i) {
     out += out_split[i];
   }
 
@@ -101,22 +102,23 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
 }
 
-string shuffle_markov(vector<char> letters, default_random_engine gen, int k,
-    bool verbose) {
+string shuffle_markov(vector<char> letters, default_random_engine gen,
+    unsigned int k, bool verbose) {
 
   /* variables */
 
-  int seqlen = letters.size();
+  size_t seqlen = letters.size();
   vector<char> lets_uniq;
-  set<int> lets_set;
-  int alphlen, nlets;
+  set<unsigned int> lets_set;
+  unsigned int nlets;
+  size_t alphlen;
   vector<string> klets, kletsm1;
-  vector<int> let_counts;
+  vector<unsigned int> let_counts;
   string let_j, out;
 
   /* get unique letters */
 
-  for (int i = 0; i < seqlen; ++i) {
+  for (size_t i = 0; i < seqlen; ++i) {
     lets_set.insert(letters[i]);
   }
   lets_uniq.assign(lets_set.begin(), lets_set.end());
@@ -135,11 +137,11 @@ string shuffle_markov(vector<char> letters, default_random_engine gen, int k,
 
   if (verbose) {
     vector<string> k1lets = make_klets(lets_uniq, 1);
-    vector<int> k1_counts = count_klets(letters, lets_uniq, 1, alphlen);
+    vector<unsigned int> k1_counts = count_klets(letters, lets_uniq, 1, alphlen);
     int alignlen = to_string(max_element(k1_counts.begin(), k1_counts.end())[0]).length();
     cerr << "Letter counts:" << endl;
     cerr << "  Before shuffling:" << endl;
-    for (int i = 0; i < alphlen; ++i) {
+    for (size_t i = 0; i < alphlen; ++i) {
       cerr << "    " << k1lets[i] << "  " << setw(alignlen) << k1_counts[i] << "\n";
     }
   }

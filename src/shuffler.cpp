@@ -56,7 +56,7 @@ void usage() {
 }
 
 string do_shuffle(vector<char> letters, int k, default_random_engine gen,
-    bool verbose, int method_i) {
+    bool verbose, unsigned int method_i) {
 
   string outletters;
 
@@ -78,8 +78,8 @@ string do_shuffle(vector<char> letters, int k, default_random_engine gen,
 
 }
 
-void shuffle_and_write(vector<char> letters, int k, default_random_engine gen,
-    bool verbose, int method_i, ostream &output, bool is_fasta) {
+void shuffle_and_write(vector<char> letters, unsigned int k, default_random_engine gen,
+    bool verbose, unsigned int method_i, ostream &output, bool is_fasta) {
 
   string outletters;
   if (letters.size() > k) {
@@ -94,7 +94,7 @@ void shuffle_and_write(vector<char> letters, int k, default_random_engine gen,
 
   } else {
 
-    for (int i = 0; i < outletters.length(); ++i) {
+    for (size_t i = 0; i < outletters.length(); ++i) {
       if (i % 80 == 0 && i != 0) {
         output << endl;
       }
@@ -108,10 +108,11 @@ void shuffle_and_write(vector<char> letters, int k, default_random_engine gen,
 
 }
 
-void read_fasta_then_shuffle_and_write(istream &input, ostream &output, int k,
-    default_random_engine gen, int method_i, bool verbose) {
+void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
+    unsigned int k, default_random_engine gen, unsigned int method_i,
+    bool verbose) {
 
-  int count_n{0}, count_s{0};
+  unsigned int count_n{0}, count_s{0};
   string line, name, content;
 
   while (getline(input, line).good()) {
@@ -189,7 +190,8 @@ int main(int argc, char **argv) {
 
   /* variables */
 
-  int k{1}, method_i{1};
+  int ku{1};
+  unsigned int k{1}, method_i{1};
   int opt;
   ifstream seqfile;
   ofstream outfile;
@@ -217,7 +219,7 @@ int main(int argc, char **argv) {
                 }
                 break;
 
-      case 'k': if (optarg) k = atoi(optarg);
+      case 'k': if (optarg) ku = atoi(optarg);
                 break;
 
       case 's': if (optarg) iseed = atoi(optarg);
@@ -258,11 +260,12 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  if (k < 1) {
+  if (ku < 1) {
     cerr << "Error: k must be greater than 0" << endl;
     cerr << "Run shuffler -h to see usage." << endl;
     exit(EXIT_FAILURE);
   }
+  k = ku;
 
   if (use_linear && use_markov) {
     cerr << "Error: only use one of -l and -m flags" << endl;

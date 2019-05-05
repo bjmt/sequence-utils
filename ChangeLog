@@ -1,6 +1,8 @@
 2019-05-04  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * Don't bother and try to fill edges of unconnected vertices (shuffle_euler)
+* Use unsigned int when not expecting negative values, size_t for sizes
+* Added some internal benchmark code
 
 2019-05-03  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 

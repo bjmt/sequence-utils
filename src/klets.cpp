@@ -26,11 +26,11 @@
 #include <algorithm>
 using namespace std;
 
-vector<string> make_klets(vector<char> lets_uniq, int k) {
+vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
 
-  int alphlen = lets_uniq.size();
-  int nlets = pow(alphlen, k);
-  int let_i, counter, step;
+  size_t alphlen = lets_uniq.size();
+  unsigned int nlets = pow(alphlen, k);
+  unsigned int let_i, counter, step;
   vector<string> klets(nlets, "");
 
   /* perhaps a bit primitive, but it works */
@@ -43,7 +43,7 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
 
     while (counter < nlets) {
 
-      for (int j = 0; j < step; ++j) {
+      for (unsigned int j = 0; j < step; ++j) {
         klets[counter] += lets_uniq[let_i];
         ++counter;
       }
@@ -61,22 +61,22 @@ vector<string> make_klets(vector<char> lets_uniq, int k) {
 
 }
 
-vector<int> count_klets(vector<char> letters, vector<char> lets_uniq, int k,
-    int alphlen) {
+vector<unsigned int> count_klets(vector<char> letters, vector<char> lets_uniq,
+    unsigned int k, size_t alphlen) {
 
   /* Scales very well with increasing k, but requires having the entire
    * sequence in memory.
    */
 
-  int seqlen = letters.size();
-  int nlets = pow(alphlen, k);
-  vector<int> intletters;
-  vector<int> let_counts(nlets, 0);
+  size_t seqlen = letters.size();
+  unsigned int nlets = pow(alphlen, k);
+  vector<unsigned int> intletters;
+  vector<unsigned int> let_counts(nlets, 0);
   intletters.reserve(seqlen);
 
-  for (int i = 0; i < seqlen; ++i) {
+  for (size_t i = 0; i < seqlen; ++i) {
 
-    for (int j = 0; j < alphlen; ++j) {
+    for (size_t j = 0; j < alphlen; ++j) {
       if (letters[i] == lets_uniq[j]) {
         intletters.push_back(j);
         break;
@@ -85,9 +85,9 @@ vector<int> count_klets(vector<char> letters, vector<char> lets_uniq, int k,
 
   }
 
-  int l;
-  int counter;
-  for (int i = 0; i < seqlen - k + 1; ++i) {
+  unsigned int l;
+  unsigned int counter;
+  for (size_t i = 0; i < seqlen - k + 1; ++i) {
 
     l = 0; counter = 0;
     for (int j = k - 1; j >= 0; --j) {

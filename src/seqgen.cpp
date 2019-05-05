@@ -48,7 +48,8 @@ void usage() {
 int main(int argc, char **argv) {
 
   unsigned int seqlen{0};
-  int alphlen, opt;
+  int opt;
+  size_t alphlen;
   ofstream outfile;
   bool has_out{false}, has_freqs{false};
   default_random_engine gen;
@@ -111,7 +112,7 @@ int main(int argc, char **argv) {
     final_let = all_lets.substr(last);
     if (final_let.length() > 0) lets.push_back(final_let);
   } else {
-    for (int i = 0; i < all_lets.length(); ++i) {
+    for (size_t i = 0; i < all_lets.length(); ++i) {
       lets.push_back(all_lets.substr(i, 1));
     }
   }
@@ -152,13 +153,13 @@ int main(int argc, char **argv) {
   if (!has_freqs) {
 
     if (has_out) {
-      for (int i = 0; i < seqlen; ++i) {
+      for (unsigned int i = 0; i < seqlen; ++i) {
         outfile << lets[gen() % alphlen];
       }
       outfile << endl;
       outfile.close();
     } else {
-      for (int i = 0; i < seqlen; ++i) {
+      for (unsigned int i = 0; i < seqlen; ++i) {
         cout << lets[gen() % alphlen];
       }
       cout << endl;
@@ -166,16 +167,16 @@ int main(int argc, char **argv) {
 
   } else {
 
-    discrete_distribution<int> next_let(freqs.begin(), freqs.end());
+    discrete_distribution<unsigned int> next_let(freqs.begin(), freqs.end());
 
     if (has_out) {
-      for (int i = 0; i < seqlen; ++i) {
+      for (unsigned int i = 0; i < seqlen; ++i) {
         outfile << lets[next_let(gen)];
       }
       outfile << endl;
       outfile.close();
     } else {
-      for (int i = 0; i < seqlen; ++i) {
+      for (unsigned int i = 0; i < seqlen; ++i) {
         cout << lets[next_let(gen)];
       }
       cout << endl;
