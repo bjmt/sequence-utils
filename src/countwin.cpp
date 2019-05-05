@@ -34,7 +34,7 @@ void usage() {
     "Usage:   countwin [options] -a [alphabet] -i [filename] -o [filename]           \n"
     "         echo [string] | countwin [options] -a [alphabet] > [filename]          \n"
     "                                                                                \n"
-    " -i <str>   Input filename. All white space will be removed. Alternatively, can \n"
+    " -i <str>   Input filename. All white space will be ignore. Alternatively, can  \n"
     "            take string input from a pipe.                                      \n"
     " -o <str>   Output filename. Alternatively, prints to stdout. Output is printed \n"
     "            in tsv format.                                                      \n"
@@ -71,10 +71,8 @@ string extract_window(istream &input, unsigned int window) {
   out.reserve(window);
 
   while (input >> l) {
-    if (l != ' ' && l != '\n') {
-      out += l;
-      ++counter;
-    }
+    out += l;
+    ++counter;
     if (counter == window) break;
   }
 
