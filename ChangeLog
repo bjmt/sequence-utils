@@ -3,6 +3,11 @@
 * faster char to int conversion in klets.cpp
 * countlets is much faster when providing alphabet (using unordered_map)
 * countlets version bumped to 1.3
+* replaced all instances of endl with \n
+* countfa version bumped to 1.2
+* countwin version bumped to 1.1
+* seqgen version bumped to 1.3
+* shuffler version bumped to 1.3
 
 2019-05-04  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 

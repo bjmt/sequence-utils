@@ -34,7 +34,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "shuffler v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
+    "shuffler v1.3  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
     "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        echo [string] | shuffler [options] > [filename]                         \n"
@@ -90,17 +90,17 @@ void shuffle_and_write(vector<char> letters, unsigned int k, default_random_engi
 
   if (!is_fasta) {
 
-    output << outletters << endl;
+    output << outletters << '\n';
 
   } else {
 
     for (size_t i = 0; i < outletters.length(); ++i) {
       if (i % 80 == 0 && i != 0) {
-        output << endl;
+        output << '\n';
       }
       output << outletters[i];
     }
-    output << endl;
+    output << '\n';
 
   }
 
@@ -121,7 +121,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
 
       if (!name.empty()) {
         ++count_n;
-        output << name << endl;
+        output << name << '\n';
         name.clear();
       }
       if (!line.empty()) {
@@ -133,12 +133,12 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
         ++count_s;
         if (count_s < count_n) {
           cerr << "Warning: encountered a missing sequence ["
-            << count_n - 1 << "]" << endl;
+            << count_n - 1 << "]" << '\n';
           count_s = count_n;
         }
         if (content.length() <= k) {
           cerr << "Warning: encountered a sequence where k is too big ["
-            << count_n << "]" << endl;
+            << count_n << "]" << '\n';
         }
 
         shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
@@ -166,20 +166,20 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
 
   if (!name.empty()) {
     ++count_n;
-    output << name << endl;
+    output << name << '\n';
     if (content.length() == 0) {
       cerr << "Warning: encountered a missing sequence ["
-        << count_n << "]" << endl;
+        << count_n << "]\n";
     } else if (content.length() <= k) {
       cerr << "Warning: encountered a sequence where k is too big ["
-        << count_n << "]" << endl;
+        << count_n << "]\n";
     }
     shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
         false, method_i, output, true);
   }
 
   if (verbose) {
-    cerr << "Shuffled " << count_n << " sequences" << endl;
+    cerr << "Shuffled " << count_n << " sequences\n";
   }
 
   return;
@@ -211,8 +211,8 @@ int main(int argc, char **argv) {
       case 'i': if (optarg) {
                   seqfile.open(optarg);
                   if (seqfile.bad()) {
-                    cerr << "Error: file not found" << endl;
-                    cerr << "Run shuffler -h to see usage." << endl;
+                    cerr << "Error: file not found\n";
+                    cerr << "Run shuffler -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -228,8 +228,8 @@ int main(int argc, char **argv) {
       case 'o': if (optarg) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
-                    cerr << "Error: could not create outfile" << endl;
-                    cerr << "Run shuffler -h to see usage." << endl;
+                    cerr << "Error: could not create outfile\n";
+                    cerr << "Run shuffler -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -255,21 +255,21 @@ int main(int argc, char **argv) {
   }
 
   if (!has_file && isatty(STDIN_FILENO)) {
-    cerr << "Error: missing input" << endl;
-    cerr << "Run shuffler -h to see usage." << endl;
+    cerr << "Error: missing input\n";
+    cerr << "Run shuffler -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
 
   if (ku < 1) {
-    cerr << "Error: k must be greater than 0" << endl;
-    cerr << "Run shuffler -h to see usage." << endl;
+    cerr << "Error: k must be greater than 0\n";
+    cerr << "Run shuffler -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
   k = ku;
 
   if (use_linear && use_markov) {
-    cerr << "Error: only use one of -l and -m flags" << endl;
-    cerr << "Run shuffler -h to see usage." << endl;
+    cerr << "Error: only use one of -l and -m flags\n";
+    cerr << "Run shuffler -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
 
@@ -282,8 +282,8 @@ int main(int argc, char **argv) {
   gen = default_random_engine(iseed);
 
   if (verbose) {
-    cerr << "K-let size: " << k << endl;
-    cerr << "RNG seed: " << iseed << endl;
+    cerr << "K-let size: " << k << '\n';
+    cerr << "RNG seed: " << iseed << '\n';
     if (k > 1) {
       cerr << "Shuffling method: ";
       switch (method_i) {
@@ -294,7 +294,7 @@ int main(int argc, char **argv) {
         case 4: cerr << "euler";
                 break;
       }
-      cerr << endl;
+      cerr << '\n';
     }
   }
 
@@ -310,7 +310,7 @@ int main(int argc, char **argv) {
       while (cin >> l) letters.push_back(l);
 
       if (letters.size() <= k) {
-        cerr << "Error: k must be greater than sequence length" << endl;
+        cerr << "Error: k must be greater than sequence length\n";
         exit(EXIT_FAILURE);
       }
 
@@ -322,7 +322,7 @@ int main(int argc, char **argv) {
       }
 
       if (verbose) {
-        cerr << "Shuffled " << letters.size() << " characters" << endl;
+        cerr << "Shuffled " << letters.size() << " characters\n";
       }
 
     } else {
@@ -331,7 +331,7 @@ int main(int argc, char **argv) {
       seqfile.close();
 
       if (letters.size() <= k) {
-        cerr << "Error: k must be greater than sequence length" << endl;
+        cerr << "Error: k must be greater than sequence length\n";
         exit(EXIT_FAILURE);
       }
 
@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
       }
 
       if (verbose) {
-        cerr << "Shuffled " << letters.size() << " characters" << endl;
+        cerr << "Shuffled " << letters.size() << " characters\n";
       }
 
     }

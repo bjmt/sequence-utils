@@ -101,8 +101,8 @@ int main(int argc, char **argv) {
       case 'i': if (optarg) {
                   seqfile.open(optarg);
                   if (seqfile.bad()) {
-                    cerr << "Error: file not found" << endl;
-                    cerr << "Run countlets -h to see usage." << endl;
+                    cerr << "Error: file not found\n";
+                    cerr << "Run countlets -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -119,8 +119,8 @@ int main(int argc, char **argv) {
       case 'o': if (optarg) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
-                    cerr << "Error: could not create outfile" << endl;
-                    cerr << "Run countlets -h to see usage." << endl;
+                    cerr << "Error: could not create outfile\n";
+                    cerr << "Run countlets -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -137,15 +137,15 @@ int main(int argc, char **argv) {
   }
 
   if (k < 1) {
-    cerr << "Error: k must be greater than 0" << endl;
-    cerr << "Run countlets -h to see usage." << endl;
+    cerr << "Error: k must be greater than 0\n";
+    cerr << "Run countlets -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
 
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
-      cerr << "Error: missing input" << endl;
-      cerr << "Run countlets -h to see usage." << endl;
+      cerr << "Error: missing input\n";
+      cerr << "Run countlets -h to see usage.\n";
       exit(EXIT_FAILURE);
     }
   }
@@ -186,12 +186,12 @@ int main(int argc, char **argv) {
     if (has_out) {
       for (size_t i = 0; i < klets.size(); ++i) {
         if (counts[i] > 0 || !nozero)
-          outfile << klets[i] << "  " << "\t" << counts[i] << endl;
+          outfile << klets[i] << '\t' << counts[i] << '\n';
       }
     } else {
       for (size_t i = 0; i < klets.size(); ++i) {
         if (counts[i] > 0 || !nozero)
-          cout << klets[i] << "  " << "\t" << counts[i] << endl;
+          cout << klets[i] << '\t' << counts[i] << '\n';
       }
     }
 
@@ -202,8 +202,8 @@ int main(int argc, char **argv) {
     unordered_map<string, unsigned int> counts;
 
     if (alph.length() < 1) {
-      cerr << "Error: could not parse -a option" << endl;
-      cerr << "Run countlets -h to see usage." << endl;
+      cerr << "Error: could not parse -a option" << '\n';
+      cerr << "Run countlets -h to see usage." << '\n';
       exit(EXIT_FAILURE);
     }
 
@@ -225,18 +225,18 @@ int main(int argc, char **argv) {
     /* return */
 
     if (counts.size() > klets.size()) {
-      cerr << "Warning: foreign character(s) encountered" << endl;
+      cerr << "Warning: foreign character(s) encountered" << '\n';
     }
 
     if (has_out) {
       for (size_t i = 0; i < klets.size(); ++i) {
         if (counts[klets[i]] > 0 || !nozero)
-          outfile << klets[i] << "\t" << counts[klets[i]] << "\t" << endl;
+          outfile << klets[i] << '\t' << counts[klets[i]] << '\t' << '\n';
       }
     } else {
       for (size_t i = 0; i < klets.size(); ++i) {
         if (counts[klets[i]] > 0 || !nozero)
-          cout << klets[i] << "\t" << counts[klets[i]] << "\t" << endl;
+          cout << klets[i] << '\t' << counts[klets[i]] << '\t' << '\n';
       }
     }
 

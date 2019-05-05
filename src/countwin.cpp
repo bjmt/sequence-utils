@@ -29,7 +29,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "countwin v1.0  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
+    "countwin v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
     "                                                                                \n"
     "Usage:   countwin [options] -a [alphabet] -i [filename] -o [filename]           \n"
     "         echo [string] | countwin [options] -a [alphabet] > [filename]          \n"
@@ -56,7 +56,7 @@ string make_row(string START, string STOP, vector<unsigned int> counts,
 
   for (size_t i = 0; i < counts.size(); ++i) {
     if (counts[i] > 0 || !nozero)
-      out += START + "\t" + STOP + "\t" + klets[i] + "\t" + to_string(counts[i]) + "\n";
+      out += START + '\t' + STOP + '\t' + klets[i] + '\t' + to_string(counts[i]) + '\n';
   }
 
   return out;
@@ -103,8 +103,8 @@ int main(int argc, char **argv) {
       case 'i': if (optarg) {
                   infile.open(optarg);
                   if (infile.bad()) {
-                    cerr << "Error: file not found" << endl;
-                    cerr << "Run countwin -h to see usage." << endl;
+                    cerr << "Error: file not found\n";
+                    cerr << "Run countwin -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -114,8 +114,8 @@ int main(int argc, char **argv) {
       case 'o': if (optarg) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
-                    cerr << "Error: could not create outfile" << endl;
-                    cerr << "Run countwin -h to see usage." << endl;
+                    cerr << "Error: could not create outfile\n";
+                    cerr << "Run countwin -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -150,8 +150,8 @@ int main(int argc, char **argv) {
   }
 
   if (ku < 1) {
-    cerr << "Error: k must be greater than 0" << endl;
-    cerr << "Run countwin -h to see usage." << endl;
+    cerr << "Error: k must be greater than 0\n";
+    cerr << "Run countwin -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
 
@@ -159,14 +159,14 @@ int main(int argc, char **argv) {
 
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
-      cerr << "Error: missing input" << endl;
-      cerr << "Run countwin -h to see usage." << endl;
+      cerr << "Error: missing input\n";
+      cerr << "Run countwin -h to see usage.\n";
       exit(EXIT_FAILURE);
     }
   }
 
   if (alph.length() < 1) {
-    cerr << "Error: missing alphabet" << endl;
+    cerr << "Error: missing alphabet\n";
     exit(EXIT_FAILURE);
   }
 
@@ -174,8 +174,8 @@ int main(int argc, char **argv) {
     window = k;
   } else {
     if (window < k) {
-      cerr << "Error: window size must be equal to or greater than k" << endl;
-      cerr << "Run countwin -h to see usage." << endl;
+      cerr << "Error: window size must be equal to or greater than k\n";
+      cerr << "Run countwin -h to see usage.\n";
       exit(EXIT_FAILURE);
     }
   }
@@ -183,8 +183,8 @@ int main(int argc, char **argv) {
   if (!has_step) step = window;
 
   if (step < 1 || step > window) {
-    cerr << "Error: step size must be between 1 and window size" << endl;
-    cerr << "Run countwin -h to see usage." << endl;
+    cerr << "Error: step size must be between 1 and window size\n";
+    cerr << "Run countwin -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
 
@@ -196,9 +196,9 @@ int main(int argc, char **argv) {
   klets = make_klets(lets_uniq, k);
 
   if (has_file) {
-    outfile << "START\tSTOP\tLET\tCOUNT" << endl;
+    outfile << "START\tSTOP\tLET\tCOUNT\n";
   } else {
-    cout << "START\tSTOP\tLET\tCOUNT" << endl;
+    cout << "START\tSTOP\tLET\tCOUNT\n";
   }
 
   /* initialise */
@@ -210,8 +210,8 @@ int main(int argc, char **argv) {
   }
   STOP = START + seq.length() - 1;
   if (seq.length() < k) {
-    cerr << "Error: sequence cannot be smaller than k" << endl;
-    cerr << "Run countwin -h to see usage." << endl;
+    cerr << "Error: sequence cannot be smaller than k\n";
+    cerr << "Run countwin -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
   counts = count_klets(vector<char>(seq.begin(), seq.end()), lets_uniq, k, alphlen);

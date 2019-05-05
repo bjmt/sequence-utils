@@ -28,7 +28,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "seqgen v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                   \n"
+    "seqgen v1.3  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                   \n"
     "                                                                                \n"
     "Usage:  seqgen [options] -a [letters] -l [length] -o [outfile]                  \n"
     "        seqgen [options] -a [letters] -l [length] > [outfile]                   \n"
@@ -61,8 +61,8 @@ int main(int argc, char **argv) {
   size_t last, next;
 
   if (argc == 1) {
-    cerr << "Error: missing alphabet and sequence length" << endl;
-    cerr << "Run seqgen -h to see usage." << endl;
+    cerr << "Error: missing alphabet and sequence length\n";
+    cerr << "Run seqgen -h to see usage.\n";
     return 0;
   }
 
@@ -71,8 +71,8 @@ int main(int argc, char **argv) {
       case 'o': if (optarg) {
                   outfile.open(optarg);
                   if (outfile.bad()) {
-                    cerr << "Error: could not create outfile" << endl;
-                    cerr << "Run seqgen -h to see usage." << endl;
+                    cerr << "Error: could not create outfile\n";
+                    cerr << "Run seqgen -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_out = true;
@@ -95,8 +95,8 @@ int main(int argc, char **argv) {
   }
 
   if (seqlen < 1) {
-    cerr << "Error: please input a desired sequence length above 0" << endl;;
-    cerr << "Run seqgen -h to see usage." << endl;
+    cerr << "Error: please input a desired sequence length above 0\n";
+    cerr << "Run seqgen -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
 
@@ -120,8 +120,8 @@ int main(int argc, char **argv) {
   alphlen = lets.size();
 
   if (alphlen < 1) {
-    cerr << "Error: could not parse sequence alphabet" << endl;
-    cerr << "Run seqgen -h to see usage." << endl;
+    cerr << "Error: could not parse sequence alphabet\n";
+    cerr << "Run seqgen -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
 
@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 
     if (lets.size() != freqs.size()) {
       cerr << "Error: mismatching number of letters [" << lets.size()
-        << "] and frequencies [" << freqs.size() << "]" << endl;
+        << "] and frequencies [" << freqs.size() << "]\n";
       exit(EXIT_FAILURE);
     }
 
@@ -156,13 +156,13 @@ int main(int argc, char **argv) {
       for (unsigned int i = 0; i < seqlen; ++i) {
         outfile << lets[gen() % alphlen];
       }
-      outfile << endl;
+      outfile << '\n';
       outfile.close();
     } else {
       for (unsigned int i = 0; i < seqlen; ++i) {
         cout << lets[gen() % alphlen];
       }
-      cout << endl;
+      cout << '\n';
     }
 
   } else {
@@ -173,13 +173,13 @@ int main(int argc, char **argv) {
       for (unsigned int i = 0; i < seqlen; ++i) {
         outfile << lets[next_let(gen)];
       }
-      outfile << endl;
+      outfile << '\n';
       outfile.close();
     } else {
       for (unsigned int i = 0; i < seqlen; ++i) {
         cout << lets[next_let(gen)];
       }
-      cout << endl;
+      cout << '\n';
     }
 
   }

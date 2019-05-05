@@ -26,7 +26,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "countfa v1.1  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                  \n"
+    "countfa v1.2  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                  \n"
     "                                                                                \n"
     "Usage:  coutfa -i [filename]                                                    \n"
     "        cat [filename] | coutfa                                                 \n"
@@ -46,14 +46,14 @@ void do_countfa(istream &input) {
   while (input.get(l)) {
 
     if (l == '>') {
-      if (counter > 0) cout << counter << endl;
+      if (counter > 0) cout << counter << '\n';
       at_name = true;
       counter = 0;
     }
 
     if (l == '\n' && at_name) {
       at_name = false;
-      cout << endl;
+      cout << '\n';
     }
 
     if (at_name) cout << l;
@@ -61,7 +61,7 @@ void do_countfa(istream &input) {
 
   }
 
-  if (!at_name && counter > 0) cout << counter << endl;
+  if (!at_name && counter > 0) cout << counter << '\n';
 
   return;
 
@@ -78,8 +78,8 @@ int main(int argc, char **argv) {
       case 'i': if (optarg) {
                   seqfile.open(optarg);
                   if (seqfile.bad()) {
-                    cerr << "Error: file not found" << endl;
-                    cerr << "Run countfa -h to see usage." << endl;
+                    cerr << "Error: file not found\n";
+                    cerr << "Run countfa -h to see usage.\n";
                     exit(EXIT_FAILURE);
                   }
                   has_file = true;
@@ -92,8 +92,8 @@ int main(int argc, char **argv) {
 
   if (!has_file) {
     if (isatty(STDIN_FILENO)) {
-      cerr << "Error: missing input" << endl;
-      cerr << "Run countfa -h to see usage." << endl;
+      cerr << "Error: missing input\n";
+      cerr << "Run countfa -h to see usage.\n";
       exit(EXIT_FAILURE);
     }
     do_countfa(cin);
