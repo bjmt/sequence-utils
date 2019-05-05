@@ -40,7 +40,7 @@ void usage() {
 void do_countfa(istream &input) {
 
   bool at_name{false};
-  unsigned int counter{0};
+  unsigned long counter{0};
   char l;
 
   while (input.get(l)) {
