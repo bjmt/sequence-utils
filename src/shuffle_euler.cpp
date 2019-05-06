@@ -35,8 +35,8 @@ using namespace std;
 using Clock = chrono::high_resolution_clock;
 #endif
 
-vector<vector<unsigned int>> make_edgelist(vector<unsigned int> let_counts,
-    unsigned int nletsm1, size_t alphlen) {
+vector<vector<unsigned long>> make_edgelist(vector<unsigned long> let_counts,
+    unsigned long nletsm1, size_t alphlen) {
 
   /* 1D vector<int> --> 2D vector<vector<int>>
    * The first layer elements are vertices, second layer are the edges.
@@ -44,10 +44,10 @@ vector<vector<unsigned int>> make_edgelist(vector<unsigned int> let_counts,
 
   /* TODO: find a cheaper alternative */
 
-  vector<vector<unsigned int>> edgelist(nletsm1, vector<unsigned int>(alphlen));
-  unsigned int counter{0};
+  vector<vector<unsigned long>> edgelist(nletsm1, vector<unsigned long>(alphlen));
+  unsigned long counter{0};
 
-  for (unsigned int i = 0; i < nletsm1; ++i) {
+  for (unsigned long i = 0; i < nletsm1; ++i) {
 
     for (size_t j = 0; j < alphlen; ++j) {
       edgelist[i][j] = let_counts[counter];
@@ -60,16 +60,16 @@ vector<vector<unsigned int>> make_edgelist(vector<unsigned int> let_counts,
 
 }
 
-vector<unsigned int> find_euler(vector<vector<unsigned int>> edgelist, unsigned int lasti,
-    unsigned int nletsm1, default_random_engine gen, size_t alphlen, unsigned int k,
-    vector<bool> empty_vertices, bool verbose) {
+vector<unsigned long> find_euler(vector<vector<unsigned long>> edgelist,
+    unsigned long lasti, unsigned long nletsm1, default_random_engine gen,
+    size_t alphlen, unsigned int k, vector<bool> empty_vertices, bool verbose) {
 
-  unsigned int u;
-  unsigned int nletsm2 = pow(alphlen, k - 2);
-  unsigned int good_v{0}, counter{0};
+  unsigned long u;
+  unsigned long nletsm2 = pow(alphlen, k - 2);
+  unsigned long good_v{0}, counter{0};
   vector<bool> vertices(nletsm1, false);
-  vector<unsigned int> last_letsi(nletsm1, 0);
-  vector<unsigned int> next_let_i;
+  vector<unsigned long> last_letsi(nletsm1, 0);
+  vector<unsigned long> next_let_i;
   next_let_i.reserve(nletsm1);
 
   /* The idea is to go through and make sure that every last letter for each
@@ -83,26 +83,26 @@ vector<unsigned int> find_euler(vector<vector<unsigned int>> edgelist, unsigned 
   vertices[lasti] = true;  /* tree root */
 
   /* I don't think there's a formula for this, so just prepare these beforehand */
-  for (unsigned int i = 0; i < nletsm1; ++i) {
+  for (unsigned long i = 0; i < nletsm1; ++i) {
     next_let_i.push_back(counter * alphlen);
     if (counter == nletsm2 - 1) counter = 0;
     else ++counter;
   }
 
-  for (unsigned int i = 0; i < nletsm1; ++i) {
+  for (unsigned long i = 0; i < nletsm1; ++i) {
     if (empty_vertices[i]) vertices[i] = true;  /* ignore unconnected vertices */
     else ++good_v;
   }
 
   if (verbose) cerr << "    Total vertices to travel: " << good_v << endl;
 
-  for (unsigned int i = 0; i < nletsm1; ++i) {
+  for (unsigned long i = 0; i < nletsm1; ++i) {
 
     u = i;
 
     while (!vertices[u]) {
       /* pick a random possible edge from the vertex */
-      discrete_distribution<unsigned int> next_let(edgelist[u].begin(), edgelist[u].end());
+      discrete_distribution<unsigned long> next_let(edgelist[u].begin(), edgelist[u].end());
       last_letsi[u] = next_let(gen);
       /* now follow the edge to the next vertex */
       if (k == 2)
@@ -130,9 +130,9 @@ vector<unsigned int> find_euler(vector<vector<unsigned int>> edgelist, unsigned 
 
 }
 
-vector<vector<unsigned int>> fill_vertices(vector<vector<unsigned int>> edgelist,
-    vector<unsigned int> last_letsi, unsigned int nletsm1, size_t alphlen,
-    unsigned int lasti, default_random_engine gen, vector<bool> empty_vertices) {
+vector<vector<unsigned long>> fill_vertices(vector<vector<unsigned long>> edgelist,
+    vector<unsigned long> last_letsi, unsigned long nletsm1, size_t alphlen,
+    unsigned long lasti, default_random_engine gen, vector<bool> empty_vertices) {
 
   /* The incoming edgelist is just a set of counts for each letter. This
    * will actually create vectors of letter indices based on counts.
@@ -140,10 +140,10 @@ vector<vector<unsigned int>> fill_vertices(vector<vector<unsigned int>> edgelist
 
   /* TODO: find a cheaper alternative */
 
-  vector<vector<unsigned int>> edgelist2(nletsm1);
-  unsigned int b;
+  vector<vector<unsigned long>> edgelist2(nletsm1);
+  unsigned long b;
 
-  for (unsigned int i = 0; i < nletsm1; ++i) {
+  for (unsigned long i = 0; i < nletsm1; ++i) {
 
     if (empty_vertices[i]) continue;
 
@@ -152,7 +152,7 @@ vector<vector<unsigned int>> fill_vertices(vector<vector<unsigned int>> edgelist
     for (size_t j = 0; j < alphlen; ++j) {
 
       b = edgelist[i][j];
-      for (unsigned int h = 0; h < b; ++h) {
+      for (unsigned long h = 0; h < b; ++h) {
         edgelist2[i].push_back(j);
       }
 
@@ -169,15 +169,15 @@ vector<vector<unsigned int>> fill_vertices(vector<vector<unsigned int>> edgelist
 
 }
 
-vector<unsigned int> walk_euler(vector<vector<unsigned int>> edgelist,
+vector<unsigned long> walk_euler(vector<vector<unsigned long>> edgelist,
     size_t seqlen, vector<char> lets_uniq, string firstl) {
 
   size_t alphlen = lets_uniq.size();
   size_t nletsm1 = edgelist.size();
-  unsigned int current{0};
+  unsigned long current{0};
   size_t n = firstl.length();
-  vector<unsigned int> edgelist_counter(nletsm1, 0);
-  vector<unsigned int> out_i;
+  vector<unsigned long> edgelist_counter(nletsm1, 0);
+  vector<unsigned long> out_i;
   out_i.reserve(seqlen);
 
   /* initialize shuffled sequence with starting vertex */
@@ -219,14 +219,14 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned i
   #endif
 
   size_t seqlen = letters.size();
-  unsigned int nlets, nletsm1;
+  unsigned long nlets, nletsm1;
   size_t alphlen;
-  unsigned int lasti{0};
-  vector<unsigned int> last_letsi, out_i;
-  vector<unsigned int> let_counts;
+  unsigned long lasti{0};
+  vector<unsigned long> last_letsi, out_i;
+  vector<unsigned long> let_counts;
   vector<char> lets_uniq;
   set<unsigned int> lets_set;
-  vector<vector<unsigned int>> edgelist;
+  vector<vector<unsigned long>> edgelist;
   string firstl, out;
 
   /* the first and last letters remain unchanged; these are special vertices
@@ -275,7 +275,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned i
    */
   vector<bool> empty_vertices;
   empty_vertices.reserve(nletsm1);
-  for (unsigned int i = 0; i < nletsm1; ++i) {
+  for (unsigned long i = 0; i < nletsm1; ++i) {
     empty_vertices.push_back(true);
     for (size_t j = 0; j < alphlen; ++j) {
       if (edgelist[i][j] > 0) {
@@ -303,7 +303,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned i
   #endif
 
   /* delete last edges from edge pool */
-  vector<vector<unsigned int>> edgelist2;
+  vector<vector<unsigned long>> edgelist2;
   for (size_t i = 0; i < last_letsi.size(); ++i) {
     if (i != lasti) --edgelist[i][last_letsi[i]];
   }

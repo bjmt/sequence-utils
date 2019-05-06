@@ -49,7 +49,7 @@ void usage() {
   );
 }
 
-unordered_map<string, unsigned int> count_stream(istream &input, vector<string> klets,
+unordered_map<string, unsigned long> count_stream(istream &input, vector<string> klets,
     unsigned int k) {
 
   char l;
@@ -57,7 +57,7 @@ unordered_map<string, unsigned int> count_stream(istream &input, vector<string> 
   string let;
   let.reserve(k + 1);
 
-  unordered_map<string, unsigned int> counts;
+  unordered_map<string, unsigned long> counts;
   counts.reserve(klets.size());
   for (size_t i = 0; i < klets.size(); ++i) {
     counts[klets[i]] = 0;
@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
 
     /* this version loads the entire sequence into memory */
 
-    vector<unsigned int> counts;
+    vector<unsigned long> counts;
     vector<char> letters;
     size_t seqlen;
     char l;
@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
 
     /* this version only keeps k+1 characters in memory */
 
-    unordered_map<string, unsigned int> counts;
+    unordered_map<string, unsigned long> counts;
 
     if (alph.length() < 1) {
       cerr << "Error: could not parse -a option" << '\n';

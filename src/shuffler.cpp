@@ -55,7 +55,7 @@ void usage() {
   );
 }
 
-string do_shuffle(vector<char> letters, int k, default_random_engine gen,
+string do_shuffle(vector<char> letters, unsigned int k, default_random_engine gen,
     bool verbose, unsigned int method_i) {
 
   string outletters;
@@ -112,7 +112,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
     unsigned int k, default_random_engine gen, unsigned int method_i,
     bool verbose) {
 
-  unsigned int count_n{0}, count_s{0};
+  unsigned long count_n{0}, count_s{0};
   string line, name, content;
 
   while (getline(input, line).good()) {

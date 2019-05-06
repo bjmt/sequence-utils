@@ -29,10 +29,10 @@ string shuffle_linear(vector<char> letters, default_random_engine gen,
 
   /* variables */
 
-  unsigned int seqlen1 = letters.size();
-  unsigned int seqlen2{seqlen1 / k};
-  unsigned int seqrem{seqlen1 % k};
-  unsigned int seqremlen{seqlen1 - seqrem};
+  unsigned long seqlen1 = letters.size();
+  unsigned long seqlen2{seqlen1 / k};
+  unsigned long seqrem{seqlen1 % k};
+  unsigned long seqremlen{seqlen1 - seqrem};
 
   if (verbose) {
     cerr << "  Times split: " << seqlen2 << endl;
@@ -42,12 +42,12 @@ string shuffle_linear(vector<char> letters, default_random_engine gen,
   string out;
   out.reserve(seqlen1);
 
-  vector<unsigned int> seqindex;
+  vector<unsigned long> seqindex;
   seqindex.reserve(seqlen2);
 
   /* shuffle index */
 
-  for (unsigned int i = 0; i < seqlen2; ++i) {
+  for (unsigned long i = 0; i < seqlen2; ++i) {
     seqindex.push_back(i * k);
   }
 
@@ -55,7 +55,7 @@ string shuffle_linear(vector<char> letters, default_random_engine gen,
 
   /* build output string from shuffled index */
 
-  for (unsigned int i = 0; i < seqlen2; ++i) {
+  for (unsigned long i = 0; i < seqlen2; ++i) {
     for (unsigned int j = 0; j < k; ++j) {
       out += letters[seqindex[i] + j];
     }
@@ -64,7 +64,7 @@ string shuffle_linear(vector<char> letters, default_random_engine gen,
   /* add leftover letters */
 
   if (seqrem > 0) {
-    for (unsigned int i = seqremlen; i < seqlen1; ++i) {
+    for (unsigned long i = seqremlen; i < seqlen1; ++i) {
       out += letters[i];
     }
   }

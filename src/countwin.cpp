@@ -49,7 +49,7 @@ void usage() {
   );
 }
 
-string make_row(string START, string STOP, vector<unsigned int> counts,
+string make_row(string START, string STOP, vector<unsigned long> counts,
     vector<string> klets, bool nozero) {
 
   string out;
@@ -63,11 +63,11 @@ string make_row(string START, string STOP, vector<unsigned int> counts,
 
 }
 
-string extract_window(istream &input, unsigned int window) {
+string extract_window(istream &input, unsigned long window) {
 
   string out;
   char l;
-  unsigned int counter{0};
+  unsigned long counter{0};
   out.reserve(window);
 
   while (input >> l) {
@@ -84,9 +84,9 @@ int main(int argc, char **argv) {
 
   int ku{1};
   unsigned int k;
-  unsigned int START{1};
+  unsigned long START{1};
   int opt;
-  unsigned int window, STOP, step;
+  unsigned long window, step, STOP;
   size_t alphlen;
   string alph, seq;
   ifstream infile;
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
   vector<string> klets;
   set<unsigned int> lets_set;
   vector<char> lets_uniq;
-  vector<unsigned int> counts;
+  vector<unsigned long> counts;
 
   while ((opt = getopt(argc, argv, "i:o:a:k:w:s:nh")) != -1) {
     switch (opt) {
@@ -129,13 +129,13 @@ int main(int argc, char **argv) {
                 break;
 
       case 'w': if (optarg) {
-                  window = atoi(optarg);
+                  window = atol(optarg);
                   has_win = true;
                 }
                 break;
 
       case 's': if (optarg) {
-                  step = atoi(optarg);
+                  step = atol(optarg);
                   has_step = true;
                 }
                 break;

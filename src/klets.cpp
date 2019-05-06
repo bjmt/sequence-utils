@@ -35,8 +35,8 @@ using Clock = chrono::high_resolution_clock;
 vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
 
   size_t alphlen = lets_uniq.size();
-  unsigned int nlets = pow(alphlen, k);
-  unsigned int let_i, counter, step;
+  unsigned long nlets = pow(alphlen, k);
+  unsigned long let_i, counter, step;
   vector<string> klets(nlets, "");
 
   /* perhaps a bit primitive, but it works */
@@ -49,7 +49,7 @@ vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
 
     while (counter < nlets) {
 
-      for (unsigned int j = 0; j < step; ++j) {
+      for (unsigned long j = 0; j < step; ++j) {
         klets[counter] += lets_uniq[let_i];
         ++counter;
       }
@@ -67,7 +67,7 @@ vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
 
 }
 
-vector<unsigned int> count_klets(vector<char> letters, vector<char> lets_uniq,
+vector<unsigned long> count_klets(vector<char> letters, vector<char> lets_uniq,
     unsigned int k, size_t alphlen) {
 
   /* Scales very well with increasing k, but requires having the entire
@@ -80,9 +80,9 @@ vector<unsigned int> count_klets(vector<char> letters, vector<char> lets_uniq,
   #endif
 
   size_t seqlen = letters.size();
-  unsigned int nlets = pow(alphlen, k);
-  unsigned int l, counter;
-  vector<unsigned int> let_counts(nlets, 0);
+  unsigned long nlets = pow(alphlen, k);
+  unsigned long l, counter;
+  vector<unsigned long> let_counts(nlets, 0);
   vector<unsigned int> intletters;
   intletters.reserve(seqlen);
   unordered_map<char, unsigned int> let2int;
