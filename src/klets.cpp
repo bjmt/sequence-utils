@@ -67,7 +67,7 @@ vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
 
 }
 
-vector<unsigned long> count_klets(vector<char> letters, vector<char> lets_uniq,
+vector<unsigned long> count_klets(string letters, vector<char> lets_uniq,
     unsigned int k, size_t alphlen) {
 
   /* Scales very well with increasing k, but requires having the entire
@@ -79,7 +79,7 @@ vector<unsigned long> count_klets(vector<char> letters, vector<char> lets_uniq,
   cerr << ">BEGIN count_klets()" << endl;
   #endif
 
-  size_t seqlen = letters.size();
+  size_t seqlen = letters.length();
   unsigned long nlets = pow(alphlen, k);
   unsigned long l, counter;
   vector<unsigned long> let_counts(nlets, 0);

@@ -24,12 +24,12 @@
 #include <iostream>
 using namespace std;
 
-string shuffle_linear(vector<char> letters, default_random_engine gen,
+string shuffle_linear(string letters, default_random_engine gen,
     unsigned int k, bool verbose) {
 
   /* variables */
 
-  unsigned long seqlen1 = letters.size();
+  unsigned long seqlen1 = letters.length();
   unsigned long seqlen2{seqlen1 / k};
   unsigned long seqrem{seqlen1 % k};
   unsigned long seqremlen{seqlen1 - seqrem};

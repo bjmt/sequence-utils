@@ -55,7 +55,7 @@ void usage() {
   );
 }
 
-string do_shuffle(vector<char> letters, unsigned int k, default_random_engine gen,
+string do_shuffle(string letters, unsigned int k, default_random_engine gen,
     bool verbose, unsigned int method_i) {
 
   string outletters;
@@ -63,7 +63,7 @@ string do_shuffle(vector<char> letters, unsigned int k, default_random_engine ge
   switch (method_i) {
 
     case 1: shuffle(letters.begin(), letters.end(), gen);
-            outletters = string(letters.begin(), letters.end());
+            outletters = letters;
             break;
     case 2: outletters = shuffle_markov(letters, gen, k, verbose);
             break;
@@ -78,14 +78,14 @@ string do_shuffle(vector<char> letters, unsigned int k, default_random_engine ge
 
 }
 
-void shuffle_and_write(vector<char> letters, unsigned int k, default_random_engine gen,
+void shuffle_and_write(string letters, unsigned int k, default_random_engine gen,
     bool verbose, unsigned int method_i, ostream &output, bool is_fasta) {
 
   string outletters;
-  if (letters.size() > k) {
+  if (letters.length() > k) {
     outletters = do_shuffle(letters, k, gen, verbose, method_i);
   } else {
-    outletters = string(letters.begin(), letters.end());
+    outletters = letters;
   }
 
   if (!is_fasta) {
@@ -141,8 +141,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
             << count_n << "]" << '\n';
         }
 
-        shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
-            false, method_i, output, true);
+        shuffle_and_write(content, k, gen, false, method_i, output, true);
 
       }
       content.clear();
@@ -174,8 +173,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
       cerr << "Warning: encountered a sequence where k is too big ["
         << count_n << "]\n";
     }
-    shuffle_and_write(vector<char>(content.begin(), content.end()), k, gen,
-        false, method_i, output, true);
+    shuffle_and_write(content, k, gen, false, method_i, output, true);
   }
 
   if (verbose) {
@@ -200,7 +198,7 @@ int main(int argc, char **argv) {
   bool verbose{false};
   unsigned int iseed = time(0);
   char l;
-  vector<char> letters;
+  string letters;
   default_random_engine gen;
 
   /* arguments */
@@ -307,9 +305,10 @@ int main(int argc, char **argv) {
 
     if (!has_file) {
 
-      while (cin >> l) letters.push_back(l);
+      letters = "";
+      while (cin >> l) letters += l;
 
-      if (letters.size() <= k) {
+      if (letters.length() <= k) {
         cerr << "Error: k must be greater than sequence length\n";
         exit(EXIT_FAILURE);
       }
@@ -322,15 +321,16 @@ int main(int argc, char **argv) {
       }
 
       if (verbose) {
-        cerr << "Shuffled " << letters.size() << " characters\n";
+        cerr << "Shuffled " << letters.length() << " characters\n";
       }
 
     } else {
 
-      while (seqfile >> l) letters.push_back(l);
+      letters = "";
+      while (seqfile >> l) letters += l;
       seqfile.close();
 
-      if (letters.size() <= k) {
+      if (letters.length() <= k) {
         cerr << "Error: k must be greater than sequence length\n";
         exit(EXIT_FAILURE);
       }
@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
       }
 
       if (verbose) {
-        cerr << "Shuffled " << letters.size() << " characters\n";
+        cerr << "Shuffled " << letters.length() << " characters\n";
       }
 
     }

@@ -1,5 +1,6 @@
 2019-05-04  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com
 
+* changed vector<char> letters --> string letters
 * converted a lot of int variables to long
 * faster char to int conversion in klets.cpp
 * countlets is much faster when providing alphabet (using unordered_map)

@@ -21,11 +21,10 @@
 #ifndef _SHUFFLE_EULER_
 #define _SHUFFLE_EULER_
 
-#include <vector>
 #include <string>
 #include <random>
 
-std::string shuffle_euler(std::vector<char> letters, std::default_random_engine gen,
+std::string shuffle_euler(std::string letters, std::default_random_engine gen,
     unsigned int k, bool verbose);
 
 #endif

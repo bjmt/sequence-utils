@@ -157,20 +157,20 @@ int main(int argc, char **argv) {
     /* this version loads the entire sequence into memory */
 
     vector<unsigned long> counts;
-    vector<char> letters;
+    string letters = "";
     size_t seqlen;
     char l;
 
     if (!has_file) {
-      while (cin >> l) letters.push_back(l);
+      while (cin >> l) letters += l;
     } else {
-      while (seqfile >> l) letters.push_back(l);
+      while (seqfile >> l) letters += l;
       seqfile.close();
     }
 
     /* make and count klets */
 
-    seqlen = letters.size();
+    seqlen = letters.length();
 
     for (size_t i = 0; i < seqlen; ++i) {
       lets_set.insert(letters[i]);

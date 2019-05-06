@@ -21,11 +21,10 @@
 #ifndef _SHUFFLE_LINEAR_
 #define _SHUFFLE_LINEAR_
 
-#include <vector>
 #include <string>
 #include <random>
 
-std::string shuffle_linear(std::vector<char> letters, std::default_random_engine gen,
+std::string shuffle_linear(std::string letters, std::default_random_engine gen,
     unsigned int k, bool verbose);
 
 #endif

@@ -210,7 +210,7 @@ vector<unsigned long> walk_euler(vector<vector<unsigned int>> edgelist2,
 
 }
 
-string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned int k,
+string shuffle_euler(string letters, default_random_engine gen, unsigned int k,
     bool verbose) {
 
   #ifdef ADD_TIMERS
@@ -218,7 +218,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned i
   auto t0 = Clock::now();
   #endif
 
-  size_t seqlen = letters.size();
+  size_t seqlen = letters.length();
   unsigned long nlets, nletsm1;
   size_t alphlen;
   unsigned long lasti{0};

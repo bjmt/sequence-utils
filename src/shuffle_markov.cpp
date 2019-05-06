@@ -36,7 +36,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
   size_t alphlen = lets_uniq.size();
   size_t nlets = klets.size();
   size_t nletsm1 = kletsm1.size();
-  string tmp_let, out;
+  string tmp_let, out, out_split;
   out.reserve(seqlen);
 
   if (let_counts.size() == 0) {
@@ -49,7 +49,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
   discrete_distribution<unsigned long> first_let_d(let_counts.begin(), let_counts.end());
   rand_i = first_let_d(gen);
   tmp_let = klets[rand_i];
-  vector<char> out_split(tmp_let.begin(), tmp_let.end());
+  out_split = tmp_let;
   out_split.reserve(seqlen);
 
   /* keep growing */
@@ -74,7 +74,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
         discrete_distribution<unsigned long> next_let(let_counts.begin() + x,
             let_counts.end() - y);
         rand_i = next_let(gen);
-        out_split.push_back(lets_uniq[rand_i]);
+        out_split += lets_uniq[rand_i];
         break;
       }
 
@@ -102,12 +102,12 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
 }
 
-string shuffle_markov(vector<char> letters, default_random_engine gen,
+string shuffle_markov(string letters, default_random_engine gen,
     unsigned int k, bool verbose) {
 
   /* variables */
 
-  size_t seqlen = letters.size();
+  size_t seqlen = letters.length();
   vector<char> lets_uniq;
   set<unsigned long> lets_set;
   unsigned long nlets;
