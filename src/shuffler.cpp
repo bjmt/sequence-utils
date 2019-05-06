@@ -55,15 +55,15 @@ void usage() {
   );
 }
 
-string do_shuffle(string letters, unsigned int k, default_random_engine gen,
+string do_shuffle(const string &letters, unsigned int k, default_random_engine gen,
     bool verbose, unsigned int method_i) {
 
   string outletters;
 
   switch (method_i) {
 
-    case 1: shuffle(letters.begin(), letters.end(), gen);
-            outletters = letters;
+    case 1: outletters = letters;
+            shuffle(outletters.begin(), outletters.end(), gen);
             break;
     case 2: outletters = shuffle_markov(letters, gen, k, verbose);
             break;
@@ -78,7 +78,7 @@ string do_shuffle(string letters, unsigned int k, default_random_engine gen,
 
 }
 
-void shuffle_and_write(string letters, unsigned int k, default_random_engine gen,
+void shuffle_and_write(const string &letters, unsigned int k, default_random_engine gen,
     bool verbose, unsigned int method_i, ostream &output, bool is_fasta) {
 
   string outletters;

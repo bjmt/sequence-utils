@@ -28,8 +28,8 @@
 #include "klets.hpp"
 using namespace std;
 
-string markov_loop(vector<string> klets, vector<string> kletsm1,
-    vector<unsigned long> let_counts, vector<char> lets_uniq,
+string markov_loop(const vector<string> &klets, const vector<string> &kletsm1,
+    const vector<unsigned long> &let_counts, const vector<char> &lets_uniq,
     default_random_engine gen, size_t seqlen, unsigned int k, bool verbose) {
 
   unsigned long rand_i, x, y;
@@ -102,7 +102,7 @@ string markov_loop(vector<string> klets, vector<string> kletsm1,
 
 }
 
-string shuffle_markov(string letters, default_random_engine gen,
+string shuffle_markov(const string &letters, default_random_engine gen,
     unsigned int k, bool verbose) {
 
   /* variables */

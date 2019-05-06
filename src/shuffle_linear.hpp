@@ -24,7 +24,7 @@
 #include <string>
 #include <random>
 
-std::string shuffle_linear(std::string letters, std::default_random_engine gen,
+std::string shuffle_linear(const std::string &letters, std::default_random_engine gen,
     unsigned int k, bool verbose);
 
 #endif

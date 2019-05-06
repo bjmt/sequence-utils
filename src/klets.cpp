@@ -32,7 +32,7 @@ using namespace std;
 using Clock = chrono::high_resolution_clock;
 #endif
 
-vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
+vector<string> make_klets(const vector<char> &lets_uniq, unsigned int k) {
 
   size_t alphlen = lets_uniq.size();
   unsigned long nlets = pow(alphlen, k);
@@ -67,7 +67,7 @@ vector<string> make_klets(vector<char> lets_uniq, unsigned int k) {
 
 }
 
-vector<unsigned long> count_klets(string letters, vector<char> lets_uniq,
+vector<unsigned long> count_klets(const string &letters, const vector<char> &lets_uniq,
     unsigned int k, size_t alphlen) {
 
   /* Scales very well with increasing k, but requires having the entire

@@ -49,8 +49,8 @@ void usage() {
   );
 }
 
-string make_row(string START, string STOP, vector<unsigned long> counts,
-    vector<string> klets, bool nozero) {
+string make_row(string START, string STOP, const vector<unsigned long> &counts,
+    const vector<string> &klets, bool nozero) {
 
   string out;
 

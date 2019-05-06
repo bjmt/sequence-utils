@@ -35,7 +35,7 @@ using namespace std;
 using Clock = chrono::high_resolution_clock;
 #endif
 
-vector<vector<unsigned long>> make_edgelist(vector<unsigned long> let_counts,
+vector<vector<unsigned long>> make_edgelist(const vector<unsigned long> &let_counts,
     unsigned long nletsm1, size_t alphlen) {
 
   /* 1D vector<int> --> 2D vector<vector<int>>
@@ -60,9 +60,9 @@ vector<vector<unsigned long>> make_edgelist(vector<unsigned long> let_counts,
 
 }
 
-vector<unsigned long> find_euler(vector<vector<unsigned long>> edgelist,
+vector<unsigned long> find_euler(const vector<vector<unsigned long>> &edgelist,
     unsigned long lasti, unsigned long nletsm1, default_random_engine gen,
-    size_t alphlen, unsigned int k, vector<bool> empty_vertices, bool verbose) {
+    size_t alphlen, unsigned int k, const vector<bool> &empty_vertices, bool verbose) {
 
   unsigned long u;
   unsigned long nletsm2 = pow(alphlen, k - 2);
@@ -130,9 +130,9 @@ vector<unsigned long> find_euler(vector<vector<unsigned long>> edgelist,
 
 }
 
-vector<vector<unsigned int>> fill_vertices(vector<vector<unsigned long>> edgelist,
-    vector<unsigned long> last_letsi, unsigned long nletsm1, size_t alphlen,
-    unsigned long lasti, default_random_engine gen, vector<bool> empty_vertices) {
+vector<vector<unsigned int>> fill_vertices(const vector<vector<unsigned long>> &edgelist,
+    const vector<unsigned long> &last_letsi, unsigned long nletsm1, size_t alphlen,
+    unsigned long lasti, default_random_engine gen, const vector<bool> &empty_vertices) {
 
   /* The incoming edgelist is just a set of counts for each letter. This
    * will actually create vectors of letter indices based on counts.
@@ -169,8 +169,8 @@ vector<vector<unsigned int>> fill_vertices(vector<vector<unsigned long>> edgelis
 
 }
 
-vector<unsigned long> walk_euler(vector<vector<unsigned int>> edgelist2,
-    size_t seqlen, vector<char> lets_uniq, string firstl) {
+vector<unsigned long> walk_euler(const vector<vector<unsigned int>> &edgelist2,
+    size_t seqlen, const vector<char> &lets_uniq, string firstl) {
 
   size_t alphlen = lets_uniq.size();
   size_t nletsm1 = edgelist2.size();
@@ -210,7 +210,7 @@ vector<unsigned long> walk_euler(vector<vector<unsigned int>> edgelist2,
 
 }
 
-string shuffle_euler(string letters, default_random_engine gen, unsigned int k,
+string shuffle_euler(const string &letters, default_random_engine gen, unsigned int k,
     bool verbose) {
 
   #ifdef ADD_TIMERS

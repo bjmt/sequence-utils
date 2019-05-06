@@ -49,8 +49,8 @@ void usage() {
   );
 }
 
-unordered_map<string, unsigned long> count_stream(istream &input, vector<string> klets,
-    unsigned int k) {
+unordered_map<string, unsigned long> count_stream(istream &input,
+    const vector<string> &klets, unsigned int k) {
 
   char l;
 
