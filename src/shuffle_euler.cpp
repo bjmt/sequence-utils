@@ -130,7 +130,7 @@ vector<unsigned long> find_euler(vector<vector<unsigned long>> edgelist,
 
 }
 
-vector<vector<unsigned long>> fill_vertices(vector<vector<unsigned long>> edgelist,
+vector<vector<unsigned int>> fill_vertices(vector<vector<unsigned long>> edgelist,
     vector<unsigned long> last_letsi, unsigned long nletsm1, size_t alphlen,
     unsigned long lasti, default_random_engine gen, vector<bool> empty_vertices) {
 
@@ -140,7 +140,7 @@ vector<vector<unsigned long>> fill_vertices(vector<vector<unsigned long>> edgeli
 
   /* TODO: find a cheaper alternative */
 
-  vector<vector<unsigned long>> edgelist2(nletsm1);
+  vector<vector<unsigned int>> edgelist2(nletsm1);
   unsigned long b;
 
   for (unsigned long i = 0; i < nletsm1; ++i) {
@@ -169,11 +169,11 @@ vector<vector<unsigned long>> fill_vertices(vector<vector<unsigned long>> edgeli
 
 }
 
-vector<unsigned long> walk_euler(vector<vector<unsigned long>> edgelist,
+vector<unsigned long> walk_euler(vector<vector<unsigned int>> edgelist2,
     size_t seqlen, vector<char> lets_uniq, string firstl) {
 
   size_t alphlen = lets_uniq.size();
-  size_t nletsm1 = edgelist.size();
+  size_t nletsm1 = edgelist2.size();
   unsigned long current{0};
   size_t n = firstl.length();
   vector<unsigned long> edgelist_counter(nletsm1, 0);
@@ -201,7 +201,7 @@ vector<unsigned long> walk_euler(vector<vector<unsigned long>> edgelist,
     }
 
     /* select a random availabe edge */
-    out_i.push_back(edgelist[current][edgelist_counter[current]]);
+    out_i.push_back(edgelist2[current][edgelist_counter[current]]);
     ++edgelist_counter[current];
 
   }
@@ -303,7 +303,7 @@ string shuffle_euler(vector<char> letters, default_random_engine gen, unsigned i
   #endif
 
   /* delete last edges from edge pool */
-  vector<vector<unsigned long>> edgelist2;
+  vector<vector<unsigned int>> edgelist2;
   for (size_t i = 0; i < last_letsi.size(); ++i) {
     if (i != lasti) --edgelist[i][last_letsi[i]];
   }
