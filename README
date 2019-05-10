@@ -283,7 +283,7 @@ A random DNA string with 100,000 characters was used as input.
       shuffler (m)               15604               13.21
 
 10    uShuffle                    6380                0.10
-      shuffler (e)               36836                0.34
+      shuffler (e)               36836                0.22
       shuffler (l)                1372                0.00
       shuffler (m)               57184             2:07.08
 

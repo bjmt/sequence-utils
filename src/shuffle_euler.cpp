@@ -147,7 +147,7 @@ vector<vector<unsigned int>> fill_vertices(const vector<vector<unsigned long>> &
 
     if (empty_vertices[i]) continue;
 
-    edgelist2[i].reserve(accumulate(edgelist2[i].begin(), edgelist2[i].end(), 0));
+    edgelist2[i].reserve(accumulate(edgelist[i].begin(), edgelist[i].end(), 0));
 
     for (size_t j = 0; j < alphlen; ++j) {
 
