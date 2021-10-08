@@ -25,6 +25,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
+#include <algorithm>
 #include "klets.hpp"
 using namespace std;
 

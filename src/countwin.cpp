@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
   unsigned int k;
   unsigned long START{1};
   int opt;
-  unsigned long window, step, STOP;
+  unsigned long STOP, window = 0, step = 0;
   size_t alphlen;
   string alph, seq;
   ifstream infile;

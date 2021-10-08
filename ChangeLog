@@ -1,3 +1,7 @@
+2021-10-08  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com
+
+* Fixed a couple compilation warnings and errors specific to g++
+
 2019-05-04  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com
 
 * use more pass by reference

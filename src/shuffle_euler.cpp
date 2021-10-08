@@ -219,7 +219,7 @@ string shuffle_euler(const string &letters, default_random_engine gen, unsigned 
   #endif
 
   size_t seqlen = letters.length();
-  unsigned long nlets, nletsm1;
+  unsigned long nletsm1, nlets = 0;
   size_t alphlen;
   unsigned long lasti{0};
   vector<unsigned long> last_letsi, out_i;
