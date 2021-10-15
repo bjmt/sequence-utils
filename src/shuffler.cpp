@@ -88,18 +88,18 @@ void shuffle_and_write(const string &letters, unsigned int k, default_random_eng
 
   vector<string> outletters(n_repeats);
   if (letters.length() > k) {
-    for (unsigned int i = 0; i <= n_repeats; ++i) {
+    for (unsigned int i = 0; i < n_repeats; ++i) {
       outletters[i] = do_shuffle(letters, k, gen, verbose, method_i);
     }
   } else {
-    for (unsigned int i = 0; i <= n_repeats; ++i) {
+    for (unsigned int i = 0; i < n_repeats; ++i) {
       outletters[0] = letters;
     }
   }
 
   if (!is_fasta) {
 
-    for (unsigned int i = 0; i <= n_repeats; ++i) {
+    for (unsigned int i = 0; i < n_repeats; ++i) {
       output << outletters[i] << '\n';
     }
 
@@ -156,7 +156,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
         shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
 
         if (n_repeats > 1) {
-          for (unsigned int i = 1; i <= n_repeats; ++i) {
+          for (unsigned int i = 1; i < n_repeats; ++i) {
             output << name_old << '-' << i << '\n';
             shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
           }
@@ -194,7 +194,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
     }
     shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
     if (n_repeats > 1) {
-      for (unsigned int i = 1; i <= n_repeats; ++i) {
+      for (unsigned int i = 1; i < n_repeats; ++i) {
         output << name << '-' << i << '\n';
         shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
       }
@@ -213,7 +213,7 @@ int main(int argc, char **argv) {
 
   /* variables */
 
-  int ku{1}, n_repeatsu{1};
+  int ku{1}, n_repeatsu{0};
   unsigned int k{1}, method_i{1}, n_repeats{1};
   int opt;
   ifstream seqfile;
@@ -292,12 +292,12 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
   k = ku;
-  if (n_repeatsu < 1) {
-    cerr << "Error: n must be greater than 0\n";
+  if (n_repeatsu < 0) {
+    cerr << "Error: n must be a positive integer\n";
     cerr << "Run shuffler -h to see usage.\n";
     exit(EXIT_FAILURE);
   }
-  n_repeats = n_repeatsu;
+  n_repeats += n_repeatsu;
 
   if (use_linear && use_markov) {
     cerr << "Error: only use one of -l and -m flags\n";
