@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Benjamin Jean-Marie Tremblay
+ * Copyright (C) 2019-2021 Benjamin Jean-Marie Tremblay
  *
  * This file is part of sequence-utils.
  *
@@ -25,7 +25,7 @@
 #include <iostream>
 using namespace std;
 
-string shuffle_linear(const string &letters, default_random_engine gen,
+string shuffle_linear(const string &letters, default_random_engine &gen,
     unsigned int k, bool verbose) {
 
   /* variables */

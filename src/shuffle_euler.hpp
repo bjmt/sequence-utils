@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Benjamin Jean-Marie Tremblay
+ * Copyright (C) 2019-2021 Benjamin Jean-Marie Tremblay
  *
  * This file is part of sequence-utils.
  *
@@ -24,7 +24,7 @@
 #include <string>
 #include <random>
 
-std::string shuffle_euler(const std::string &letters, std::default_random_engine gen,
+std::string shuffle_euler(const std::string &letters, std::default_random_engine &gen,
     unsigned int k, bool verbose);
 
 #endif

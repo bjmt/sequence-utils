@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Benjamin Jean-Marie Tremblay
+ * Copyright (C) 2019-2021 Benjamin Jean-Marie Tremblay
  *
  * This file is part of sequence-utils.
  *
@@ -34,7 +34,7 @@ using namespace std;
 
 void usage() {
   printf(
-    "shuffler v1.3  Copyright (C) 2019  Benjamin Jean-Marie Tremblay                 \n"
+    "shuffler v1.4  Copyright (C) 2019-2021  Benjamin Jean-Marie Tremblay            \n"
     "                                                                                \n"
     "Usage:  shuffler [options] -i [filename] -o [filename]                          \n"
     "        echo [string] | shuffler [options] > [filename]                         \n"
@@ -50,12 +50,16 @@ void usage() {
     " -f         Indicate the input is fasta formatted. Each sequence will be        \n"
     "            shuffled individually. Text preceding the first sequence entry is   \n"
     "            ignored.                                                            \n"
+    " -n <int>   Number of times to repeat the output, which will be separated by    \n"
+    "            newline characters. If '-f' is set, then all of the individual      \n"
+    "            sequences are repeated per each additional iteration, with the      \n"
+    "            iteration number appended to the sequence names.                    \n"
     " -v         Verbose mode.                                                       \n"
     " -h         Show usage.                                                         \n"
   );
 }
 
-string do_shuffle(const string &letters, unsigned int k, default_random_engine gen,
+string do_shuffle(const string &letters, unsigned int k, default_random_engine &gen,
     bool verbose, unsigned int method_i) {
 
   string outletters;
@@ -78,27 +82,34 @@ string do_shuffle(const string &letters, unsigned int k, default_random_engine g
 
 }
 
-void shuffle_and_write(const string &letters, unsigned int k, default_random_engine gen,
-    bool verbose, unsigned int method_i, ostream &output, bool is_fasta) {
+void shuffle_and_write(const string &letters, unsigned int k, default_random_engine &gen,
+    bool verbose, unsigned int method_i, ostream &output, bool is_fasta,
+    unsigned int n_repeats) {
 
-  string outletters;
+  vector<string> outletters(n_repeats);
   if (letters.length() > k) {
-    outletters = do_shuffle(letters, k, gen, verbose, method_i);
+    for (unsigned int i = 0; i <= n_repeats; ++i) {
+      outletters[i] = do_shuffle(letters, k, gen, verbose, method_i);
+    }
   } else {
-    outletters = letters;
+    for (unsigned int i = 0; i <= n_repeats; ++i) {
+      outletters[0] = letters;
+    }
   }
 
   if (!is_fasta) {
 
-    output << outletters << '\n';
+    for (unsigned int i = 0; i <= n_repeats; ++i) {
+      output << outletters[i] << '\n';
+    }
 
   } else {
 
-    for (size_t i = 0; i < outletters.length(); ++i) {
+    for (size_t i = 0; i < outletters[0].length(); ++i) {
       if (i % 80 == 0 && i != 0) {
         output << '\n';
       }
-      output << outletters[i];
+      output << outletters[0][i];
     }
     output << '\n';
 
@@ -110,10 +121,10 @@ void shuffle_and_write(const string &letters, unsigned int k, default_random_eng
 
 void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
     unsigned int k, default_random_engine gen, unsigned int method_i,
-    bool verbose) {
+    bool verbose, unsigned int n_repeats) {
 
   unsigned long count_n{0}, count_s{0};
-  string line, name, content;
+  string line, name, content, name_old;
 
   while (getline(input, line).good()) {
 
@@ -122,6 +133,7 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
       if (!name.empty()) {
         ++count_n;
         output << name << '\n';
+        name_old = name;
         name.clear();
       }
       if (!line.empty()) {
@@ -141,7 +153,14 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
             << count_n << "]" << '\n';
         }
 
-        shuffle_and_write(content, k, gen, false, method_i, output, true);
+        shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
+
+        if (n_repeats > 1) {
+          for (unsigned int i = 1; i <= n_repeats; ++i) {
+            output << name_old << '-' << i << '\n';
+            shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
+          }
+        }
 
       }
       content.clear();
@@ -173,7 +192,13 @@ void read_fasta_then_shuffle_and_write(istream &input, ostream &output,
       cerr << "Warning: encountered a sequence where k is too big ["
         << count_n << "]\n";
     }
-    shuffle_and_write(content, k, gen, false, method_i, output, true);
+    shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
+    if (n_repeats > 1) {
+      for (unsigned int i = 1; i <= n_repeats; ++i) {
+        output << name << '-' << i << '\n';
+        shuffle_and_write(content, k, gen, false, method_i, output, true, 1);
+      }
+    }
   }
 
   if (verbose) {
@@ -188,8 +213,8 @@ int main(int argc, char **argv) {
 
   /* variables */
 
-  int ku{1};
-  unsigned int k{1}, method_i{1};
+  int ku{1}, n_repeatsu{1};
+  unsigned int k{1}, method_i{1}, n_repeats{1};
   int opt;
   ifstream seqfile;
   ofstream outfile;
@@ -203,7 +228,7 @@ int main(int argc, char **argv) {
 
   /* arguments */
 
-  while ((opt = getopt(argc, argv, "i:k:s:o:mvhlf")) != -1) {
+  while ((opt = getopt(argc, argv, "i:k:s:o:n:mvhlf")) != -1) {
     switch (opt) {
 
       case 'i': if (optarg) {
@@ -246,6 +271,9 @@ int main(int argc, char **argv) {
       case 'f': is_fasta = true;
                 break;
 
+      case 'n': if (optarg) n_repeatsu = atoi(optarg);
+                break;
+
       case 'h': usage();
                 return 0;
 
@@ -264,6 +292,12 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
   k = ku;
+  if (n_repeatsu < 1) {
+    cerr << "Error: n must be greater than 0\n";
+    cerr << "Run shuffler -h to see usage.\n";
+    exit(EXIT_FAILURE);
+  }
+  n_repeats = n_repeatsu;
 
   if (use_linear && use_markov) {
     cerr << "Error: only use one of -l and -m flags\n";
@@ -296,11 +330,6 @@ int main(int argc, char **argv) {
     }
   }
 
-  /* The code here is a bit spaghetti, but the alternative is to have way more
-   * repeate code. Additionally, for fasta this allows reading+shuffling+writting
-   * per sequence instead of needing to read the whole file before starting.
-   */
-
   if (!is_fasta) {
 
     if (!has_file) {
@@ -314,10 +343,10 @@ int main(int argc, char **argv) {
       }
 
       if (has_out) {
-        shuffle_and_write(letters, k, gen, verbose, method_i, outfile, false);
+        shuffle_and_write(letters, k, gen, verbose, method_i, outfile, false, n_repeats);
         outfile.close();
       } else {
-        shuffle_and_write(letters, k, gen, verbose, method_i, cout, false);
+        shuffle_and_write(letters, k, gen, verbose, method_i, cout, false, n_repeats);
       }
 
       if (verbose) {
@@ -336,10 +365,10 @@ int main(int argc, char **argv) {
       }
 
       if (has_out) {
-        shuffle_and_write(letters, k, gen, verbose, method_i, outfile, false);
+        shuffle_and_write(letters, k, gen, verbose, method_i, outfile, false, n_repeats);
         outfile.close();
       } else {
-        shuffle_and_write(letters, k, gen, verbose, method_i, cout, false);
+        shuffle_and_write(letters, k, gen, verbose, method_i, cout, false, n_repeats);
       }
 
       if (verbose) {
@@ -353,20 +382,20 @@ int main(int argc, char **argv) {
     if (!has_file) {
 
       if (has_out) {
-        read_fasta_then_shuffle_and_write(cin, outfile, k, gen, method_i, verbose);
+        read_fasta_then_shuffle_and_write(cin, outfile, k, gen, method_i, verbose, n_repeats);
         outfile.close();
       } else {
-        read_fasta_then_shuffle_and_write(cin, cout, k, gen, method_i, verbose);
+        read_fasta_then_shuffle_and_write(cin, cout, k, gen, method_i, verbose, n_repeats);
       }
 
     } else {
 
       if (has_out) {
-        read_fasta_then_shuffle_and_write(seqfile, outfile, k, gen, method_i, verbose);
+        read_fasta_then_shuffle_and_write(seqfile, outfile, k, gen, method_i, verbose, n_repeats);
         seqfile.close();
         outfile.close();
       } else {
-        read_fasta_then_shuffle_and_write(seqfile, cout, k, gen, method_i, verbose);
+        read_fasta_then_shuffle_and_write(seqfile, cout, k, gen, method_i, verbose, n_repeats);
         seqfile.close();
       }
 

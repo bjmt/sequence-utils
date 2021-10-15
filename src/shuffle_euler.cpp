@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Benjamin Jean-Marie Tremblay
+ * Copyright (C) 2019-2021 Benjamin Jean-Marie Tremblay
  *
  * This file is part of sequence-utils.
  *
@@ -61,7 +61,7 @@ vector<vector<unsigned long>> make_edgelist(const vector<unsigned long> &let_cou
 }
 
 vector<unsigned long> find_euler(const vector<vector<unsigned long>> &edgelist,
-    unsigned long lasti, unsigned long nletsm1, default_random_engine gen,
+    unsigned long lasti, unsigned long nletsm1, default_random_engine &gen,
     size_t alphlen, unsigned int k, const vector<bool> &empty_vertices, bool verbose) {
 
   unsigned long u;
@@ -132,7 +132,7 @@ vector<unsigned long> find_euler(const vector<vector<unsigned long>> &edgelist,
 
 vector<vector<unsigned int>> fill_vertices(const vector<vector<unsigned long>> &edgelist,
     const vector<unsigned long> &last_letsi, unsigned long nletsm1, size_t alphlen,
-    unsigned long lasti, default_random_engine gen, const vector<bool> &empty_vertices) {
+    unsigned long lasti, default_random_engine &gen, const vector<bool> &empty_vertices) {
 
   /* The incoming edgelist is just a set of counts for each letter. This
    * will actually create vectors of letter indices based on counts.
@@ -210,7 +210,7 @@ vector<unsigned long> walk_euler(const vector<vector<unsigned int>> &edgelist2,
 
 }
 
-string shuffle_euler(const string &letters, default_random_engine gen, unsigned int k,
+string shuffle_euler(const string &letters, default_random_engine &gen, unsigned int k,
     bool verbose) {
 
   #ifdef ADD_TIMERS

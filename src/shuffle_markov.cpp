@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Benjamin Jean-Marie Tremblay
+ * Copyright (C) 2019-2021 Benjamin Jean-Marie Tremblay
  *
  * This file is part of sequence-utils.
  *
@@ -31,7 +31,7 @@ using namespace std;
 
 string markov_loop(const vector<string> &klets, const vector<string> &kletsm1,
     const vector<unsigned long> &let_counts, const vector<char> &lets_uniq,
-    default_random_engine gen, size_t seqlen, unsigned int k, bool verbose) {
+    default_random_engine &gen, size_t seqlen, unsigned int k, bool verbose) {
 
   unsigned long rand_i, x, y;
   size_t alphlen = lets_uniq.size();
@@ -103,7 +103,7 @@ string markov_loop(const vector<string> &klets, const vector<string> &kletsm1,
 
 }
 
-string shuffle_markov(const string &letters, default_random_engine gen,
+string shuffle_markov(const string &letters, default_random_engine &gen,
     unsigned int k, bool verbose) {
 
   /* variables */
