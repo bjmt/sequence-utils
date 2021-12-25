@@ -233,9 +233,9 @@ Comparison with the command line version of uShuffle (Jiang et al. 2008):
 
   Pros:                                  Cons:
 
-- Additional linear and markov         - Twice as slow (on average) with low k
-  shuffling methods                    - Memory usage and time elapsed does not
-- Input/output can be read/written       scale as well with high k (>8)
+- Additional linear and markov         - Memory usage does not scale as
+  shuffling methods                      well with high k (>8)
+- Input/output can be read/written       
   from/to disk or piped
 - Shuffles both strings and
   fasta files
@@ -250,52 +250,52 @@ A random DNA string with 100,000 characters was used as input.
  k         Program    Peak memory (kB)    Elapsed time (s)
 --    ------------    ----------------    ----------------
  1    uShuffle                    1036                0.00
-      shuffler                    1176                0.01
+      shuffler                    1872                0.01
 
  2    uShuffle                    3796                0.00
-      shuffler (e)                3024                0.02
-      shuffler (l)                1760                0.01
-      shuffler (m)                1780                0.04
+      shuffler (e)                3184                0.02
+      shuffler (l)                2272                0.01
+      shuffler (m)                2672                0.03
 
  3    uShuffle                    3796                0.01
-      shuffler (e)                2944                0.02
-      shuffler (l)                1556                0.00
-      shuffler (m)                1888                0.04
+      shuffler (e)                3504                0.02
+      shuffler (l)                2144                0.01
+      shuffler (m)                2672                0.02
 
  4    uShuffle                    3780                0.01
-      shuffler (e)                2956                0.02
-      shuffler (l)                1520                0.00
-      shuffler (m)                1804                0.06
+      shuffler (e)                3728                0.02
+      shuffler (l)                2080                0.00
+      shuffler (m)                2736                0.03
 
  5    uShuffle                    3792                0.01
-      shuffler (e)                2884                0.03
-      shuffler (l)                1456                0.00
-      shuffler (m)                1800                0.10
+      shuffler (e)                3808                0.02
+      shuffler (l)                2032                0.01
+      shuffler (m)                2704                0.03
 
  6    uShuffle                    3820                0.01
-      shuffler (e)                3172                0.03
-      shuffler (l)                1488                0.00
-      shuffler (m)                2020                0.29
+      shuffler (e)                3824                0.03
+      shuffler (l)                2016                0.00
+      shuffler (m)                2880                0.04
 
  7    uShuffle                    3908                0.02
-      shuffler (e)                3588                0.04
-      shuffler (l)                1296                0.00
-      shuffler (m)                2648                1.05
+      shuffler (e)                4224                0.03
+      shuffler (l)                1984                0.00
+      shuffler (m)                3792                0.04
 
  8    uShuffle                    4296                0.05
-      shuffler (e)                4764                0.06
-      shuffler (l)                1416                0.01
-      shuffler (m)                5236                4.18
+      shuffler (e)                5248                0.04
+      shuffler (l)                1984                0.01
+      shuffler (m)                8112                0.05
 
  9    uShuffle                    5384                0.08
-      shuffler (e)               11624                0.13
-      shuffler (l)                1404                0.00
-      shuffler (m)               15604               13.21
+      shuffler (e)               12080                0.05
+      shuffler (l)                1872                0.00
+      shuffler (m)               28896                0.08
 
 10    uShuffle                    6380                0.10
-      shuffler (e)               36836                0.22
-      shuffler (l)                1372                0.00
-      shuffler (m)               57184             2:07.08
+      shuffler (e)               39600                0.09
+      shuffler (l)                1872                0.00
+      shuffler (m)              107984                0.13
 
 
 shuffler (euler) is quite competitive with uShuffle in terms of elapsed time

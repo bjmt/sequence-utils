@@ -1,3 +1,7 @@
+2021-12-24  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
+
+* Transplanted markov shuffling code from bjmt/universalmotif, fixes #3
+
 2021-10-15  Benjamin Jean-Marie Tremblay  <benjmtremblay@gmail.com>
 
 * Added '-n' option to shuffler to repeat shuffling
